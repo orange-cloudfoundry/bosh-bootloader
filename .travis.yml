@@ -5,10 +5,12 @@ install:
 - go get github.com/onsi/ginkgo/ginkgo
 - go get github.com/onsi/gomega
 - git fetch origin 'add-cloudstack':'add-cloudstack'
+- cp -R $HOME/gopath/src/github.com/orange-cloudfoundry/bosh-bootloader/bin $HOME/gopath/src
 - git branch -v -a
-- git merge add-cloudstack
+- git checkout add-cloudstack
 - cd $HOME/gopath/src/github.com
 - mv orange-cloudfoundry cloudfoundry
+- mv $HOME/gopath/src/bin $HOME/gopath/src/github.com/cloudfoundry/bosh-bootloader/bin
 - cd $HOME/gopath/src/github.com/cloudfoundry/bosh-bootloader
 script:
 - echo "no test"
