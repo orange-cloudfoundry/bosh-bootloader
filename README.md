@@ -22,6 +22,37 @@ The following should be installed on your local machine
 - [terraform](https://www.terraform.io/downloads.html) >= 0.11.0
 - ruby (necessary for bosh create-env)
 
+### Installation from orange
+
+### On *nix system
+
+You can install this via the command-line with either `curl` or `wget`.
+
+#### via curl
+
+```bash
+$ sh -c "$(curl -fsSL https://raw.github.com/orange-cloudfoundry/bbl/master/bin/install.sh)"
+```
+
+#### via wget
+
+```bash
+$ sh -c "$(wget https://raw.github.com/orange-cloudfoundry/bbl/master/bin/install.sh -O -)"
+```
+
+### On windows
+
+You can install it by downloading the `.exe` corresponding to your cpu from releases page: https://github.com/orange-cloudfoundry/bbl/releases .
+Alternatively, if you have terminal interpreting shell you can also use command line script above, it will download file in your current working dir.
+
+### From go command line
+
+Simply run in terminal:
+
+```bash
+$ go get github.com/orange-cloudfoundry/bbl
+```
+
 ### Install bosh-bootloader using a package manager
 
 **Mac OS X**
