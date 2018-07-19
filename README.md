@@ -31,18 +31,18 @@ You can install this via the command-line with either `curl` or `wget`.
 #### via curl
 
 ```bash
-$ sh -c "$(curl -fsSL https://raw.github.com/orange-cloudfoundry/bbl/master/bin/install.sh)"
+$ sh -c "$(curl -fsSL https://raw.github.com/orange-cloudfoundry/bosh-bootloader/master/bin/install.sh)"
 ```
 
 #### via wget
 
 ```bash
-$ sh -c "$(wget https://raw.github.com/orange-cloudfoundry/bbl/master/bin/install.sh -O -)"
+$ sh -c "$(wget https://raw.github.com/orange-cloudfoundry/bosh-bootloader/master/bin/install.sh -O -)"
 ```
 
 ### On windows
 
-You can install it by downloading the `.exe` corresponding to your cpu from releases page: https://github.com/orange-cloudfoundry/bbl/releases .
+You can install it by downloading the `.exe` corresponding to your cpu from releases page: https://github.com/orange-cloudfoundry/bosh-bootloader/releases .
 Alternatively, if you have terminal interpreting shell you can also use command line script above, it will download file in your current working dir.
 
 ### From go command line
@@ -50,7 +50,7 @@ Alternatively, if you have terminal interpreting shell you can also use command 
 Simply run in terminal:
 
 ```bash
-$ go get github.com/orange-cloudfoundry/bbl
+$ go get github.com/orange-cloudfoundry/bosh-bootloader
 ```
 
 ### Install bosh-bootloader using a package manager
