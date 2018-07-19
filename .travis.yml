@@ -6,7 +6,7 @@ install:
 - go get github.com/onsi/gomega
 - git fetch origin 'add-cloudstack':'add-cloudstack'
 - git branch -v -a
-- git checkout add-cloudstack
+- git merge add-cloudstack
 - cd $HOME/gopath/src/github.com
 - mv orange-cloudfoundry cloudfoundry
 - cd $HOME/gopath/src/github.com/cloudfoundry/bosh-bootloader
