@@ -10,7 +10,7 @@ import (
 	"github.com/cloudfoundry/bosh-bootloader/application"
 	"github.com/cloudfoundry/bosh-bootloader/fileio"
 	"github.com/cloudfoundry/bosh-bootloader/storage"
-	flags "github.com/jessevdk/go-flags"
+	"github.com/jessevdk/go-flags"
 )
 
 type logger interface {
@@ -178,6 +178,8 @@ func (c Config) updateIAASState(globalFlags globalFlags, state storage.State) (s
 		return c.updateVSphereState(globalFlags, state)
 	case "openstack":
 		return c.updateOpenStackState(globalFlags, state)
+	case "cloudstack":
+		return c.updateCloudStackState(globalFlags, state)
 	}
 
 	return state, nil
@@ -230,6 +232,19 @@ func (c Config) updateOpenStackState(globalFlags globalFlags, state storage.Stat
 			state.OpenStack.PrivateKey = key
 		}
 	}
+
+	return state, nil
+}
+
+func (c Config) updateCloudStackState(globalFlags globalFlags, state storage.State) (storage.State, error) {
+	copyFlagToState(globalFlags.CloudStackEndpoint, &state.CloudStack.Endpoint)
+	copyFlagToState(globalFlags.CloudStackSecretAccessKey, &state.CloudStack.SecretAccessKey)
+	copyFlagToState(globalFlags.CloudStackApiKey, &state.CloudStack.ApiKey)
+	copyFlagToState(globalFlags.CloudStackZone, &state.CloudStack.Zone)
+	copyFlagToState(globalFlags.CloudStackNetworkVpcOffering, &state.CloudStack.NetworkVpcOffering)
+	copyFlagToState(globalFlags.CloudStackComputeOffering, &state.CloudStack.ComputeOffering)
+	state.CloudStack.Secure = globalFlags.CloudStackSecure
+	state.CloudStack.IsoSegment = globalFlags.CloudStackIsoSegment
 
 	return state, nil
 }
@@ -365,8 +380,10 @@ func ValidateIAAS(state storage.State) error {
 		err = vsphere(state.VSphere)
 	case "openstack":
 		err = openstack(state.OpenStack)
+	case "cloudstack":
+		err = cloudstack(state.CloudStack)
 	default:
-		err = errors.New("--iaas [gcp, aws, azure, vsphere, openstack] must be provided or BBL_IAAS must be set")
+		err = errors.New("--iaas [gcp, aws, azure, vsphere, openstack, cloudstack] must be provided or BBL_IAAS must be set")
 	}
 
 	if err != nil {
@@ -459,6 +476,22 @@ func openstack(state storage.OpenStack) error {
 	}
 	if state.PrivateKey == "" {
 		return fmt.Errorf(CRED_ERROR, "--openstack-private-key")
+	}
+	return nil
+}
+
+func cloudstack(state storage.CloudStack) error {
+	if state.Endpoint == "" {
+		return fmt.Errorf(CRED_ERROR, "--cloudstack-endpoint")
+	}
+	if state.ApiKey == "" {
+		return fmt.Errorf(CRED_ERROR, "--cloudstack-api-key")
+	}
+	if state.SecretAccessKey == "" {
+		return fmt.Errorf(CRED_ERROR, "--cloudstack-secret-access-key")
+	}
+	if state.Zone == "" {
+		return fmt.Errorf(CRED_ERROR, "--cloudstack-zone")
 	}
 	return nil
 }

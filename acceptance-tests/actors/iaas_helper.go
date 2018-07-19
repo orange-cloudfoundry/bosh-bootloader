@@ -3,7 +3,7 @@ package actors
 import (
 	"fmt"
 
-	acceptance "github.com/cloudfoundry/bosh-bootloader/acceptance-tests"
+	"github.com/cloudfoundry/bosh-bootloader/acceptance-tests"
 )
 
 type IAASLBHelper interface {
@@ -26,6 +26,8 @@ func NewIAASLBHelper(iaas string, configuration acceptance.Config) IAASLBHelper 
 		return NewVSphereLBHelper()
 	case "openstack":
 		return NewOpenStackLBHelper()
+	case "cloudstack":
+		return NewCloudStackLBHelper()
 	default:
 		panic(fmt.Sprintf("%s is not a supported iaas", iaas))
 	}

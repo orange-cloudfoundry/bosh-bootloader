@@ -35,3 +35,6 @@ bbl/debug
 
 # Environment
 .env*
+
+/vendor/github.com/cppforlife/jumpbox-deployment
+/vendor/github.com/cloudfoundry/bosh-deployment

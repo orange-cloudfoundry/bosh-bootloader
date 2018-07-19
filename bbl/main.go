@@ -30,12 +30,14 @@ import (
 	gcpcloudconfig "github.com/cloudfoundry/bosh-bootloader/cloudconfig/gcp"
 	openstackcloudconfig "github.com/cloudfoundry/bosh-bootloader/cloudconfig/openstack"
 	vspherecloudconfig "github.com/cloudfoundry/bosh-bootloader/cloudconfig/vsphere"
+	cloudstackcloudconfig "github.com/cloudfoundry/bosh-bootloader/cloudconfig/cloudstack"
 
 	awsterraform "github.com/cloudfoundry/bosh-bootloader/terraform/aws"
 	azureterraform "github.com/cloudfoundry/bosh-bootloader/terraform/azure"
 	gcpterraform "github.com/cloudfoundry/bosh-bootloader/terraform/gcp"
 	openstackterraform "github.com/cloudfoundry/bosh-bootloader/terraform/openstack"
 	vsphereterraform "github.com/cloudfoundry/bosh-bootloader/terraform/vsphere"
+	cloudstackterraform "github.com/cloudfoundry/bosh-bootloader/terraform/cloudstack"
 
 	awsleftovers "github.com/genevieve/leftovers/aws"
 	azureleftovers "github.com/genevieve/leftovers/azure"
@@ -242,6 +244,13 @@ func main() {
 		terraformManager = terraform.NewManager(terraformExecutor, templateGenerator, inputGenerator, terraformOutputBuffer, logger)
 
 		cloudConfigOpsGenerator = openstackcloudconfig.NewOpsGenerator(terraformManager)
+	case "cloudstack":
+		templateGenerator = cloudstackterraform.NewTemplateGenerator()
+		inputGenerator = cloudstackterraform.NewInputGenerator()
+
+		terraformManager = terraform.NewManager(terraformExecutor, templateGenerator, inputGenerator, terraformOutputBuffer, logger)
+
+		cloudConfigOpsGenerator = cloudstackcloudconfig.NewOpsGenerator(terraformManager)
 	}
 
 	cloudConfigManager := cloudconfig.NewManager(logger, boshCommand, stateStore, cloudConfigOpsGenerator, boshClientProvider, terraformManager, afs)

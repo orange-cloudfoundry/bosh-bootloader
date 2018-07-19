@@ -47,4 +47,13 @@ type globalFlags struct {
 	OpenStackDomain               string `long:"openstack-domain"                 env:"BBL_OPENSTACK_DOMAIN"`
 	OpenStackRegion               string `long:"openstack-region"                 env:"BBL_OPENSTACK_REGION"`
 	OpenStackPrivateKey           string `long:"openstack-private-key"            env:"BBL_OPENSTACK_PRIVATE_KEY"`
+
+	CloudStackEndpoint           string `long:"cloudstack-endpoint"               env:"BBL_CLOUDSTACK_ENDPOINT"`
+	CloudStackApiKey             string `long:"cloudstack-api-key"                env:"BBL_CLOUDSTACK_API_KEY"`
+	CloudStackSecretAccessKey    string `long:"cloudstack-secret-access-key"      env:"BBL_CLOUDSTACK_SECRET_ACCESS_KEY"`
+	CloudStackZone               string `long:"cloudstack-zone"                   env:"BBL_CLOUDSTACK_ZONE"`
+	CloudStackNetworkVpcOffering string `long:"cloudstack-network-vpc-offering"   env:"BBL_CLOUDSTACK_NETWORK_VPC_OFFERING"`
+	CloudStackComputeOffering    string `long:"cloudstack-compute-offering"       env:"BBL_CLOUDSTACK_COMPUTE_OFFERING"`
+	CloudStackSecure             bool   `long:"cloudstack-secure"                 env:"BBL_CLOUDSTACK_SECURE"`
+	CloudStackIsoSegment         bool   `long:"cloudstack-iso-segment"            env:"BBL_CLOUDSTACK_ISO_SEGMENT"`
 }

@@ -19,3 +19,9 @@ if [ "${@}" == "gcp" ]; then
     go-bindata -pkg gcp -mode 0740 -o templates.go templates
   popd
 fi
+
+if [ "${@}" == "cloudstack" ]; then
+  pushd ${root_dir}/../terraform/cloudstack
+    go-bindata -pkg cloudstack -mode 0740 -o templates.go templates
+  popd
+fi
