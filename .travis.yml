@@ -4,7 +4,11 @@ go:
 install:
 - go get github.com/onsi/ginkgo/ginkgo
 - go get github.com/onsi/gomega
+- git branch -v -a
 - git checkout add-cloudstack
+- cd $HOME/gopath/src/github.com
+- mv orange-cloudfoundry cloudfoundry
+- cd $HOME/gopath/src/github.com/cloudfoundry/bosh-bootloader
 script:
 - echo "no test"
 after_success:
