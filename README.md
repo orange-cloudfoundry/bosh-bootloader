@@ -31,13 +31,13 @@ You can install this via the command-line with either `curl` or `wget`.
 #### via curl
 
 ```bash
-$ sh -c "$(curl -fsSL https://raw.github.com/orange-cloudfoundry/bosh-bootloader/master/bin/install.sh)"
+$ bash -c "$(curl -fsSL https://raw.github.com/orange-cloudfoundry/bosh-bootloader/master/bin/install.sh)"
 ```
 
 #### via wget
 
 ```bash
-$ sh -c "$(wget https://raw.github.com/orange-cloudfoundry/bosh-bootloader/master/bin/install.sh -O -)"
+$ bash -c "$(wget https://raw.github.com/orange-cloudfoundry/bosh-bootloader/master/bin/install.sh -O -)"
 ```
 
 ### On windows
