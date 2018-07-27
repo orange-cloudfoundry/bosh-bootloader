@@ -12,6 +12,7 @@ install:
 - mv orange-cloudfoundry cloudfoundry
 - mv $HOME/gopath/src/bin $HOME/gopath/src/github.com/cloudfoundry/bosh-bootloader/bin
 - cd $HOME/gopath/src/github.com/cloudfoundry/bosh-bootloader
+- bin/versionning
 script:
 - echo "no test"
 after_success:
