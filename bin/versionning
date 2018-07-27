@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
 test ! -z "${TRAVIS_TAG}" && sed -i "s%var Version = \"dev\"%var Version = \"${TRAVIS_TAG}\"%g" bbl/main.go
+
+exit 0
