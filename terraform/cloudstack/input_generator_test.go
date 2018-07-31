@@ -1,8 +1,9 @@
 package cloudstack_test
 
 import (
+	"github.com/cloudfoundry/bosh-bootloader/fakes"
 	"github.com/cloudfoundry/bosh-bootloader/storage"
-	"github.com/cloudfoundry/bosh-bootloader/terraform/vsphere"
+	"github.com/cloudfoundry/bosh-bootloader/terraform/cloudstack"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -10,62 +11,72 @@ import (
 
 var _ = Describe("InputGenerator", func() {
 	var (
-		inputGenerator vsphere.InputGenerator
+		awsClient *fakes.AWSClient
+
+		inputGenerator cloudstack.InputGenerator
 	)
 
+	BeforeEach(func() {
+		awsClient = &fakes.AWSClient{}
+		awsClient.RetrieveAZsCall.Returns.AZs = []string{"z1", "z2", "z3"}
+
+		inputGenerator = cloudstack.NewInputGenerator()
+	})
+
 	Describe("Generate", func() {
-		It("receives state and returns a map of terraform variables", func() {
+		Context("when env-id is greater than 18 characters", func() {
+			It("creates a short env-id with truncated env_id and sha1sum[0:7]", func() {
+				inputs, err := inputGenerator.Generate(storage.State{
+					EnvID:      "some-env-id-that-is-pretty-long",
+					CloudStack: storage.CloudStack{},
+				})
+				Expect(err).NotTo(HaveOccurred())
+
+				Expect(inputs["env_id"]).To(Equal("some-env-id-that-is-pretty-long"))
+				Expect(inputs["short_env_id"]).To(Equal("some-env-i-1fc794e"))
+			})
+		})
+
+		It("receives BBL state and returns a map of terraform variables", func() {
 			inputs, err := inputGenerator.Generate(storage.State{
-				EnvID: "banana",
-				VSphere: storage.VSphere{
-					Subnet:           "10.0.0.0/24",
-					Network:          "the-network",
-					VCenterCluster:   "the-cluster",
-					VCenterUser:      "the-user",
-					VCenterPassword:  "the-password",
-					VCenterIP:        "the-ip",
-					VCenterDC:        "the-datacenter",
-					VCenterRP:        "the-resource-pool",
-					VCenterDS:        "the-datastore",
-					VCenterDisks:     "the-disks",
-					VCenterTemplates: "the-templates",
-					VCenterVMs:       "the-vms",
+				EnvID: "some-env-id",
+				CloudStack: storage.CloudStack{
+					ApiKey:          "some-access-key-id",
+					SecretAccessKey: "some-secret-access-key",
+					Zone:            "my-zone",
+					Secure:          true,
+					IsoSegment:      true,
+					Endpoint:        "http://my-cloudstack.com/client/api",
 				},
 			})
 			Expect(err).NotTo(HaveOccurred())
 
 			Expect(inputs).To(Equal(map[string]interface{}{
-				"env_id":               "banana",
-				"vsphere_subnet":       "10.0.0.0/24",
-				"jumpbox_ip":           "10.0.0.5",
-				"director_internal_ip": "10.0.0.6",
-				"internal_gw":          "10.0.0.1",
-				"network_name":         "the-network",
-				"vcenter_cluster":      "the-cluster",
-				"vcenter_ip":           "the-ip",
-				"vcenter_dc":           "the-datacenter",
-				"vcenter_rp":           "the-resource-pool",
-				"vcenter_ds":           "the-datastore",
-				"vcenter_disks":        "the-disks",
-				"vcenter_templates":    "the-templates",
-				"vcenter_vms":          "the-vms",
+				"env_id":              "some-env-id",
+				"short_env_id":        "some-env-id",
+				"cloudstack_zone":     "my-zone",
+				"cloudstack_endpoint": "http://my-cloudstack.com/client/api",
+				"secure":              "true",
+				"iso_segment":         "true",
 			}))
 		})
 	})
+
 	Describe("Credentials", func() {
-		It("returns the vsphere credentials", func() {
+		It("returns the api key, secret key and the key name", func() {
 			state := storage.State{
-				VSphere: storage.VSphere{
-					VCenterUser:     "the-user",
-					VCenterPassword: "the-password",
+				CloudStack: storage.CloudStack{
+					ApiKey:          "some-access-key-id",
+					SecretAccessKey: "some-secret-access-key",
+					DefaultKeyName:  "key-name",
 				},
 			}
-
 			credentials := inputGenerator.Credentials(state)
 
 			Expect(credentials).To(Equal(map[string]string{
-				"vcenter_user":     "the-user",
-				"vcenter_password": "the-password",
+				"cloudstack_api_key":           "some-access-key-id",
+				"cloudstack_secret_access_key": "some-secret-access-key",
+				"cloudstack_key_name":          "key-name",
 			}))
 		})
 	})

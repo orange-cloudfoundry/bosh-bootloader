@@ -27,17 +27,17 @@ import (
 
 	awscloudconfig "github.com/cloudfoundry/bosh-bootloader/cloudconfig/aws"
 	azurecloudconfig "github.com/cloudfoundry/bosh-bootloader/cloudconfig/azure"
+	cloudstackcloudconfig "github.com/cloudfoundry/bosh-bootloader/cloudconfig/cloudstack"
 	gcpcloudconfig "github.com/cloudfoundry/bosh-bootloader/cloudconfig/gcp"
 	openstackcloudconfig "github.com/cloudfoundry/bosh-bootloader/cloudconfig/openstack"
 	vspherecloudconfig "github.com/cloudfoundry/bosh-bootloader/cloudconfig/vsphere"
-	cloudstackcloudconfig "github.com/cloudfoundry/bosh-bootloader/cloudconfig/cloudstack"
 
 	awsterraform "github.com/cloudfoundry/bosh-bootloader/terraform/aws"
 	azureterraform "github.com/cloudfoundry/bosh-bootloader/terraform/azure"
+	cloudstackterraform "github.com/cloudfoundry/bosh-bootloader/terraform/cloudstack"
 	gcpterraform "github.com/cloudfoundry/bosh-bootloader/terraform/gcp"
 	openstackterraform "github.com/cloudfoundry/bosh-bootloader/terraform/openstack"
 	vsphereterraform "github.com/cloudfoundry/bosh-bootloader/terraform/vsphere"
-	cloudstackterraform "github.com/cloudfoundry/bosh-bootloader/terraform/cloudstack"
 
 	awsleftovers "github.com/genevieve/leftovers/aws"
 	azureleftovers "github.com/genevieve/leftovers/azure"

@@ -8,7 +8,7 @@ import (
 
 	"github.com/cloudfoundry/bosh-bootloader/fakes"
 	"github.com/cloudfoundry/bosh-bootloader/storage"
-	uuid "github.com/nu7hatch/gouuid"
+	"github.com/nu7hatch/gouuid"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/ginkgo/extensions/table"
@@ -152,6 +152,7 @@ var _ = Describe("Store", func() {
 				},
 				"vsphere": {},
 				"openstack": {},
+				"cloudstack": {},
 				"lb": {
 					"type": "some-type",
 					"cert": "some-cert",
