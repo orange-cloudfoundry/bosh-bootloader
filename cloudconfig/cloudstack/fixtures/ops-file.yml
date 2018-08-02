@@ -13,6 +13,7 @@
     network: compilation
     reuse_compilation_vms: true
     vm_type: default
+    az: z1
     workers: 5
 - path: /disk_types/name=default?
   type: replace
@@ -220,8 +221,19 @@
 - path: /networks/-
   type: replace
   value:
-    cloud_properties:
-      name: myenv-compilation-subnet
-    dns: ((dns))
     name: compilation
-    type: dynamic
+    subnets:
+    - azs:
+      - z1
+      - z2
+      - z3
+      cloud_properties:
+        name: myenv-compilation-subnet
+      dns: ((dns))
+      gateway: ((gw_myenv-compilation-subnet))
+      range: ((cidr_myenv-compilation-subnet))
+      reserved:
+      - ((reserved_1_myenv-compilation-subnet))
+      static:
+      - ((static_myenv-compilation-subnet))
+    type: manual

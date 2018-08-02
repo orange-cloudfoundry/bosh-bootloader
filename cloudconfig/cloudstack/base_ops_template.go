@@ -18,6 +18,7 @@ const (
     workers: 5
     reuse_compilation_vms: true
     vm_type: default
+    az: z1
     network: compilation
 
 - type: replace

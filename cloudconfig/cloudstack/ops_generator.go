@@ -95,12 +95,9 @@ func (o OpsGenerator) Generate(state storage.State) (string, error) {
 			Type:    "manual",
 		}),
 		createOp("replace", "/networks/-", network{
-			Name: "compilation",
-			Type: "dynamic",
-			DNS:  "((dns))",
-			CloudProperties: networkSubnetCloudProperties{
-				Name: o.generateNetworkName("compilation-subnet", shortEnvID),
-			},
+			Name:    "compilation",
+			Type:    "manual",
+			Subnets: []networkSubnet{o.generateNetworkSubnet(o.generateNetworkName("compilation-subnet", shortEnvID))},
 		}),
 	}
 	if state.CloudStack.IsoSegment {
