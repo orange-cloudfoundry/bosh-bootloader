@@ -174,7 +174,7 @@ func (o OpsGenerator) generateNetworkSubnetVars(networkName, cidr, gw string) (m
 	}
 
 	firstReserved := parsedCidr.GetNthIP(2).String()
-	secondReserved := parsedCidr.GetNthIP(3).String()
+	secondReserved := parsedCidr.GetNthIP(6).String()
 	lastStatic := parsedCidr.GetLastIP().Subtract(1).String()
 	firstStatic := parsedCidr.GetLastIP().Subtract(200).String()
 

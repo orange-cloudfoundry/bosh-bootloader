@@ -76,9 +76,9 @@ internal_subnet_gw_mapping:
   subnet1: 10.0.16.1
   subnet2: 10.0.48.1
   subnet3: 10.0.32.1
-reserved_1_subnet1: 10.0.16.2-10.0.16.3
-reserved_1_subnet2: 10.0.48.2-10.0.48.3
-reserved_1_subnet3: 10.0.32.2-10.0.32.3
+reserved_1_subnet1: 10.0.16.2-10.0.16.6
+reserved_1_subnet2: 10.0.48.2-10.0.48.6
+reserved_1_subnet3: 10.0.32.2-10.0.32.6
 static_subnet1: 10.0.31.55-10.0.31.254
 static_subnet2: 10.0.63.55-10.0.63.254
 static_subnet3: 10.0.47.55-10.0.47.254
