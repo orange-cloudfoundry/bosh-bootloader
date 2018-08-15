@@ -3,4 +3,4 @@ platforms:
 - darwin/amd64
 - linux/amd64
 - windows/amd64
-template: {{.Name}}_{{.OS}}_{{.Arch}}
+template: "{{.Name}}_{{.OS}}_{{.Arch}}"
