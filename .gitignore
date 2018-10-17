@@ -38,3 +38,4 @@ bbl/debug
 
 /vendor/github.com/cppforlife/jumpbox-deployment
 /vendor/github.com/cloudfoundry/bosh-deployment
+bbl/bbl
