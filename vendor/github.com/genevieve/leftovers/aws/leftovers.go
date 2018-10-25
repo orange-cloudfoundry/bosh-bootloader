@@ -3,7 +3,6 @@ package aws
 import (
 	"errors"
 	"fmt"
-	"sync"
 
 	awslib "github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -18,7 +17,7 @@ import (
 	awss3 "github.com/aws/aws-sdk-go/service/s3"
 	awssts "github.com/aws/aws-sdk-go/service/sts"
 	"github.com/fatih/color"
-	"github.com/genevieve/leftovers/aws/common"
+	"github.com/genevieve/leftovers/app"
 	"github.com/genevieve/leftovers/aws/ec2"
 	"github.com/genevieve/leftovers/aws/elb"
 	"github.com/genevieve/leftovers/aws/elbv2"
@@ -27,6 +26,7 @@ import (
 	"github.com/genevieve/leftovers/aws/rds"
 	"github.com/genevieve/leftovers/aws/route53"
 	"github.com/genevieve/leftovers/aws/s3"
+	"github.com/genevieve/leftovers/common"
 )
 
 type resource interface {
@@ -35,10 +35,14 @@ type resource interface {
 }
 
 type Leftovers struct {
-	logger    logger
-	resources []resource
+	asyncDeleter app.AsyncDeleter
+	logger       logger
+	resources    []resource
 }
 
+// NewLeftovers returns a new Leftovers for AWS that can be used to list resources,
+// list types, or delete resources for the provided account. It returns an error
+// if the credentials provided are invalid.
 func NewLeftovers(logger logger, accessKeyId, secretAccessKey, region string) (Leftovers, error) {
 	if accessKeyId == "" {
 		return Leftovers{}, errors.New("Missing aws access key id.")
@@ -78,8 +82,11 @@ func NewLeftovers(logger logger, accessKeyId, secretAccessKey, region string) (L
 	subnets := ec2.NewSubnets(ec2Client, logger, resourceTags)
 	bucketManager := s3.NewBucketManager(region)
 
+	asyncDeleter := app.NewAsyncDeleter(logger)
+
 	return Leftovers{
-		logger: logger,
+		logger:       logger,
+		asyncDeleter: asyncDeleter,
 		resources: []resource{
 			elb.NewLoadBalancers(elbClient, logger),
 			elbv2.NewLoadBalancers(elbv2Client, logger),
@@ -118,6 +125,8 @@ func NewLeftovers(logger logger, accessKeyId, secretAccessKey, region string) (L
 	}, nil
 }
 
+// Types will print all the resource types that can
+// be deleted on this IaaS.
 func (l Leftovers) Types() {
 	l.logger.NoConfirm()
 
@@ -126,6 +135,8 @@ func (l Leftovers) Types() {
 	}
 }
 
+// List will print all the resources that contain
+// the provided filter in the resource's identifier.
 func (l Leftovers) List(filter string) {
 	l.logger.NoConfirm()
 
@@ -144,6 +155,10 @@ func (l Leftovers) List(filter string) {
 	}
 }
 
+// Delete will collect all resources that contain
+// the provided filter in the resource's identifier, prompt
+// you to confirm deletion (if enabled), and delete those
+// that are selected.
 func (l Leftovers) Delete(filter string) error {
 	deletables := [][]common.Deletable{}
 
@@ -156,11 +171,13 @@ func (l Leftovers) Delete(filter string) error {
 		deletables = append(deletables, list)
 	}
 
-	l.asyncDelete(deletables)
-
-	return nil
+	return l.asyncDeleter.Run(deletables)
 }
 
+// DeleteType will collect all resources of the provied type that contain
+// the provided filter in the resource's identifier, prompt
+// you to confirm deletion (if enabled), and delete those
+// that are selected.
 func (l Leftovers) DeleteType(filter, rType string) error {
 	deletables := [][]common.Deletable{}
 
@@ -175,31 +192,5 @@ func (l Leftovers) DeleteType(filter, rType string) error {
 		}
 	}
 
-	l.asyncDelete(deletables)
-
-	return nil
-}
-
-func (l Leftovers) asyncDelete(deletables [][]common.Deletable) {
-	var wg sync.WaitGroup
-
-	for _, list := range deletables {
-		for _, d := range list {
-			wg.Add(1)
-
-			go func(d common.Deletable) {
-				defer wg.Done()
-
-				l.logger.Println(fmt.Sprintf("[%s: %s] Deleting...", d.Type(), d.Name()))
-
-				if err := d.Delete(); err != nil {
-					l.logger.Println(fmt.Sprintf("[%s: %s] %s", d.Type(), d.Name(), color.YellowString(err.Error())))
-				} else {
-					l.logger.Println(fmt.Sprintf("[%s: %s] %s", d.Type(), d.Name(), color.GreenString("Deleted!")))
-				}
-			}(d)
-		}
-
-		wg.Wait()
-	}
+	return l.asyncDeleter.Run(deletables)
 }

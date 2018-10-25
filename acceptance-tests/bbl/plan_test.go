@@ -5,7 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	acceptance "github.com/cloudfoundry/bosh-bootloader/acceptance-tests"
 	"github.com/cloudfoundry/bosh-bootloader/acceptance-tests/actors"
@@ -32,12 +31,12 @@ var _ = Describe("plan", func() {
 		iaas = configuration.IAAS
 		stateDir = configuration.StateFileDir
 
-		bbl = actors.NewBBL(stateDir, pathToBBL, configuration, "plan-env")
+		bbl = actors.NewBBL(stateDir, pathToBBL, configuration, "plan-env", false)
 	})
 
 	It("sets up the bbl state directory", func() {
 		session := bbl.Plan("--name", bbl.PredefinedEnvID())
-		Eventually(session, 5*time.Minute).Should(gexec.Exit(0))
+		Eventually(session, bblPlanTimeout).Should(gexec.Exit(0))
 
 		expectedArtifacts := []string{
 			filepath.Join(stateDir, "create-jumpbox.sh"),
@@ -86,7 +85,7 @@ var _ = Describe("plan", func() {
 
 		By("rerunning bbl plan", func() {
 			session = bbl.Plan("--name", bbl.PredefinedEnvID())
-			Eventually(session, 5*time.Minute).Should(gexec.Exit(0))
+			Eventually(session, bblPlanTimeout).Should(gexec.Exit(0))
 		})
 
 		By("verifying that modified artifacts were overwritten", func() {
@@ -105,7 +104,7 @@ var _ = Describe("plan", func() {
 
 		By("running bbl down", func() {
 			session = bbl.Down()
-			Eventually(session, 5*time.Minute).Should(gexec.Exit(0))
+			Eventually(session, bblDownTimeout).Should(gexec.Exit(0))
 		})
 
 		By("verifying that artifacts were deleted", func() {

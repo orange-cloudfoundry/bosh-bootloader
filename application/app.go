@@ -29,7 +29,11 @@ func New(commands CommandSet, configuration Configuration, usage usage) App {
 }
 
 func (a App) Run() error {
-	return a.execute()
+	err := a.execute()
+	if _, ok := err.(commands.ExitSuccessfully); !ok {
+		return err
+	}
+	return nil
 }
 
 func (a App) getCommand(commandString string) (commands.Command, error) {
@@ -69,6 +73,10 @@ func (a App) execute() error {
 		}
 
 		return versionCommand.Execute([]string{}, storage.State{})
+	}
+
+	if (a.configuration.Command == "plan" || a.configuration.Command == "up") && a.configuration.Global.Name != "" {
+		a.configuration.SubcommandFlags = append(a.configuration.SubcommandFlags, "--name", a.configuration.Global.Name)
 	}
 
 	err = command.CheckFastFails(a.configuration.SubcommandFlags, a.configuration.State)

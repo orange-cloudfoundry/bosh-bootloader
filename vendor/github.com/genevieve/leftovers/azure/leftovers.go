@@ -9,10 +9,12 @@ import (
 	"github.com/Azure/go-autorest/autorest/adal"
 	azurelib "github.com/Azure/go-autorest/autorest/azure"
 	"github.com/fatih/color"
+	"github.com/genevieve/leftovers/common"
+	multierror "github.com/hashicorp/go-multierror"
 )
 
 type resource interface {
-	List(filter string) ([]Deletable, error)
+	List(filter string) ([]common.Deletable, error)
 	Type() string
 }
 
@@ -21,6 +23,7 @@ type Leftovers struct {
 	resource resource
 }
 
+// List will print all of the resources that match the provided filter.
 func (l Leftovers) List(filter string) {
 	l.logger.NoConfirm()
 
@@ -34,12 +37,21 @@ func (l Leftovers) List(filter string) {
 	}
 }
 
+// Types will print all the resource types that can
+// be deleted on this IaaS.
 func (l Leftovers) Types() {
 	l.logger.Println(l.resource.Type())
 }
 
+// Delete will collect all resources that contain
+// the provided filter in the resource's identifier, prompt
+// you to confirm deletion (if enabled), and delete those
+// that are selected.
 func (l Leftovers) Delete(filter string) error {
-	var deletables []Deletable
+	var (
+		deletables []common.Deletable
+		result     *multierror.Error
+	)
 
 	deletables, err := l.resource.List(filter)
 	if err != nil {
@@ -51,19 +63,29 @@ func (l Leftovers) Delete(filter string) error {
 
 		err := d.Delete()
 		if err != nil {
-			l.logger.Println(fmt.Sprintf("[%s: %s] %s", d.Type(), d.Name(), color.YellowString(err.Error())))
+			err = fmt.Errorf("[%s: %s] %s", d.Type(), d.Name(), color.YellowString(err.Error()))
+			result = multierror.Append(result, err)
+
+			l.logger.Println(err.Error())
 		} else {
 			l.logger.Println(fmt.Sprintf("[%s: %s] %s", d.Type(), d.Name(), color.GreenString("Deleted!")))
 		}
 	}
 
-	return nil
+	return result.ErrorOrNil()
 }
 
+// DeleteType will collect all resources of the provied type that contain
+// the provided filter in the resource's identifier, prompt
+// you to confirm deletion (if enabled), and delete those
+// that are selected.
 func (l Leftovers) DeleteType(filter, rType string) error {
 	return l.Delete(filter)
 }
 
+// NewLeftovers returns a new Leftovers for Azure that can be used to list resources,
+// list types, or delete resources for the provided account. It returns an error
+// if the credentials provided are invalid.
 func NewLeftovers(logger logger, clientId, clientSecret, subscriptionId, tenantId string) (Leftovers, error) {
 	if clientId == "" {
 		return Leftovers{}, errors.New("Missing client id.")

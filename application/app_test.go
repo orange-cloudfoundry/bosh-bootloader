@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/cloudfoundry/bosh-bootloader/application"
+	"github.com/cloudfoundry/bosh-bootloader/commands"
 	"github.com/cloudfoundry/bosh-bootloader/fakes"
 	"github.com/cloudfoundry/bosh-bootloader/storage"
 
@@ -71,6 +72,42 @@ var _ = Describe("App", func() {
 					"--second-subcommand-flag", "second-value",
 				}))
 			})
+		})
+
+		Context("when name is passed as a global flag", func() {
+			DescribeTable("propagates name to subcommand flags", func(command string) {
+				commandFake := &fakes.Command{}
+
+				app = application.New(
+					application.CommandSet{
+						command: commandFake,
+					},
+					application.Configuration{
+						Command: command,
+						SubcommandFlags: []string{
+							"--first-subcommand-flag", "first-value",
+							"--second-subcommand-flag", "second-value",
+						},
+						Global: application.GlobalConfiguration{
+							StateDir: "some/state/dir",
+							Name:     "some-env-name",
+						},
+						State: storage.State{},
+					},
+					usage)
+
+				Expect(app.Run()).To(Succeed())
+
+				Expect(commandFake.ExecuteCall.CallCount).To(Equal(1))
+				Expect(commandFake.ExecuteCall.Receives.SubcommandFlags).To(Equal([]string{
+					"--first-subcommand-flag", "first-value",
+					"--second-subcommand-flag", "second-value",
+					"--name", "some-env-name",
+				}))
+			},
+				Entry("when command is plan", "plan"),
+				Entry("when command is up", "up"),
+			)
 		})
 
 		Context("when subcommand flags contains help", func() {
@@ -196,6 +233,22 @@ var _ = Describe("App", func() {
 					err := app.Run()
 					Expect(someCmd.CheckFastFailsCall.CallCount).To(Equal(1))
 					Expect(err).To(MatchError("fast failed command"))
+					Expect(someCmd.ExecuteCall.CallCount).To(Equal(0))
+				})
+			})
+
+			Context("when a fast fail occurs, but indicates that its a success", func() {
+				BeforeEach(func() {
+					someCmd.CheckFastFailsCall.Returns.Error = commands.ExitSuccessfully{}
+				})
+
+				It("returns nil and doesn't execute the command", func() {
+					app = NewAppWithConfiguration(application.Configuration{
+						Command: "some",
+					})
+					err := app.Run()
+					Expect(someCmd.CheckFastFailsCall.CallCount).To(Equal(1))
+					Expect(err).NotTo(HaveOccurred())
 					Expect(someCmd.ExecuteCall.CallCount).To(Equal(0))
 				})
 			})

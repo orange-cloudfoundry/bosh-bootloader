@@ -12,6 +12,7 @@ import (
 	"github.com/cloudfoundry/bosh-bootloader/application"
 	"github.com/cloudfoundry/bosh-bootloader/aws"
 	"github.com/cloudfoundry/bosh-bootloader/azure"
+	"github.com/cloudfoundry/bosh-bootloader/backends"
 	"github.com/cloudfoundry/bosh-bootloader/bosh"
 	"github.com/cloudfoundry/bosh-bootloader/certs"
 	"github.com/cloudfoundry/bosh-bootloader/cloudconfig"
@@ -19,6 +20,8 @@ import (
 	"github.com/cloudfoundry/bosh-bootloader/config"
 	"github.com/cloudfoundry/bosh-bootloader/gcp"
 	"github.com/cloudfoundry/bosh-bootloader/helpers"
+	"github.com/cloudfoundry/bosh-bootloader/renderers"
+	"github.com/cloudfoundry/bosh-bootloader/runtimeconfig"
 	"github.com/cloudfoundry/bosh-bootloader/ssh"
 	"github.com/cloudfoundry/bosh-bootloader/storage"
 	"github.com/cloudfoundry/bosh-bootloader/terraform"
@@ -53,8 +56,9 @@ func main() {
 	logger := application.NewLogger(os.Stdout, os.Stdin)
 	stderrLogger := application.NewLogger(os.Stderr, os.Stdin)
 	stateBootstrap := storage.NewStateBootstrap(stderrLogger, Version)
+	envRendererFactory := renderers.NewFactory(helpers.NewEnvGetter())
 
-	globals, _, err := config.ParseArgs(os.Args)
+	globals, remainingArgs, err := config.ParseArgs(os.Args)
 	if err != nil {
 		log.Fatalf("\n\n%s\n", err)
 	}
@@ -71,19 +75,14 @@ func main() {
 	stateStore := storage.NewStore(globals.StateDir, afs, garbageCollector)
 	patchDetector := storage.NewPatchDetector(globals.StateDir, logger)
 	stateMigrator := storage.NewMigrator(stateStore, afs)
-	newConfig := config.NewConfig(stateBootstrap, stateMigrator, stderrLogger, afs)
+	stateMerger := config.NewMerger(afs)
+	storageProvider := backends.NewProvider()
+	stateDownloader := config.NewDownloader(storageProvider)
+	newConfig := config.NewConfig(stateBootstrap, stateMigrator, stateMerger, stateDownloader, stderrLogger, afs)
 
-	appConfig, err := newConfig.Bootstrap(os.Args)
+	appConfig, err := newConfig.Bootstrap(globals, remainingArgs, len(os.Args))
 	if err != nil {
 		log.Fatalf("\n\n%s\n", err)
-	}
-
-	needsIAASCreds := config.NeedsIAASCreds(appConfig.Command) && !appConfig.ShowCommandHelp
-	if needsIAASCreds {
-		err = config.ValidateIAAS(appConfig.State)
-		if err != nil {
-			log.Fatal(err)
-		}
 	}
 
 	// Utilities
@@ -125,17 +124,21 @@ func main() {
 	allProxyGetter := bosh.NewAllProxyGetter(sshKeyGetter, afs)
 	credhubGetter := bosh.NewCredhubGetter(stateStore, afs)
 	boshManager := bosh.NewManager(boshExecutor, logger, stateStore, sshKeyGetter, afs)
-	boshClientProvider := bosh.NewClientProvider(socks5Proxy, sshKeyGetter)
+	boshClientProvider := bosh.NewClientProvider(allProxyGetter, socks5Proxy, sshKeyGetter, boshPath)
 
 	// Clients that require IAAS credentials.
 	var (
+		// function extract InitializeNetworkClients
 		networkClient            helpers.NetworkClient
 		networkDeletionValidator commands.NetworkDeletionValidator
 
-		awsClient aws.Client
+		// function extract InitializeLeftovers
 		leftovers commands.FilteredDeleter
+
+		awsClient aws.Client
 	)
-	if needsIAASCreds {
+	// IF we could push this whole block down out of main somehow
+	if appConfig.CommandModifiesState {
 		switch appConfig.State.IAAS {
 		case "aws":
 			awsClient = aws.NewClient(appConfig.State.AWS, logger)
@@ -254,6 +257,7 @@ func main() {
 	}
 
 	cloudConfigManager := cloudconfig.NewManager(logger, boshCommand, stateStore, cloudConfigOpsGenerator, boshClientProvider, terraformManager, afs)
+	runtimeConfigManager := runtimeconfig.NewManager(logger, stateStore, boshClientProvider)
 
 	// Commands
 	var envIDManager helpers.EnvIDManager
@@ -261,7 +265,7 @@ func main() {
 		envIDManager = helpers.NewEnvIDManager(envIDGenerator, networkClient)
 	}
 	plan := commands.NewPlan(boshManager, cloudConfigManager, stateStore, patchDetector, envIDManager, terraformManager, lbArgsHandler, stderrLogger, Version)
-	up := commands.NewUp(plan, boshManager, cloudConfigManager, stateStore, terraformManager)
+	up := commands.NewUp(plan, boshManager, cloudConfigManager, runtimeConfigManager, stateStore, terraformManager)
 	usage := commands.NewUsage(logger)
 
 	commandSet := application.CommandSet{}
@@ -287,7 +291,7 @@ func main() {
 	commandSet["director-ssh-key"] = commands.NewDirectorSSHKey(logger, stateValidator, sshKeyGetter)
 	commandSet["env-id"] = commands.NewStateQuery(logger, stateValidator, terraformManager, commands.EnvIDPropertyName)
 	commandSet["latest-error"] = commands.NewLatestError(logger, stateValidator)
-	commandSet["print-env"] = commands.NewPrintEnv(logger, stderrLogger, stateValidator, allProxyGetter, credhubGetter, terraformManager, afs)
+	commandSet["print-env"] = commands.NewPrintEnv(logger, stderrLogger, stateValidator, allProxyGetter, credhubGetter, terraformManager, afs, envRendererFactory)
 	commandSet["ssh"] = commands.NewSSH(sshCLI, sshKeyGetter, pathFinder, afs, ssh.RandomPort{})
 
 	app := application.New(commandSet, appConfig, usage)

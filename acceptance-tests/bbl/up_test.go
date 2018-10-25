@@ -3,7 +3,6 @@ package acceptance_test
 import (
 	"fmt"
 	"os/exec"
-	"time"
 
 	acceptance "github.com/cloudfoundry/bosh-bootloader/acceptance-tests"
 	"github.com/cloudfoundry/bosh-bootloader/acceptance-tests/actors"
@@ -38,21 +37,21 @@ var _ = Describe("up", func() {
 		iaasHelper = actors.NewIAASLBHelper(iaas, configuration)
 		stateDir = configuration.StateFileDir
 
-		bbl = actors.NewBBL(stateDir, pathToBBL, configuration, "up-env")
+		bbl = actors.NewBBL(stateDir, pathToBBL, configuration, "up-env", false)
 		boshcli = actors.NewBOSHCLI()
 	})
 
 	AfterEach(func() {
 		By("destroying the director and the jumpbox", func() {
 			session := bbl.Down()
-			Eventually(session, 20*time.Minute).Should(gexec.Exit(0))
+			Eventually(session, bblDownTimeout).Should(gexec.Exit(0))
 		})
 	})
 
 	It("bbl's up a new bosh director and jumpbox", func() {
 		By("cleaning up any leftovers", func() {
 			session := bbl.CleanupLeftovers(bbl.PredefinedEnvID())
-			Eventually(session, 10*time.Minute).Should(gexec.Exit())
+			Eventually(session, bblLeftoversTimeout).Should(gexec.Exit())
 		})
 
 		args := []string{
@@ -60,7 +59,7 @@ var _ = Describe("up", func() {
 		}
 		args = append(args, iaasHelper.GetLBArgs()...)
 		session := bbl.Up(args...)
-		Eventually(session, 60*time.Minute).Should(gexec.Exit(0))
+		Eventually(session, bblUpTimeout).Should(gexec.Exit(0))
 
 		By("exporting bosh environment variables", func() {
 			bbl.ExportBoshAllProxy()
@@ -90,6 +89,11 @@ var _ = Describe("up", func() {
 			iaasHelper.VerifyCloudConfigExtensions(vmExtensions)
 		})
 
+		By("varifying that the bosh dns runtime config was set", func() {
+			_, err := boshcli.RuntimeConfig(directorAddress, caCertPath, directorUsername, directorPassword, "dns")
+			Expect(err).NotTo(HaveOccurred())
+		})
+
 		By("checking if bbl print-env prints the bosh environment variables", func() {
 			stdout := bbl.PrintEnv()
 
@@ -104,7 +108,7 @@ var _ = Describe("up", func() {
 			Expect(sshKey).NotTo(BeEmpty())
 
 			session := bbl.Rotate()
-			Eventually(session, 40*time.Minute).Should(gexec.Exit(0))
+			Eventually(session, bblRotateTimeout).Should(gexec.Exit(0))
 
 			rotatedKey := bbl.SSHKey()
 			Expect(rotatedKey).NotTo(BeEmpty())
@@ -113,7 +117,7 @@ var _ = Describe("up", func() {
 
 		By("checking bbl up is idempotent", func() {
 			session := bbl.Up()
-			Eventually(session, 40*time.Minute).Should(gexec.Exit(0))
+			Eventually(session, bblUpTimeout).Should(gexec.Exit(0))
 		})
 
 		By("confirming that the load balancers exist", func() {
@@ -127,10 +131,10 @@ var _ = Describe("up", func() {
 
 		By("deleting lbs", func() {
 			session := bbl.Plan("--name", bbl.PredefinedEnvID())
-			Eventually(session, 1*time.Minute).Should(gexec.Exit(0))
+			Eventually(session, bblPlanTimeout).Should(gexec.Exit(0))
 
 			session = bbl.Up()
-			Eventually(session, 60*time.Minute).Should(gexec.Exit(0))
+			Eventually(session, bblUpTimeout).Should(gexec.Exit(0))
 		})
 
 		By("confirming that the load balancers no longer exist", func() {

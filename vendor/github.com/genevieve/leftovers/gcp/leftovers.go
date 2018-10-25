@@ -6,11 +6,12 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"path/filepath"
-	"sync"
+
+	homedir "github.com/mitchellh/go-homedir"
 
 	"github.com/fatih/color"
-	"github.com/genevieve/leftovers/gcp/common"
+	"github.com/genevieve/leftovers/app"
+	"github.com/genevieve/leftovers/common"
 	"github.com/genevieve/leftovers/gcp/compute"
 	"github.com/genevieve/leftovers/gcp/container"
 	"github.com/genevieve/leftovers/gcp/dns"
@@ -32,18 +33,28 @@ type resource interface {
 }
 
 type Leftovers struct {
-	logger    logger
-	resources []resource
+	logger       logger
+	asyncDeleter app.AsyncDeleter
+	resources    []resource
 }
 
+// NewLeftovers returns a new Leftovers for GCP that can be used to list resources,
+// list types, or delete resources for the provided account. It returns an error
+// if the credentials provided are invalid or if a client fails to be created.
 func NewLeftovers(logger logger, keyPath string) (Leftovers, error) {
 	if keyPath == "" {
 		return Leftovers{}, errors.New("Missing service account key path.")
 	}
 
-	absKeyPath, _ := filepath.Abs(keyPath)
+	if keyPath[0] == '~' {
+		var err error
+		keyPath, err = homedir.Expand(keyPath)
+		if err != nil {
+			return Leftovers{}, fmt.Errorf("Invalid service account key path: %s", keyPath)
+		}
+	}
 
-	key, err := ioutil.ReadFile(absKeyPath)
+	key, err := ioutil.ReadFile(keyPath)
 	if err != nil {
 		key = []byte(keyPath)
 	}
@@ -108,8 +119,11 @@ func NewLeftovers(logger logger, keyPath string) (Leftovers, error) {
 		return Leftovers{}, err
 	}
 
+	asyncDeleter := app.NewAsyncDeleter(logger)
+
 	return Leftovers{
-		logger: logger,
+		logger:       logger,
+		asyncDeleter: asyncDeleter,
 		resources: []resource{
 			compute.NewForwardingRules(client, logger, regions),
 			compute.NewGlobalForwardingRules(client, logger),
@@ -162,7 +176,8 @@ func (l Leftovers) List(filter string) {
 	}
 }
 
-// Types will print all of the resource types that can be deleted.
+// Types will print all the resource types that can
+// be deleted on this IaaS.
 func (l Leftovers) Types() {
 	l.logger.NoConfirm()
 
@@ -171,6 +186,10 @@ func (l Leftovers) Types() {
 	}
 }
 
+// Delete will collect all resources that contain
+// the provided filter in the resource's identifier, prompt
+// you to confirm deletion (if enabled), and delete those
+// that are selected.
 func (l Leftovers) Delete(filter string) error {
 	deletables := [][]common.Deletable{}
 
@@ -183,11 +202,13 @@ func (l Leftovers) Delete(filter string) error {
 		deletables = append(deletables, list)
 	}
 
-	l.asyncDelete(deletables)
-
-	return nil
+	return l.asyncDeleter.Run(deletables)
 }
 
+// DeleteType will collect all resources of the provied type that contain
+// the provided filter in the resource's identifier, prompt
+// you to confirm deletion (if enabled), and delete those
+// that are selected.
 func (l Leftovers) DeleteType(filter, rType string) error {
 	deletables := [][]common.Deletable{}
 
@@ -202,31 +223,5 @@ func (l Leftovers) DeleteType(filter, rType string) error {
 		}
 	}
 
-	l.asyncDelete(deletables)
-
-	return nil
-}
-
-func (l Leftovers) asyncDelete(deletables [][]common.Deletable) {
-	var wg sync.WaitGroup
-
-	for _, list := range deletables {
-		for _, d := range list {
-			wg.Add(1)
-
-			go func(d common.Deletable) {
-				defer wg.Done()
-
-				l.logger.Println(fmt.Sprintf("[%s: %s] Deleting...", d.Type(), d.Name()))
-
-				if err := d.Delete(); err != nil {
-					l.logger.Println(fmt.Sprintf("[%s: %s] %s", d.Type(), d.Name(), color.YellowString(err.Error())))
-				} else {
-					l.logger.Println(fmt.Sprintf("[%s: %s] %s", d.Type(), d.Name(), color.GreenString("Deleted!")))
-				}
-			}(d)
-		}
-
-		wg.Wait()
-	}
+	return l.asyncDeleter.Run(deletables)
 }

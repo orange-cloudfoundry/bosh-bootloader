@@ -8,11 +8,13 @@ import (
 	"time"
 
 	"github.com/fatih/color"
+	"github.com/genevieve/leftovers/common"
+	multierror "github.com/hashicorp/go-multierror"
 	"github.com/vmware/govmomi"
 )
 
 type resource interface {
-	List(filter string, rType string) ([]Deletable, error)
+	List(filter string, rType string) ([]common.Deletable, error)
 	Type() string
 }
 
@@ -21,8 +23,10 @@ type Leftovers struct {
 	resources []resource
 }
 
+// List will print all the resources that contain
+// the provided filter in the resource's identifier.
 func (l Leftovers) List(filter string) {
-	var all []Deletable
+	var all []common.Deletable
 
 	for _, r := range l.resources {
 		list, err := r.List(filter, "")
@@ -38,18 +42,31 @@ func (l Leftovers) List(filter string) {
 	}
 }
 
+// Types will print all the resource types that can
+// be deleted on this IaaS.
 func (l Leftovers) Types() {
 	for _, r := range l.resources {
 		l.logger.Println(r.Type())
 	}
 }
 
+// Delete will collect all resources that contain
+// the provided filter in the resource's identifier, prompt
+// you to confirm deletion (if enabled), and delete those
+// that are selected.
 func (l Leftovers) Delete(filter string) error {
 	return l.DeleteType(filter, "")
 }
 
+// DeleteType will collect all resources of the provied type that contain
+// the provided filter in the resource's identifier, prompt
+// you to confirm deletion, and delete those
+// that are selected.
 func (l Leftovers) DeleteType(filter, rType string) error {
-	var deletables []Deletable
+	var (
+		deletables []common.Deletable
+		result     *multierror.Error
+	)
 
 	for _, r := range l.resources {
 		list, err := r.List(filter, rType)
@@ -65,15 +82,21 @@ func (l Leftovers) DeleteType(filter, rType string) error {
 
 		err := d.Delete()
 		if err != nil {
-			l.logger.Println(fmt.Sprintf("[%s: %s] %s", d.Type(), d.Name(), color.YellowString(err.Error())))
+			err = fmt.Errorf("[%s: %s] %s", d.Type(), d.Name(), color.YellowString(err.Error()))
+			result = multierror.Append(result, err)
+
+			l.logger.Println(err.Error())
 		} else {
 			l.logger.Println(fmt.Sprintf("[%s: %s] %s", d.Type(), d.Name(), color.GreenString("Deleted!")))
 		}
 	}
 
-	return nil
+	return result.ErrorOrNil()
 }
 
+// NewLeftovers returns a new Leftovers for vSphere that can be used to list resources,
+// list types, or delete resources for the provided account. It returns an error
+// if the credentials provided are invalid or a client cannot be created.
 func NewLeftovers(logger logger, vCenterIP, vCenterUser, vCenterPassword, vCenterDC string) (Leftovers, error) {
 	if vCenterIP == "" {
 		return Leftovers{}, errors.New("Missing vCenter IP.")
