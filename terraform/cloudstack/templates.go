@@ -84,7 +84,7 @@ func templatesBaseTf() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/base.tf", size: 7068, mode: os.FileMode(480), modTime: time.Unix(1532970082, 0)}
+	info := bindataFileInfo{name: "templates/base.tf", size: 7068, mode: os.FileMode(480), modTime: time.Unix(1540502298, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -104,7 +104,7 @@ func templatesSec_groupTf() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/sec_group.tf", size: 6161, mode: os.FileMode(480), modTime: time.Unix(1533204077, 0)}
+	info := bindataFileInfo{name: "templates/sec_group.tf", size: 6161, mode: os.FileMode(480), modTime: time.Unix(1540502298, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }

@@ -1206,7 +1206,7 @@ var _ = Describe("LoadState", func() {
 						})
 
 						It("returns a state object containing configuration flags", func() {
-							appConfig, err := c.Bootstrap(args)
+							appConfig, err := c.Bootstrap(bootstrapArgs(args))
 							Expect(err).NotTo(HaveOccurred())
 
 							state := appConfig.State
@@ -1221,11 +1221,11 @@ var _ = Describe("LoadState", func() {
 						})
 
 						It("returns the remaining arguments", func() {
-							appConfig, err := c.Bootstrap(args)
+							appConfig, err := c.Bootstrap(bootstrapArgs(args))
 							Expect(err).NotTo(HaveOccurred())
 
 							Expect(appConfig.Command).To(Equal("up"))
-							Expect(appConfig.SubcommandFlags).To(Equal(application.StringSlice{"--name", "some-env-id"}))
+							Expect(appConfig.Global.Name).To(Equal("some-env-id"))
 						})
 					})
 
@@ -1247,7 +1247,7 @@ var _ = Describe("LoadState", func() {
 						})
 
 						It("returns a state object containing configuration flags", func() {
-							appConfig, err := c.Bootstrap(args)
+							appConfig, err := c.Bootstrap(bootstrapArgs(args))
 							Expect(err).NotTo(HaveOccurred())
 
 							state := appConfig.State
@@ -1261,7 +1261,7 @@ var _ = Describe("LoadState", func() {
 						})
 
 						It("returns the command", func() {
-							appConfig, err := c.Bootstrap(args)
+							appConfig, err := c.Bootstrap(bootstrapArgs(args))
 							Expect(err).NotTo(HaveOccurred())
 
 							Expect(appConfig.Command).To(Equal("up"))
@@ -1285,14 +1285,14 @@ var _ = Describe("LoadState", func() {
 
 					Context("when valid matching configuration is passed in", func() {
 						It("returns state with existing configuration", func() {
-							appConfig, err := c.Bootstrap([]string{
+							appConfig, err := c.Bootstrap(bootstrapArgs([]string{
 								"bbl", "up",
 								"--iaas", "cloudstack",
 								"--cloudstack-api-key", "some-api-key",
 								"--cloudstack-secret-access-key", "some-secret-access-key",
 								"--cloudstack-zone", "some-zone",
 								"--cloudstack-endpoint", "http://my-cloudstack.com/client/api",
-							})
+							}))
 							Expect(err).NotTo(HaveOccurred())
 
 							Expect(appConfig.State.EnvID).To(Equal("some-env-id"))
@@ -1301,7 +1301,7 @@ var _ = Describe("LoadState", func() {
 
 					DescribeTable("when non-matching configuration is passed in",
 						func(args []string, expected string) {
-							_, err := c.Bootstrap(args)
+							_, err := c.Bootstrap(bootstrapArgs(args))
 
 							Expect(err).To(MatchError(expected))
 						},
