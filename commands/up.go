@@ -104,10 +104,11 @@ func (u Up) Execute(args []string, state storage.State) error {
 		return fmt.Errorf("Update cloud config: %s", err)
 	}
 
-	err = u.runtimeConfigManager.Update(state)
-	if err != nil {
-		return fmt.Errorf("Update runtime config: %s", err)
-	}
+	// TODO: uncomment when runtime config will be patchable
+	//err = u.runtimeConfigManager.Update(state)
+	//if err != nil {
+	//	return fmt.Errorf("Update runtime config: %s", err)
+	//}
 
 	return nil
 }
