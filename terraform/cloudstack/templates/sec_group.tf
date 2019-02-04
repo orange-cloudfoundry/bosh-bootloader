@@ -4,7 +4,8 @@ variable "cf_external_ports" {
     80,
     443,
     2222,
-    4443]
+    4443
+  ]
 }
 
 variable "bosh_ports" {
@@ -31,24 +32,28 @@ variable "bosh_external_ports" {
 variable "shared_tcp_ports" {
   type = "list"
   default = [
-    9090,
-    9091,
+    1801,
+    3000,
+    3457,
+    4003,
+    4103,
+    4222,
+    4443,
+    8080,
     8082,
     8300,
     8301,
-    8889,
+    8302,
     8443,
-    3000,
-    4443,
-    8080,
-    3457,
-    9023,
-    9022,
-    4222,
+    8844,
+    8853,
+    8889,
     8891,
-    4003,
-    4103,
-    1801]
+    9022,
+    9023,
+    9090,
+    9091,
+  ]
 }
 
 variable "shared_udp_ports" {
@@ -56,7 +61,8 @@ variable "shared_udp_ports" {
   default = [
     8301,
     8302,
-    8600]
+    8600
+  ]
 }
 
 resource "cloudstack_network_acl" "bosh_subnet_sec_group" {
