@@ -35,6 +35,7 @@ type boshManager interface {
 	InitializeDirector(bblState storage.State) error
 	CreateDirector(bblState storage.State, terraformOutputs terraform.Outputs) (storage.State, error)
 	InitializeJumpbox(bblState storage.State) error
+	CleanUpDirector(state storage.State) error
 	CreateJumpbox(bblState storage.State, terraformOutputs terraform.Outputs) (storage.State, error)
 	DeleteDirector(bblState storage.State, terraformOutputs terraform.Outputs) error
 	DeleteJumpbox(bblState storage.State, terraformOutputs terraform.Outputs) error
@@ -102,12 +103,11 @@ type stateStore interface {
 type cloudConfigManager interface {
 	Update(state storage.State) error
 	Initialize(state storage.State) error
-	GenerateVars(state storage.State) error
-	Interpolate() (string, error)
 	IsPresentCloudConfig() bool
 	IsPresentCloudConfigVars() bool
 }
 
 type runtimeConfigManager interface {
+	Initialize(state storage.State) error
 	Update(state storage.State) error
 }

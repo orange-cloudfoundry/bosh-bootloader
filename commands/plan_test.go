@@ -17,20 +17,22 @@ var _ = Describe("Plan", func() {
 	var (
 		command commands.Plan
 
-		boshManager        *fakes.BOSHManager
-		cloudConfigManager *fakes.CloudConfigManager
-		envIDManager       *fakes.EnvIDManager
-		lbArgsHandler      *fakes.LBArgsHandler
-		logger             *fakes.Logger
-		stateStore         *fakes.StateStore
-		terraformManager   *fakes.TerraformManager
-		patchDetector      *fakes.PatchDetector
-		bblVersion         string
+		boshManager          *fakes.BOSHManager
+		cloudConfigManager   *fakes.CloudConfigManager
+		runtimeConfigManager *fakes.RuntimeConfigManager
+		envIDManager         *fakes.EnvIDManager
+		lbArgsHandler        *fakes.LBArgsHandler
+		logger               *fakes.Logger
+		stateStore           *fakes.StateStore
+		terraformManager     *fakes.TerraformManager
+		patchDetector        *fakes.PatchDetector
+		bblVersion           string
 	)
 
 	BeforeEach(func() {
 		boshManager = &fakes.BOSHManager{}
 		cloudConfigManager = &fakes.CloudConfigManager{}
+		runtimeConfigManager = &fakes.RuntimeConfigManager{}
 		envIDManager = &fakes.EnvIDManager{}
 		lbArgsHandler = &fakes.LBArgsHandler{}
 		logger = &fakes.Logger{}
@@ -44,6 +46,7 @@ var _ = Describe("Plan", func() {
 		command = commands.NewPlan(
 			boshManager,
 			cloudConfigManager,
+			runtimeConfigManager,
 			stateStore,
 			patchDetector,
 			envIDManager,
@@ -92,6 +95,9 @@ var _ = Describe("Plan", func() {
 
 			Expect(cloudConfigManager.InitializeCall.CallCount).To(Equal(1))
 			Expect(cloudConfigManager.InitializeCall.Receives.State).To(Equal(syncedState))
+
+			Expect(runtimeConfigManager.InitializeCall.CallCount).To(Equal(1))
+			Expect(runtimeConfigManager.InitializeCall.Receives.State).To(Equal(syncedState))
 
 			Expect(patchDetector.FindCall.CallCount).To(Equal(1))
 		})
@@ -168,6 +174,13 @@ var _ = Describe("Plan", func() {
 				Expect(err).To(MatchError("Cloud config manager initialize: potato"))
 			})
 
+			It("returns an error if runtime config initialize fails", func() {
+				runtimeConfigManager.InitializeCall.Returns.Error = errors.New("bell-pepper")
+
+				err := command.Execute([]string{}, storage.State{})
+				Expect(err).To(MatchError("Runtime config manager initialize: bell-pepper"))
+			})
+
 			It("prints the error but continues if patch detector fails", func() {
 				patchDetector.FindCall.Returns.Error = errors.New("iceburg lettuce")
 
@@ -205,7 +218,7 @@ var _ = Describe("Plan", func() {
 
 			It("returns an error", func() {
 				err := command.CheckFastFails([]string{}, storage.State{Version: 999})
-				Expect(err).To(MatchError("/bin/banana: bosh-cli version must be at least v2.0.48"))
+				Expect(err).To(MatchError("/bin/banana: bosh-cli version must be at least v2.0.48, but found v1.9.1"))
 			})
 		})
 

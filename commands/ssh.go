@@ -15,6 +15,7 @@ import (
 )
 
 type SSH struct {
+	logger        logger
 	cli           sshCLI
 	keyGetter     sshKeyGetter
 	pathFinder    pathFinder
@@ -40,8 +41,9 @@ type tempDirWriter interface {
 	fileio.TempDirer
 }
 
-func NewSSH(sshCLI sshCLI, sshKeyGetter sshKeyGetter, pathFinder pathFinder, tempDirWriter tempDirWriter, randomPort randomPort) SSH {
+func NewSSH(logger logger, sshCLI sshCLI, sshKeyGetter sshKeyGetter, pathFinder pathFinder, tempDirWriter tempDirWriter, randomPort randomPort) SSH {
 	return SSH{
+		logger:        logger,
 		cli:           sshCLI,
 		keyGetter:     sshKeyGetter,
 		pathFinder:    pathFinder,
@@ -62,10 +64,12 @@ func (s SSH) Execute(args []string, state storage.State) error {
 	var (
 		jumpbox  bool
 		director bool
+		cmd      string
 	)
 	sshFlags := flags.New("ssh")
 	sshFlags.Bool(&jumpbox, "jumpbox")
 	sshFlags.Bool(&director, "director")
+	sshFlags.String(&cmd, "cmd", "")
 	err := sshFlags.Parse(args)
 	if err != nil {
 		return err
@@ -73,6 +77,10 @@ func (s SSH) Execute(args []string, state storage.State) error {
 
 	if !jumpbox && !director {
 		return fmt.Errorf("This command requires the --jumpbox or --director flag.")
+	}
+
+	if jumpbox && len(cmd) > 0 {
+		return fmt.Errorf("Executing commands on jumpbox not supported (only on director).")
 	}
 
 	tempDir, err := s.tempDirWriter.TempDir("", "")
@@ -120,7 +128,7 @@ func (s SSH) Execute(args []string, state storage.State) error {
 		return fmt.Errorf("Open proxy port: %s", err)
 	}
 
-	fmt.Println("checking host key")
+	s.logger.Println("checking host key")
 	err = s.cli.Run([]string{
 		"-T",
 		fmt.Sprintf("jumpbox@%s", jumpboxURL),
@@ -130,8 +138,7 @@ func (s SSH) Execute(args []string, state storage.State) error {
 	if err != nil {
 		return fmt.Errorf("unable to verify host key fingerprint: %s", err)
 	}
-
-	fmt.Println("opening a tunnel through your jumpbox")
+	s.logger.Println("opening a tunnel through your jumpbox")
 	backgroundTunnel, err := s.cli.Start([]string{
 		"-4",
 		"-D", port,
@@ -155,13 +162,19 @@ func (s SSH) Execute(args []string, state storage.State) error {
 
 	ip := strings.Split(strings.TrimPrefix(state.BOSH.DirectorAddress, "https://"), ":")[0]
 
-	time.Sleep(2 * time.Second) // make sure we give that tunnel a moment to open
-	return s.cli.Run([]string{
+	toExecute := []string{
 		"-tt",
 		"-o", "StrictHostKeyChecking=no",
 		"-o", "ServerAliveInterval=300",
 		"-o", fmt.Sprintf("ProxyCommand=%s localhost:%s %%h %%p", proxyCommandPrefix, port),
 		"-i", directorKeyPath,
 		fmt.Sprintf("jumpbox@%s", ip),
-	})
+	}
+	if len(cmd) > 0 {
+		toExecute = append(toExecute, cmd)
+		s.logger.Printf("executing command on director:\n%s\n", cmd)
+	}
+
+	time.Sleep(2 * time.Second) // make sure we give that tunnel a moment to open
+	return s.cli.Run(toExecute)
 }

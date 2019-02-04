@@ -21,6 +21,7 @@ var _ = Describe("SSH", func() {
 		sshKeyGetter *fakes.FancySSHKeyGetter
 		fileIO       *fakes.FileIO
 		randomPort   *fakes.RandomPort
+		logger       *fakes.Logger
 	)
 
 	BeforeEach(func() {
@@ -29,8 +30,9 @@ var _ = Describe("SSH", func() {
 		pathFinder = &fakes.PathFinder{}
 		fileIO = &fakes.FileIO{}
 		randomPort = &fakes.RandomPort{}
+		logger = &fakes.Logger{}
 
-		ssh = commands.NewSSH(sshCLI, sshKeyGetter, pathFinder, fileIO, randomPort)
+		ssh = commands.NewSSH(logger, sshCLI, sshKeyGetter, pathFinder, fileIO, randomPort)
 	})
 
 	Describe("CheckFastFails", func() {
@@ -81,6 +83,11 @@ var _ = Describe("SSH", func() {
 				err := ssh.Execute([]string{"--director"}, state)
 				Expect(err).NotTo(HaveOccurred())
 
+				Expect(logger.PrintlnCall.Messages).To(Equal([]string{
+					"checking host key",
+					"opening a tunnel through your jumpbox",
+				}))
+
 				Expect(sshCLI.RunCall.Receives[0]).To(ConsistOf(
 					"-T",
 					"jumpbox@jumpboxURL",
@@ -95,7 +102,13 @@ var _ = Describe("SSH", func() {
 				err := ssh.Execute([]string{"--director"}, state)
 				Expect(err).NotTo(HaveOccurred())
 
+				Expect(logger.PrintlnCall.Messages).To(Equal([]string{
+					"checking host key",
+					"opening a tunnel through your jumpbox",
+				}))
+
 				Expect(sshKeyGetter.JumpboxGetCall.CallCount).To(Equal(1))
+
 				Expect(fileIO.WriteFileCall.Receives).To(ContainElement(
 					fakes.WriteFileReceive{
 						Filename: jumpboxPrivateKeyPath,
@@ -103,6 +116,7 @@ var _ = Describe("SSH", func() {
 						Mode:     os.FileMode(0600),
 					},
 				))
+
 				Expect(sshCLI.StartCall.Receives[0]).To(ConsistOf(
 					"-4", "-D", "60000", "-nNC", "jumpbox@jumpboxURL", "-i", jumpboxPrivateKeyPath,
 				))
@@ -129,6 +143,32 @@ var _ = Describe("SSH", func() {
 					"-o", "ProxyCommand=nc -x localhost:60000 %h %p",
 					"-i", directorPrivateKeyPath,
 					"jumpbox@directorURL",
+				))
+			})
+
+			It("executes a command on the director through the ssh tunnel", func() {
+				cmd := "echo hello"
+				err := ssh.Execute([]string{"--director", "--cmd", cmd}, state)
+				Expect(err).NotTo(HaveOccurred())
+
+				Expect(sshKeyGetter.DirectorGetCall.CallCount).To(Equal(1))
+
+				Expect(fileIO.WriteFileCall.Receives).To(ContainElement(
+					fakes.WriteFileReceive{
+						Filename: directorPrivateKeyPath,
+						Contents: []byte("director-private-key"),
+						Mode:     os.FileMode(0600),
+					},
+				))
+
+				Expect(sshCLI.RunCall.Receives[1]).To(ConsistOf(
+					"-tt",
+					"-o", "StrictHostKeyChecking=no",
+					"-o", "ServerAliveInterval=300",
+					"-o", "ProxyCommand=nc -x localhost:60000 %h %p",
+					"-i", directorPrivateKeyPath,
+					"jumpbox@directorURL",
+					cmd,
 				))
 			})
 
@@ -252,6 +292,13 @@ var _ = Describe("SSH", func() {
 			It("returns an error", func() {
 				err := ssh.Execute([]string{}, storage.State{})
 				Expect(err).To(MatchError("This command requires the --jumpbox or --director flag."))
+			})
+		})
+
+		Context("when the user provides a command to execute on the jumpbox", func() {
+			It("returns an error", func() {
+				err := ssh.Execute([]string{"--jumpbox", "--cmd", "bogus"}, storage.State{})
+				Expect(err).To(MatchError("Executing commands on jumpbox not supported (only on director)."))
 			})
 		})
 

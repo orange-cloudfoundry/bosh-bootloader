@@ -19,6 +19,7 @@ import (
 	"github.com/genevieve/leftovers/gcp/sql"
 	"github.com/genevieve/leftovers/gcp/storage"
 	"golang.org/x/oauth2/google"
+	gcpcrm "google.golang.org/api/cloudresourcemanager/v1"
 	gcpcompute "google.golang.org/api/compute/v1"
 	gcpcontainer "google.golang.org/api/container/v1"
 	gcpdns "google.golang.org/api/dns/v1"
@@ -97,11 +98,16 @@ func NewLeftovers(logger logger, keyPath string) (Leftovers, error) {
 	}
 	storageClient := storage.NewClient(p.ProjectId, storageService)
 
+	crmService, err := gcpcrm.New(httpClient)
+	if err != nil {
+		return Leftovers{}, err
+	}
+
 	iamService, err := gcpiam.New(httpClient)
 	if err != nil {
 		return Leftovers{}, err
 	}
-	iamClient := iam.NewClient(p.ProjectId, iamService)
+	iamClient := iam.NewClient(p.ProjectId, iamService, crmService)
 
 	containerService, err := gcpcontainer.New(httpClient)
 	if err != nil {
@@ -119,11 +125,9 @@ func NewLeftovers(logger logger, keyPath string) (Leftovers, error) {
 		return Leftovers{}, err
 	}
 
-	asyncDeleter := app.NewAsyncDeleter(logger)
-
 	return Leftovers{
 		logger:       logger,
-		asyncDeleter: asyncDeleter,
+		asyncDeleter: app.NewAsyncDeleter(logger),
 		resources: []resource{
 			compute.NewForwardingRules(client, logger, regions),
 			compute.NewGlobalForwardingRules(client, logger),
@@ -142,6 +146,8 @@ func NewLeftovers(logger logger, keyPath string) (Leftovers, error) {
 			compute.NewHttpsHealthChecks(client, logger),
 			compute.NewImages(client, logger),
 			compute.NewDisks(client, logger, zones),
+			compute.NewVpnTunnels(client, logger, regions),
+			compute.NewTargetVpnGateways(client, logger, regions),
 			compute.NewSubnetworks(client, logger, regions),
 			compute.NewNetworks(client, logger),
 			compute.NewAddresses(client, logger, regions),

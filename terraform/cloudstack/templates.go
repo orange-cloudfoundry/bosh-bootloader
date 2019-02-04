@@ -84,7 +84,7 @@ func templatesBaseTf() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/base.tf", size: 7068, mode: os.FileMode(480), modTime: time.Unix(1540502298, 0)}
+	info := bindataFileInfo{name: "templates/base.tf", size: 7068, mode: os.FileMode(480), modTime: time.Unix(1549273016, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -104,7 +104,7 @@ func templatesSec_groupTf() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/sec_group.tf", size: 6161, mode: os.FileMode(480), modTime: time.Unix(1540502298, 0)}
+	info := bindataFileInfo{name: "templates/sec_group.tf", size: 6161, mode: os.FileMode(480), modTime: time.Unix(1549273016, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -161,7 +161,7 @@ func AssetNames() []string {
 
 // _bindata is a table, holding each asset generator, mapped to its name.
 var _bindata = map[string]func() (*asset, error){
-	"templates/base.tf":      templatesBaseTf,
+	"templates/base.tf": templatesBaseTf,
 	"templates/sec_group.tf": templatesSec_groupTf,
 }
 
@@ -204,10 +204,9 @@ type bintree struct {
 	Func     func() (*asset, error)
 	Children map[string]*bintree
 }
-
 var _bintree = &bintree{nil, map[string]*bintree{
 	"templates": &bintree{nil, map[string]*bintree{
-		"base.tf":      &bintree{templatesBaseTf, map[string]*bintree{}},
+		"base.tf": &bintree{templatesBaseTf, map[string]*bintree{}},
 		"sec_group.tf": &bintree{templatesSec_groupTf, map[string]*bintree{}},
 	}},
 }}
@@ -258,3 +257,4 @@ func _filePath(dir, name string) string {
 	cannonicalName := strings.Replace(name, "\\", "/", -1)
 	return filepath.Join(append([]string{dir}, strings.Split(cannonicalName, "/")...)...)
 }
+

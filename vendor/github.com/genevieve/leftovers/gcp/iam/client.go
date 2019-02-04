@@ -4,41 +4,51 @@ import (
 	"fmt"
 	"time"
 
+	gcpcrm "google.golang.org/api/cloudresourcemanager/v1"
+	"google.golang.org/api/googleapi"
 	gcpiam "google.golang.org/api/iam/v1"
 )
-
-const PAGE_SIZE = int64(200)
 
 type client struct {
 	project string
 
-	service         *gcpiam.Service
 	serviceAccounts *gcpiam.ProjectsServiceAccountsService
+	projects        *gcpcrm.ProjectsService
 }
 
-func NewClient(project string, service *gcpiam.Service) client {
+func NewClient(project string, iamService *gcpiam.Service, crmService *gcpcrm.Service) client {
 	return client{
 		project:         project,
-		service:         service,
-		serviceAccounts: service.Projects.ServiceAccounts,
+		serviceAccounts: iamService.Projects.ServiceAccounts,
+		projects:        crmService.Projects,
 	}
+}
+
+func (c client) GetProjectIamPolicy() (*gcpcrm.Policy, error) {
+	return c.projects.GetIamPolicy(c.project, &gcpcrm.GetIamPolicyRequest{}).Do()
+}
+
+func (c client) SetProjectIamPolicy(p *gcpcrm.Policy) (*gcpcrm.Policy, error) {
+	return c.projects.SetIamPolicy(c.project, &gcpcrm.SetIamPolicyRequest{Policy: p}).Do()
 }
 
 // ListServiceAccounts will loop over every page of results
 // and return the full list of service accounts. To prevent
 // backend errors from repeated calls, there is a 2s delay.
 func (c client) ListServiceAccounts() ([]*gcpiam.ServiceAccount, error) {
+	var token string
 	serviceAccounts := []*gcpiam.ServiceAccount{}
 
 	for {
-		resp, err := c.serviceAccounts.List(fmt.Sprintf("projects/%s", c.project)).PageSize(PAGE_SIZE).Do()
+		resp, err := c.serviceAccounts.List(fmt.Sprintf("projects/%s", c.project)).PageToken(token).Do()
 		if err != nil {
-			return serviceAccounts, err
+			return []*gcpiam.ServiceAccount{}, err
 		}
 
 		serviceAccounts = append(serviceAccounts, resp.Accounts...)
 
-		if resp.NextPageToken == "" {
+		token = resp.NextPageToken
+		if token == "" {
 			break
 		}
 
@@ -48,6 +58,15 @@ func (c client) ListServiceAccounts() ([]*gcpiam.ServiceAccount, error) {
 	return serviceAccounts, nil
 }
 
-func (c client) DeleteServiceAccount(account string) (*gcpiam.Empty, error) {
-	return c.serviceAccounts.Delete(account).Do()
+func (c client) DeleteServiceAccount(account string) error {
+	_, err := c.serviceAccounts.Delete(account).Do()
+	if err != nil {
+		gerr, ok := err.(*googleapi.Error)
+		if ok && gerr != nil && gerr.Code == 404 {
+			return nil
+		}
+
+		return err
+	}
+	return nil
 }

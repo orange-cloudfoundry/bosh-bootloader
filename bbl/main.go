@@ -25,7 +25,6 @@ import (
 	"github.com/cloudfoundry/bosh-bootloader/ssh"
 	"github.com/cloudfoundry/bosh-bootloader/storage"
 	"github.com/cloudfoundry/bosh-bootloader/terraform"
-	proxy "github.com/cloudfoundry/socks5-proxy"
 	"github.com/spf13/afero"
 
 	awscloudconfig "github.com/cloudfoundry/bosh-bootloader/cloudconfig/aws"
@@ -112,8 +111,6 @@ func main() {
 	terraformExecutor := terraform.NewExecutor(terraformCLI, bufferingCLI, stateStore, afs, appConfig.Global.Debug, out)
 
 	// BOSH
-	hostKey := proxy.NewHostKey()
-	socks5Proxy := proxy.NewSocks5Proxy(hostKey, nil)
 	boshPath, err := config.GetBOSHPath()
 	if err != nil {
 		log.Fatal(err)
@@ -123,8 +120,10 @@ func main() {
 	sshKeyGetter := bosh.NewSSHKeyGetter(stateStore, afs)
 	allProxyGetter := bosh.NewAllProxyGetter(sshKeyGetter, afs)
 	credhubGetter := bosh.NewCredhubGetter(stateStore, afs)
-	boshManager := bosh.NewManager(boshExecutor, logger, stateStore, sshKeyGetter, afs)
-	boshClientProvider := bosh.NewClientProvider(allProxyGetter, socks5Proxy, sshKeyGetter, boshPath)
+	boshCLIProvider := bosh.NewCLIProvider(allProxyGetter, boshPath)
+	boshManager := bosh.NewManager(boshExecutor, logger, stateStore, sshKeyGetter, afs, boshCLIProvider)
+
+	configUpdater := bosh.NewConfigUpdater(boshCLIProvider)
 
 	// Clients that require IAAS credentials.
 	var (
@@ -256,15 +255,15 @@ func main() {
 		cloudConfigOpsGenerator = cloudstackcloudconfig.NewOpsGenerator(terraformManager)
 	}
 
-	cloudConfigManager := cloudconfig.NewManager(logger, boshCommand, stateStore, cloudConfigOpsGenerator, boshClientProvider, terraformManager, afs)
-	runtimeConfigManager := runtimeconfig.NewManager(logger, stateStore, boshClientProvider)
+	cloudConfigManager := cloudconfig.NewManager(logger, configUpdater, stateStore, cloudConfigOpsGenerator, terraformManager, afs)
+	runtimeConfigManager := runtimeconfig.NewManager(logger, stateStore, configUpdater, afs)
 
 	// Commands
 	var envIDManager helpers.EnvIDManager
 	if appConfig.State.IAAS != "" {
 		envIDManager = helpers.NewEnvIDManager(envIDGenerator, networkClient)
 	}
-	plan := commands.NewPlan(boshManager, cloudConfigManager, stateStore, patchDetector, envIDManager, terraformManager, lbArgsHandler, stderrLogger, Version)
+	plan := commands.NewPlan(boshManager, cloudConfigManager, runtimeConfigManager, stateStore, patchDetector, envIDManager, terraformManager, lbArgsHandler, stderrLogger, Version)
 	up := commands.NewUp(plan, boshManager, cloudConfigManager, runtimeConfigManager, stateStore, terraformManager)
 	usage := commands.NewUsage(logger)
 
@@ -292,7 +291,7 @@ func main() {
 	commandSet["env-id"] = commands.NewStateQuery(logger, stateValidator, terraformManager, commands.EnvIDPropertyName)
 	commandSet["latest-error"] = commands.NewLatestError(logger, stateValidator)
 	commandSet["print-env"] = commands.NewPrintEnv(logger, stderrLogger, stateValidator, allProxyGetter, credhubGetter, terraformManager, afs, envRendererFactory)
-	commandSet["ssh"] = commands.NewSSH(sshCLI, sshKeyGetter, pathFinder, afs, ssh.RandomPort{})
+	commandSet["ssh"] = commands.NewSSH(logger, sshCLI, sshKeyGetter, pathFinder, afs, ssh.RandomPort{})
 
 	app := application.New(commandSet, appConfig, usage)
 

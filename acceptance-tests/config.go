@@ -10,7 +10,8 @@ import (
 )
 
 type Config struct {
-	IAAS string
+	IAAS        string
+	StemcellURL string
 
 	AWSAccessKeyID     string
 	AWSSecretAccessKey string
@@ -26,7 +27,7 @@ type Config struct {
 	GCPRegion            string
 
 	VSphereNetwork          string
-	VSphereSubnet           string
+	VSphereSubnetCIDR       string
 	VSphereVCenterIP        string
 	VSphereVCenterUser      string
 	VSphereVCenterPassword  string
@@ -92,7 +93,7 @@ func LoadConfig() (Config, error) {
 		config.StateFileDir = dir
 	}
 
-	fmt.Println("Using state-dir: %s", config.StateFileDir)
+	fmt.Printf("Using state-dir: %s", config.StateFileDir)
 
 	return config, nil
 }
@@ -200,6 +201,8 @@ func loadConfigFromEnvVars() Config {
 	return Config{
 		IAAS: os.Getenv("BBL_IAAS"),
 
+		StemcellURL: os.Getenv("STEMCELL_URL"),
+
 		AWSAccessKeyID:     os.Getenv("BBL_AWS_ACCESS_KEY_ID"),
 		AWSSecretAccessKey: os.Getenv("BBL_AWS_SECRET_ACCESS_KEY"),
 		AWSRegion:          os.Getenv("BBL_AWS_REGION"),
@@ -214,7 +217,7 @@ func loadConfigFromEnvVars() Config {
 		GCPRegion:            os.Getenv("BBL_GCP_REGION"),
 
 		VSphereNetwork:          os.Getenv("BBL_VSPHERE_NETWORK"),
-		VSphereSubnet:           os.Getenv("BBL_VSPHERE_SUBNET"),
+		VSphereSubnetCIDR:       os.Getenv("BBL_VSPHERE_SUBNET_CIDR"),
 		VSphereVCenterIP:        os.Getenv("BBL_VSPHERE_VCENTER_IP"),
 		VSphereVCenterUser:      os.Getenv("BBL_VSPHERE_VCENTER_USER"),
 		VSphereVCenterPassword:  os.Getenv("BBL_VSPHERE_VCENTER_PASSWORD"),

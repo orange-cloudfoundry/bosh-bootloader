@@ -80,7 +80,7 @@ var _ = Describe("Store", func() {
 						VCenterRP:       "rp",
 						Network:         "network",
 						VCenterDS:       "ds",
-						Subnet:          "10.0.0.0/24",
+						SubnetCIDR:      "10.0.0.0/24",
 					},
 					OpenStack: storage.OpenStack{
 						InternalCidr:         "cidr",
@@ -138,7 +138,6 @@ var _ = Describe("Store", func() {
 				"iaas": "aws",
 				"id": "01020304-0506-0708-0910-111213141516",
 				"envID": "some-env-id",
-				"noDirector": false,
 				"aws": {
 					"region": "some-region"
 				},
@@ -322,6 +321,36 @@ var _ = Describe("Store", func() {
 					cloudConfigDir, err := store.GetCloudConfigDir()
 					Expect(err).To(MatchError("Get cloud-config dir: not a directory"))
 					Expect(cloudConfigDir).To(Equal(""))
+				})
+			})
+		})
+	})
+
+	Describe("GetRuntimeConfigDir", func() {
+		var expectedRuntimeConfigPath string
+
+		BeforeEach(func() {
+			expectedRuntimeConfigPath = filepath.Join(tempDir, "runtime-config")
+		})
+
+		Context("if the runtime-config subdirectory exists", func() {
+			It("returns the path to the runtime-config directory", func() {
+				runtimeConfigDir, err := store.GetRuntimeConfigDir()
+				Expect(err).NotTo(HaveOccurred())
+				Expect(runtimeConfigDir).To(Equal(expectedRuntimeConfigPath))
+			})
+		})
+
+		Context("failure cases", func() {
+			Context("when there is a name collision with an existing file", func() {
+				BeforeEach(func() {
+					fileIO.MkdirAllCall.Returns.Error = errors.New("not a directory")
+				})
+
+				It("returns an error", func() {
+					runtimeConfigDir, err := store.GetRuntimeConfigDir()
+					Expect(err).To(MatchError("Get runtime-config dir: not a directory"))
+					Expect(runtimeConfigDir).To(Equal(""))
 				})
 			})
 		})

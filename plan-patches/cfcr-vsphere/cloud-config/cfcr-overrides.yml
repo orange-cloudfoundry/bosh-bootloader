@@ -1,7 +1,10 @@
-# replace the IP below with one that's within BBL_VSPHERE_SUBNET
+# replace the IP below with one that's within BBL_VSPHERE_SUBNET_CIDR
 # but is not reserved. IPs 10 or more above the base of your cidr should be safe.
 ---
 - type: replace
-  path: /networks/name=default/subnets/0/static?
+  path: /vm_extensions/-
   value:
-	- 10.0.0.35
+    name: cfcr-worker-cloud-properties
+    cloud_properties:
+      vmx_options:
+        disk.enableUUID: "1"

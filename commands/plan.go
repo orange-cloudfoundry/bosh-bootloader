@@ -13,15 +13,16 @@ type patchDetector interface {
 }
 
 type Plan struct {
-	boshManager        boshManager
-	cloudConfigManager cloudConfigManager
-	stateStore         stateStore
-	patchDetector      patchDetector
-	envIDManager       envIDManager
-	terraformManager   terraformManager
-	lbArgsHandler      lbArgsHandler
-	logger             logger
-	bblVersion         string
+	boshManager          boshManager
+	cloudConfigManager   cloudConfigManager
+	runtimeConfigManager runtimeConfigManager
+	stateStore           stateStore
+	patchDetector        patchDetector
+	envIDManager         envIDManager
+	terraformManager     terraformManager
+	lbArgsHandler        lbArgsHandler
+	logger               logger
+	bblVersion           string
 }
 
 type PlanConfig struct {
@@ -29,8 +30,10 @@ type PlanConfig struct {
 	LB   storage.LB
 }
 
-func NewPlan(boshManager boshManager,
+func NewPlan(
+	boshManager boshManager,
 	cloudConfigManager cloudConfigManager,
+	runtimeConfigManager runtimeConfigManager,
 	stateStore stateStore,
 	patchDetector patchDetector,
 	envIDManager envIDManager,
@@ -40,15 +43,16 @@ func NewPlan(boshManager boshManager,
 	bblVersion string,
 ) Plan {
 	return Plan{
-		boshManager:        boshManager,
-		cloudConfigManager: cloudConfigManager,
-		stateStore:         stateStore,
-		patchDetector:      patchDetector,
-		envIDManager:       envIDManager,
-		terraformManager:   terraformManager,
-		lbArgsHandler:      lbArgsHandler,
-		logger:             logger,
-		bblVersion:         bblVersion,
+		boshManager:          boshManager,
+		cloudConfigManager:   cloudConfigManager,
+		runtimeConfigManager: runtimeConfigManager,
+		stateStore:           stateStore,
+		patchDetector:        patchDetector,
+		envIDManager:         envIDManager,
+		terraformManager:     terraformManager,
+		lbArgsHandler:        lbArgsHandler,
+		logger:               logger,
+		bblVersion:           bblVersion,
 	}
 }
 
@@ -117,7 +121,6 @@ func (p Plan) Execute(args []string, state storage.State) error {
 func (p Plan) InitializePlan(config PlanConfig, state storage.State) (storage.State, error) {
 	state.BBLVersion = p.bblVersion
 	state.LB = config.LB
-	state.NoDirector = false
 
 	var err error
 	state, err = p.envIDManager.Sync(state, config.Name)
@@ -134,16 +137,20 @@ func (p Plan) InitializePlan(config PlanConfig, state storage.State) (storage.St
 		return storage.State{}, fmt.Errorf("Terraform manager init: %s", err)
 	}
 
-	if err := p.cloudConfigManager.Initialize(state); err != nil {
-		return storage.State{}, fmt.Errorf("Cloud config manager initialize: %s", err)
-	}
-
 	if err := p.boshManager.InitializeJumpbox(state); err != nil {
 		return storage.State{}, fmt.Errorf("Bosh manager initialize jumpbox: %s", err)
 	}
 
 	if err := p.boshManager.InitializeDirector(state); err != nil {
 		return storage.State{}, fmt.Errorf("Bosh manager initialize director: %s", err)
+	}
+
+	if err := p.cloudConfigManager.Initialize(state); err != nil {
+		return storage.State{}, fmt.Errorf("Cloud config manager initialize: %s", err)
+	}
+
+	if err := p.runtimeConfigManager.Initialize(state); err != nil {
+		return storage.State{}, fmt.Errorf("Runtime config manager initialize: %s", err)
 	}
 
 	if err := p.patchDetector.Find(); err != nil {

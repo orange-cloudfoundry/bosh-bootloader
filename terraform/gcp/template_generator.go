@@ -31,8 +31,9 @@ func (t TemplateGenerator) Generate(state storage.State) string {
 	case "concourse":
 		template = strings.Join([]string{template, tmpls.concourseLB}, "\n")
 	case "cf":
-		instanceGroups := t.GenerateInstanceGroups(state.GCP.Zones)
-		backendService := t.GenerateBackendService(state.GCP.Zones)
+		zoneList := state.GCP.Zones
+		instanceGroups := t.GenerateInstanceGroups(zoneList)
+		backendService := t.GenerateBackendService(zoneList)
 
 		template = strings.Join([]string{template, tmpls.cfLB, instanceGroups, backendService}, "\n")
 
@@ -45,6 +46,9 @@ func (t TemplateGenerator) Generate(state storage.State) string {
 }
 
 func (t TemplateGenerator) GenerateBackendService(zoneList []string) string {
+	if len(zoneList) > 2 {
+		zoneList = zoneList[:2]
+	}
 	backendBase := `resource "google_compute_backend_service" "router-lb-backend-service" {
   name        = "${var.env_id}-router-lb"
   port_name   = "https"
@@ -68,6 +72,9 @@ func (t TemplateGenerator) GenerateBackendService(zoneList []string) string {
 }
 
 func (t TemplateGenerator) GenerateInstanceGroups(zoneList []string) string {
+	if len(zoneList) > 2 {
+		zoneList = zoneList[:2]
+	}
 	var groups []string
 	for i, zone := range zoneList {
 		groups = append(groups, fmt.Sprintf(`resource "google_compute_instance_group" "router-lb-%[1]d" {
