@@ -8,7 +8,9 @@ echo -e "\nGenerating Binary..."
 CURRENTDIR=`pwd`
 
 BASEDIR=$(dirname $0)
+: ${GOPATH:=$HOME/gopath/src}
 
 go build \
 	-a -ldflags "-s -w" \
+	-gcflags="all=-trimpath=$GOPATH" \
 	-o $CURRENTDIR/out/bbl ./$BASEDIR/../bbl
