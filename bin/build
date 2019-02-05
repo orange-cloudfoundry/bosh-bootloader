@@ -10,6 +10,7 @@ CURRENTDIR=`pwd`
 BASEDIR=$(dirname $0)
 : ${GOPATH:=$HOME/gopath/src}
 
+export CGO_ENABLED=0
 go build \
 	-a -ldflags "-s -w" \
 	-gcflags="all=-trimpath=$GOPATH" \
