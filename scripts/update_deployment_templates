@@ -1,17 +1,9 @@
 #!/bin/bash -exu
 
-root_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+pushd bosh/deployments/bosh-deployment
+    git pull
+popd
 
-if [ ! -d "${root_dir}/../vendor/github.com/cloudfoundry/jumpbox-deployment" ]; then
-    git clone https://github.com/cloudfoundry/jumpbox-deployment.git "${root_dir}/../vendor/github.com/cloudfoundry/jumpbox-deployment"
-fi
-
-if [ ! -d "${root_dir}/../vendor/github.com/cloudfoundry/bosh-deployment" ]; then
-    git clone https://github.com/cloudfoundry/bosh-deployment.git "${root_dir}/../vendor/github.com/cloudfoundry/bosh-deployment"
-fi
-
-pushd ${root_dir}/../
-    go-bindata -pkg=bosh -ignore=\\.git -o "bosh/deployment_files.go" \
-     "vendor/github.com/cloudfoundry/jumpbox-deployment/..." \
-      "vendor/github.com/cloudfoundry/bosh-deployment/..."
+pushd bosh/deployments/jumpbox-deployment
+    git pull
 popd
