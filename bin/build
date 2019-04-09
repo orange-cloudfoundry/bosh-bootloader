@@ -7,6 +7,9 @@ echo -e "\nGenerating Binary..."
 
 CURRENTDIR=`pwd`
 
+version=$(echo "${TRAVIS_BRANCH:-dev}" | sed 's/^v//')
+
 BASEDIR=$(dirname $0)
 
-go build -o $CURRENTDIR/out/bbl ./$BASEDIR/../bbl
+packr2 install -ldflags="-s -w -X main.Version=${version}" ./$BASEDIR/../bbl
+
