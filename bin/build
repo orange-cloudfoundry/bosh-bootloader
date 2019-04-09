@@ -10,6 +10,6 @@ CURRENTDIR=`pwd`
 version=$(echo "${TRAVIS_BRANCH:-dev}" | sed 's/^v//')
 
 BASEDIR=$(dirname $0)
+export CGO_ENABLED=0
 
 packr2 install -ldflags="-s -w -X main.Version=${version}" ./$BASEDIR/../bbl
-
