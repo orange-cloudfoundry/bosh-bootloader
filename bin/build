@@ -3,13 +3,42 @@
 
 set -e
 
-echo -e "\nGenerating Binary..."
 
 CURRENTDIR=`pwd`
+
+function cleanup_mod() {
+  rm -rf ${CURRENTDIR}/terraform/binary_dist/terraform-mod-time
+}
+
+function create_mod() {
+  cleanup_mod
+
+  if uname | grep -q "Darwin"; then
+    mod_fmt="-f %m"
+  else
+    mod_fmt="-c %Y"
+  fi
+
+  stat "${mod_fmt}" "${CURRENTDIR}/terraform/binary_dist/terraform" > "${CURRENTDIR}/terraform/binary_dist/terraform-mod-time"
+}
+
+
+echo -e "\nGenerating Binary..."
+
 
 version=$(echo "${TRAVIS_BRANCH:-dev}" | sed 's/^v//')
 
 BASEDIR=$(dirname $0)
 export CGO_ENABLED=0
+
+TF_VERSION="0.11.13"
+
+PLATFORM="${GOOS}_${GOARCH}"
+
+curl -o ${CURRENTDIR}/terraform/binary_dist/terraform.zip https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_${PLATFORM}.zip
+
+unzip ${CURRENTDIR}/terraform/binary_dist/terraform.zip -d ${CURRENTDIR}/terraform/binary_dist
+
+create_mod
 
 packr2 build -ldflags="-s -w -X main.Version=${version}" -o $CURRENTDIR/out/bbl github.com/cloudfoundry/bosh-bootloader/bbl
