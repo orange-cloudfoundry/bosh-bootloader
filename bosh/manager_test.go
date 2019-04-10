@@ -161,7 +161,7 @@ director_ssl:
 					DirectorSSLCA:          "some-ca",
 					DirectorSSLCertificate: "some-certificate",
 					DirectorSSLPrivateKey:  "some-private-key",
-					State: nil,
+					State:                  nil,
 				}))
 			})
 
