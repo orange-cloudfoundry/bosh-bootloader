@@ -49,6 +49,6 @@ create_mod
 
 rm -f ${CURRENTDIR}/terraform/binary_dist/terraform.zip
 
-packr2 build -ldflags="-s -w -X main.Version=${version}" -o $CURRENTDIR/out/bbl github.com/cloudfoundry/bosh-bootloader/bbl
+packr2 build -ldflags="-s -w -X main.Version=${version}" -v -o $CURRENTDIR/out/bbl github.com/cloudfoundry/bosh-bootloader/bbl
 
 rm -f ${CURRENTDIR}/terraform/binary_dist/terraform${EXT}
