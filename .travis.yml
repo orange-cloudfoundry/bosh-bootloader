@@ -10,8 +10,8 @@ install:
   - git branch -v -a
   - git checkout add-cloudstack
   - git submodule update --init
-  - rm -rf ${ROOT_DIR}/bosh/deployments/bosh-deployment/.git
-  - rm -rf ${ROOT_DIR}/bosh/deployments/jumpbox-deployment/.git
+  - rm -rf bosh/deployments/bosh-deployment/.git
+  - rm -rf bosh/deployments/jumpbox-deployment/.git
   - cd $HOME/gopath/src/github.com
   - mv orange-cloudfoundry cloudfoundry
   - mv $HOME/gopath/src/bin $HOME/gopath/src/github.com/cloudfoundry/bosh-bootloader/bin
