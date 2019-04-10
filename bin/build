@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
 #!/bin/bash
 
-set -e
+set -xe
 
 
 CURRENTDIR=`pwd`
+
+EXT=""
+
+if [[ "$GOOS" == "windows"* ]]; then
+    EXT=".exe"
+fi
 
 function cleanup_mod() {
   rm -rf ${CURRENTDIR}/terraform/binary_dist/terraform-mod-time
@@ -19,7 +25,7 @@ function create_mod() {
     mod_fmt="-c %Y"
   fi
 
-  stat "${mod_fmt}" "${CURRENTDIR}/terraform/binary_dist/terraform" > "${CURRENTDIR}/terraform/binary_dist/terraform-mod-time"
+  stat "${mod_fmt}" "${CURRENTDIR}/terraform/binary_dist/terraform${EXT}" > "${CURRENTDIR}/terraform/binary_dist/terraform-mod-time"
 }
 
 
@@ -32,13 +38,6 @@ BASEDIR=$(dirname $0)
 export CGO_ENABLED=0
 
 TF_VERSION="0.11.13"
-
-EXT=""
-
-if [[ "$GOOS" == "windows"* ]]; then
-    EXT=".exe"
-fi
-
 
 PLATFORM="${GOOS}_${GOARCH}"
 
