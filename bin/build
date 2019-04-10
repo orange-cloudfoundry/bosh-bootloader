@@ -41,4 +41,6 @@ unzip ${CURRENTDIR}/terraform/binary_dist/terraform.zip -d ${CURRENTDIR}/terrafo
 
 create_mod
 
+rm -f ${CURRENTDIR}/terraform/binary_dist/terraform.zip
+
 packr2 build -ldflags="-s -w -X main.Version=${version}" -o $CURRENTDIR/out/bbl github.com/cloudfoundry/bosh-bootloader/bbl
