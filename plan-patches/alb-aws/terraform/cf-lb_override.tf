@@ -2,7 +2,7 @@ resource "aws_lb" "cf_router" {
   name               = "${var.short_env_id}-cf-router-lb"
   load_balancer_type = "application"
 
-  security_groups = ["${aws_security_group.cf_router.id}"]
+  security_groups = ["${aws_security_group.cf_router_lb_security_group.id}"]
   subnets         = ["${aws_subnet.lb_subnets.*.id}"]
 }
 
@@ -79,34 +79,34 @@ resource "aws_lb_target_group" "cf_router_80" {
   }
 }
 
-resource "aws_security_group" "cf_router_internal" {
+resource "aws_security_group" "cf_router_lb_internal_security_group" {
   name        = "${var.env_id}-cf-router-lb-internal-security-group"
   description = "CF Router Internal"
   vpc_id      = "${local.vpc_id}"
 
   ingress {
-    security_groups = ["${aws_security_group.cf_router.id}"]
+    security_groups = ["${aws_security_group.cf_router_lb_security_group.id}"]
     protocol        = "tcp"
     from_port       = 80
     to_port         = 80
   }
 
   ingress {
-    security_groups = ["${aws_security_group.cf_router.id}"]
+    security_groups = ["${aws_security_group.cf_router_lb_security_group.id}"]
     protocol        = "tcp"
     from_port       = 8080
     to_port         = 8080
   }
 
   ingress {
-    security_groups = ["${aws_security_group.cf_router.id}"]
+    security_groups = ["${aws_security_group.cf_router_lb_security_group.id}"]
     protocol        = "tcp"
     from_port       = 443
     to_port         = 443
   }
 
   ingress {
-    security_groups = ["${aws_security_group.cf_router.id}"]
+    security_groups = ["${aws_security_group.cf_router_lb_security_group.id}"]
     protocol        = "tcp"
     from_port       = 4443
     to_port         = 4443
