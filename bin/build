@@ -37,7 +37,7 @@ version=$(echo "${TRAVIS_BRANCH:-dev}" | sed 's/^v//')
 BASEDIR=$(dirname $0)
 export CGO_ENABLED=0
 
-TF_VERSION="0.11.13"
+TF_VERSION="0.12.2"
 
 PLATFORM="${GOOS}_${GOARCH}"
 
