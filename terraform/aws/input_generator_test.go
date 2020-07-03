@@ -43,32 +43,6 @@ var _ = Describe("InputGenerator", func() {
 			})
 		})
 
-		Context("when more than 3 azs are available in the region", func() {
-			It("uses the first 3 azs for availability_zones", func() {
-				awsClient.RetrieveAZsCall.Returns.AZs = []string{"z1", "z2", "z3", "z4"}
-
-				inputs, err := inputGenerator.Generate(storage.State{
-					EnvID: "some-env-id",
-					AWS: storage.AWS{
-						AccessKeyID:     "some-access-key-id",
-						SecretAccessKey: "some-secret-access-key",
-						Region:          "some-region",
-					},
-					LB: storage.LB{
-						Type: "concourse",
-					},
-				})
-				Expect(err).NotTo(HaveOccurred())
-
-				Expect(inputs).To(Equal(map[string]interface{}{
-					"env_id":             "some-env-id",
-					"short_env_id":       "some-env-id",
-					"region":             "some-region",
-					"availability_zones": []string{"z1", "z2", "z3"},
-				}))
-			})
-		})
-
 		It("receives BBL state and returns a map of terraform variables", func() {
 			inputs, err := inputGenerator.Generate(storage.State{
 				EnvID: "some-env-id",
@@ -106,10 +80,9 @@ var _ = Describe("InputGenerator", func() {
 						Region:          "some-region",
 					},
 					LB: storage.LB{
-						Type:  "cf",
-						Cert:  "some-cert",
-						Chain: "some-chain",
-						Key:   "some-key",
+						Type: "cf",
+						Cert: "some-cert",
+						Key:  "some-key",
 					},
 				}
 			})
@@ -126,7 +99,6 @@ var _ = Describe("InputGenerator", func() {
 					"region":                      "some-region",
 					"availability_zones":          []string{"z1", "z2", "z3"},
 					"ssl_certificate":             "some-cert",
-					"ssl_certificate_chain":       "some-chain",
 					"ssl_certificate_private_key": "some-key",
 				}))
 			})
@@ -150,7 +122,6 @@ var _ = Describe("InputGenerator", func() {
 						"region":                      "some-region",
 						"availability_zones":          []string{"z1", "z2", "z3"},
 						"ssl_certificate":             "some-cert",
-						"ssl_certificate_chain":       "some-chain",
 						"ssl_certificate_private_key": "some-key",
 						"system_domain":               "some-domain",
 						"parent_zone":                 "zone-id",

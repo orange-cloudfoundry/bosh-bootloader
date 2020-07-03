@@ -83,6 +83,10 @@ resource "aws_elb" "cf_ssh_lb" {
 
   security_groups = ["${aws_security_group.cf_ssh_lb_security_group.id}"]
   subnets         = ["${aws_subnet.lb_subnets.*.id}"]
+
+  tags {
+    Name = "${var.env_id}"
+  }
 }
 
 output "cf_ssh_lb_name" {
@@ -110,6 +114,13 @@ resource "aws_security_group" "cf_router_lb_security_group" {
     protocol    = "tcp"
     from_port   = 443
     to_port     = 443
+  }
+
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    protocol    = "tcp"
+    from_port   = 4443
+    to_port     = 4443
   }
 
   egress {
@@ -201,6 +212,25 @@ resource "aws_elb" "cf_router_lb" {
 
   security_groups = ["${aws_security_group.cf_router_lb_security_group.id}"]
   subnets         = ["${aws_subnet.lb_subnets.*.id}"]
+
+  tags {
+    Name = "${var.env_id}"
+  }
+}
+
+resource "aws_lb_target_group" "cf_router_4443" {
+  name     = "${var.short_env_id}-routertg-4443"
+  port     = 4443
+  protocol = "TCP"
+  vpc_id   = "${local.vpc_id}"
+
+  health_check {
+    protocol = "TCP"
+  }
+
+  tags {
+    Name = "${var.env_id}"
+  }
 }
 
 output "cf_router_lb_name" {
@@ -996,6 +1026,10 @@ resource "aws_elb" "cf_tcp_lb" {
 
   security_groups = ["${aws_security_group.cf_tcp_lb_security_group.id}"]
   subnets         = ["${aws_subnet.lb_subnets.*.id}"]
+
+  tags {
+    Name = "${var.env_id}"
+  }
 }
 
 output "cf_tcp_lb_name" {

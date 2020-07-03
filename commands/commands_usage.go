@@ -60,7 +60,6 @@ const (
   --lb-type                  Load balancer(s) type: "concourse" or "cf"
   --lb-cert                  Path to SSL certificate (supported when type="cf")
   --lb-key                   Path to SSL certificate key (supported when type="cf")
-  --lb-chain                 Path to SSL certificate chain (supported when iaas="aws")
   --lb-domain                Creates a DNS zone and records for the given domain (supported when type="cf")`
 
 	PlanCommandUsage = `Populates a state directory with the latest config without applying it
@@ -81,7 +80,8 @@ const (
 
 	CleanupLeftoversCommandUsage = `Cleans up orphaned IAAS resources
 
-  --filter            Only delete resources with this string in their name`
+  --filter            Only delete resources with this string in their name
+  --dry-run           List all resources without deleting any`
 
 	LBsCommandUsage = "Prints attached load balancer(s)"
 
@@ -118,7 +118,8 @@ const (
 
 	PrintEnvCommandUsage = `Prints required BOSH environment variables.
 
-  --shell-type             Prints for the given shell (posix|powershell)
+  --shell-type             Prints for the given shell (posix|powershell|yaml)
+  --metadata-file          Read from Toolsmiths metadata file instead of bbl state
 `
 	LatestErrorCommandUsage = "Prints the output from the latest call to terraform"
 )
