@@ -11,7 +11,7 @@ variable "iso_to_bosh_ports" {
 
 variable "iso_to_shared_tcp_ports" {
   type    = "list"
-  default = [9090, 9091, 8082, 8300, 8301, 8889, 8443, 3000, 8080, 3457, 9023, 9022, 4222]
+  default = [9090, 9091, 8082, 8300, 8301, 8889, 8443, 3000, 4443, 8080, 3457, 9023, 9022, 4222]
 }
 
 variable "iso_to_shared_udp_ports" {
@@ -79,6 +79,26 @@ resource "aws_elb" "iso_router_lb" {
 
   security_groups = ["${aws_security_group.cf_router_lb_security_group.id}"]
   subnets         = ["${aws_subnet.lb_subnets.*.id}"]
+
+  tags {
+    Name = "${var.env_id}"
+  }
+}
+
+resource "aws_lb_target_group" "iso_router_lb_4443" {
+  count    = "${var.isolation_segments}"
+  name     = "${var.short_env_id}-isotg-4443"
+  port     = 4443
+  protocol = "TCP"
+  vpc_id   = "${local.vpc_id}"
+
+  health_check {
+    protocol = "TCP"
+  }
+
+  tags {
+    Name = "${var.env_id}"
+  }
 }
 
 resource "aws_security_group" "iso_security_group" {

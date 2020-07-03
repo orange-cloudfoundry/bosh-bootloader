@@ -1,7 +1,7 @@
 #!/bin/sh
-BOSH_LOG_LEVEL=debug bosh create-env \
+bosh create-env \
  ${BBL_STATE_DIR}/bosh-deployment/bosh.yml \
- --state=state.json \
+ --state  ${BBL_STATE_DIR}/vars/bosh-state.json \
  --vars-store  ${BBL_STATE_DIR}/vars/director-vars-store.yml \
  --vars-file  ${BBL_STATE_DIR}/vars/director-vars-file.yml \
  -o ${BBL_STATE_DIR}/bosh-deployment/aws/cpi.yml \

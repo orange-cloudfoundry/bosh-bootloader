@@ -71,7 +71,6 @@ var _ = Describe("Commands Usage", func() {
   --lb-type                  Load balancer(s) type: "concourse" or "cf"
   --lb-cert                  Path to SSL certificate (supported when type="cf")
   --lb-key                   Path to SSL certificate key (supported when type="cf")
-  --lb-chain                 Path to SSL certificate chain (supported when iaas="aws")
   --lb-domain                Creates a DNS zone and records for the given domain (supported when type="cf")`))
 			})
 		})
@@ -112,6 +111,7 @@ var _ = Describe("Commands Usage", func() {
 			Expect(usageText).To(Equal(fmt.Sprintf(`Cleans up orphaned IAAS resources
 
   --filter            Only delete resources with this string in their name
+  --dry-run           List all resources without deleting any
 
   Credentials for your IaaS are required:%s`, commands.Credentials)))
 		})
@@ -151,7 +151,8 @@ var _ = Describe("Commands Usage", func() {
 				usageText := command.Usage()
 				Expect(usageText).To(Equal(`Prints required BOSH environment variables.
 
-  --shell-type             Prints for the given shell (posix|powershell)
+  --shell-type             Prints for the given shell (posix|powershell|yaml)
+  --metadata-file          Read from Toolsmiths metadata file instead of bbl state
 `))
 			})
 		})
