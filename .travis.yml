@@ -1,6 +1,6 @@
 language: go
 go:
-  - '1.12'
+  - '1.15'
 install:
   - go get github.com/onsi/ginkgo/ginkgo
   - go get github.com/onsi/gomega
@@ -31,4 +31,3 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
-  
