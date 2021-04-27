@@ -6,7 +6,7 @@ import (
 	"github.com/cloudfoundry/bosh-bootloader/storage"
 )
 
-const terraformNameCharLimit = 18
+const terraformNameCharLimit = 45
 
 type InputGenerator struct {
 }

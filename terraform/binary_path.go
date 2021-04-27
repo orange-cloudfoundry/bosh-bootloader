@@ -3,6 +3,7 @@ package terraform
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -43,6 +44,12 @@ func NewBinary() *Binary {
 }
 
 func (binary *Binary) BinaryPath() (string, error) {
+	// if user has a terraform use it
+	userTerraform, err := exec.LookPath("terraform")
+	if err == nil && userTerraform != "" {
+		return userTerraform, nil
+	}
+
 	exists, err := binary.FS.Exists(binary.Path)
 	if err != nil {
 		return "", err

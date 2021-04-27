@@ -1,6 +1,7 @@
 package terraform
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"os/exec"
@@ -29,6 +30,10 @@ func (c CLI) RunWithEnv(stdout io.Writer, workingDirectory string, args []string
 	if err != nil {
 		return err
 	}
+	if c.errorBuffer != nil {
+		c.errorBuffer.Write([]byte(fmt.Sprintf("Use terraform from path '%s'.\n", path)))
+	}
+
 	command := exec.Command(path, args...)
 	command.Dir = workingDirectory
 
