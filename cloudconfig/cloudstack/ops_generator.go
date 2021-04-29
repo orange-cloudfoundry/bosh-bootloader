@@ -56,7 +56,7 @@ type terraformManager interface {
 	GetOutputs() (terraform.Outputs, error)
 }
 
-const terraformNameCharLimit = 18
+const terraformNameCharLimit = 45
 
 var marshal func(interface{}) ([]byte, error) = yaml.Marshal
 
