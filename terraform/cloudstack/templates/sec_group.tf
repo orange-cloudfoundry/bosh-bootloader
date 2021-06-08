@@ -1,36 +1,38 @@
 variable "cf_external_ports" {
-  type = "list"
+  type = list(string)
   default = [
     80,
     443,
     2222,
-    4443
+    4443,
   ]
 }
 
 variable "bosh_ports" {
-  type = "list"
+  type = list(string)
   default = [
     22,
     6868,
     2555,
     4222,
-    25250]
+    25250,
+  ]
 }
 
 variable "bosh_external_ports" {
-  type = "list"
+  type = list(string)
   default = [
     22,
     6868,
     25555,
     3389,
     8844,
-    8443]
+    8443,
+  ]
 }
 
 variable "shared_tcp_ports" {
-  type = "list"
+  type = list(string)
   default = [
     1801,
     3000,
@@ -57,248 +59,260 @@ variable "shared_tcp_ports" {
 }
 
 variable "shared_udp_ports" {
-  type = "list"
+  type = list(string)
   default = [
     8301,
     8302,
-    8600
+    8600,
   ]
 }
 
 resource "cloudstack_network_acl" "bosh_subnet_sec_group" {
-  count = "${var.secure ? 1 : 0}"
-  name = "bosh_subnet"
-  vpc_id = "${cloudstack_vpc.vpc.id}"
+  count  = var.secure ? 1 : 0
+  name   = "bosh_subnet"
+  vpc_id = cloudstack_vpc.vpc.id
 }
 
-
 resource "cloudstack_network_acl_rule" "bosh_subnet_sec_group_egress" {
-  count = "${var.secure ? 1 : 0}"
-  acl_id = "${cloudstack_network_acl.bosh_subnet_sec_group.id}"
+  count  = var.secure ? 1 : 0
+  acl_id = cloudstack_network_acl.bosh_subnet_sec_group[0].id
 
   rule {
     action = "allow"
     cidr_list = [
-      "0.0.0.0/0"]
-    protocol = "all"
-    ports = []
+      "0.0.0.0/0",
+    ]
+    protocol     = "all"
+    ports        = []
     traffic_type = "egress"
   }
 }
 
 resource "cloudstack_network_acl_rule" "bosh_subnet_sec_group_udp" {
-  count = "${var.secure ? 1 : 0}"
-  acl_id = "${cloudstack_network_acl.bosh_subnet_sec_group.id}"
+  count  = var.secure ? 1 : 0
+  acl_id = cloudstack_network_acl.bosh_subnet_sec_group[0].id
 
   rule {
     action = "allow"
     cidr_list = [
-      "0.0.0.0/0"]
-    protocol = "udp"
-    ports = []
+      "0.0.0.0/0",
+    ]
+    protocol     = "udp"
+    ports        = []
     traffic_type = "ingress"
   }
 }
 
 resource "cloudstack_network_acl_rule" "bosh_subnet_sec_group_external" {
-  count = "${var.secure ? 1 : 0}"
-  acl_id = "${cloudstack_network_acl.bosh_subnet_sec_group.id}"
+  count  = var.secure ? 1 : 0
+  acl_id = cloudstack_network_acl.bosh_subnet_sec_group[0].id
 
   rule {
     action = "allow"
     cidr_list = [
-      "0.0.0.0/0"]
-    protocol = "tcp"
-    ports = "${var.bosh_external_ports}"
+      "0.0.0.0/0",
+    ]
+    protocol     = "tcp"
+    ports        = var.bosh_external_ports
     traffic_type = "ingress"
   }
 }
 
 resource "cloudstack_network_acl_rule" "bosh_subnet_sec_group_icmp" {
-  count = "${var.secure ? 1 : 0}"
-  acl_id = "${cloudstack_network_acl.bosh_subnet_sec_group.id}"
+  count  = var.secure ? 1 : 0
+  acl_id = cloudstack_network_acl.bosh_subnet_sec_group[0].id
 
   rule {
     action = "allow"
     cidr_list = [
-      "0.0.0.0/0"]
-    protocol = "icmp"
-    icmp_type = -1
-    icmp_code = -1
-    ports = []
+      "0.0.0.0/0",
+    ]
+    protocol     = "icmp"
+    icmp_type    = -1
+    icmp_code    = -1
+    ports        = []
     traffic_type = "ingress"
   }
 }
 
-
 resource "cloudstack_network_acl" "control_plane_sec_group" {
-  count = "${var.secure ? 1 : 0}"
-  name = "control_plane"
-  vpc_id = "${cloudstack_vpc.vpc.id}"
+  count  = var.secure ? 1 : 0
+  name   = "control_plane"
+  vpc_id = cloudstack_vpc.vpc.id
 }
 
-
 resource "cloudstack_network_acl_rule" "control_plane_sec_group_egress" {
-  count = "${var.secure ? 1 : 0}"
-  acl_id = "${cloudstack_network_acl.control_plane_sec_group.id}"
+  count  = var.secure ? 1 : 0
+  acl_id = cloudstack_network_acl.control_plane_sec_group[0].id
 
   rule {
     action = "allow"
     cidr_list = [
-      "0.0.0.0/0"]
-    protocol = "all"
-    ports = []
+      "0.0.0.0/0",
+    ]
+    protocol     = "all"
+    ports        = []
     traffic_type = "egress"
   }
 }
 
 resource "cloudstack_network_acl_rule" "control_plane_sec_group_bosh" {
-  count = "${var.secure ? 1 : 0}"
-  acl_id = "${cloudstack_network_acl.control_plane_sec_group.id}"
+  count  = var.secure ? 1 : 0
+  acl_id = cloudstack_network_acl.control_plane_sec_group[0].id
 
   rule {
     action = "allow"
     cidr_list = [
-      "${var.vpc_cidr}"]
-    protocol = "tcp"
-    ports = "${var.bosh_ports}"
+      var.vpc_cidr,
+    ]
+    protocol     = "tcp"
+    ports        = var.bosh_ports
     traffic_type = "ingress"
   }
 }
 
 resource "cloudstack_network_acl_rule" "control_plane_sec_group_shared_tcp_ports" {
-  count = "${var.secure ? 1 : 0}"
-  acl_id = "${cloudstack_network_acl.control_plane_sec_group.id}"
+  count  = var.secure ? 1 : 0
+  acl_id = cloudstack_network_acl.control_plane_sec_group[0].id
 
   rule {
     action = "allow"
     cidr_list = [
-      "${var.vpc_cidr}"]
-    protocol = "tcp"
-    ports = "${var.shared_tcp_ports}"
+      var.vpc_cidr,
+    ]
+    protocol     = "tcp"
+    ports        = var.shared_tcp_ports
     traffic_type = "ingress"
   }
 }
 
 resource "cloudstack_network_acl_rule" "control_plane_sec_group_shared_udp_ports" {
-  count = "${var.secure ? 1 : 0}"
-  acl_id = "${cloudstack_network_acl.control_plane_sec_group.id}"
+  count  = var.secure ? 1 : 0
+  acl_id = cloudstack_network_acl.control_plane_sec_group[0].id
 
   rule {
     action = "allow"
     cidr_list = [
-      "${var.vpc_cidr}"]
-    protocol = "udp"
-    ports = "${var.shared_udp_ports}"
+      var.vpc_cidr,
+    ]
+    protocol     = "udp"
+    ports        = var.shared_udp_ports
     traffic_type = "ingress"
   }
 }
 
 resource "cloudstack_network_acl_rule" "control_plane_sec_group_icmp" {
-  count = "${var.secure ? 1 : 0}"
-  acl_id = "${cloudstack_network_acl.control_plane_sec_group.id}"
+  count  = var.secure ? 1 : 0
+  acl_id = cloudstack_network_acl.control_plane_sec_group[0].id
 
   rule {
     action = "allow"
     cidr_list = [
-      "0.0.0.0/0"]
-    protocol = "icmp"
-    icmp_type = -1
-    icmp_code = -1
-    ports = []
+      "0.0.0.0/0",
+    ]
+    protocol     = "icmp"
+    icmp_type    = -1
+    icmp_code    = -1
+    ports        = []
     traffic_type = "ingress"
   }
 }
 
 resource "cloudstack_network_acl" "data_plane_sec_group" {
-  count = "${var.secure ? 1 : 0}"
-  name = "data_plane"
-  vpc_id = "${cloudstack_vpc.vpc.id}"
+  count  = var.secure ? 1 : 0
+  name   = "data_plane"
+  vpc_id = cloudstack_vpc.vpc.id
 }
 
-
 resource "cloudstack_network_acl_rule" "data_plane_sec_group_egress" {
-  count = "${var.secure ? 1 : 0}"
-  acl_id = "${cloudstack_network_acl.data_plane_sec_group.id}"
+  count  = var.secure ? 1 : 0
+  acl_id = cloudstack_network_acl.data_plane_sec_group[0].id
 
   rule {
     action = "allow"
     cidr_list = [
-      "0.0.0.0/0"]
-    protocol = "all"
-    ports = []
+      "0.0.0.0/0",
+    ]
+    protocol     = "all"
+    ports        = []
     traffic_type = "egress"
   }
 }
 
 resource "cloudstack_network_acl_rule" "data_plane_sec_group_bosh" {
-  count = "${var.secure ? 1 : 0}"
-  acl_id = "${cloudstack_network_acl.data_plane_sec_group.id}"
+  count  = var.secure ? 1 : 0
+  acl_id = cloudstack_network_acl.data_plane_sec_group[0].id
 
   rule {
     action = "allow"
     cidr_list = [
-      "${var.vpc_cidr}"]
-    protocol = "tcp"
-    ports = "${var.bosh_ports}"
+      var.vpc_cidr,
+    ]
+    protocol     = "tcp"
+    ports        = var.bosh_ports
     traffic_type = "ingress"
   }
 }
 
 resource "cloudstack_network_acl_rule" "data_plane_sec_group_shared_tcp_ports" {
-  count = "${var.secure ? 1 : 0}"
-  acl_id = "${cloudstack_network_acl.data_plane_sec_group.id}"
+  count  = var.secure ? 1 : 0
+  acl_id = cloudstack_network_acl.data_plane_sec_group[0].id
 
   rule {
     action = "allow"
     cidr_list = [
-      "${var.vpc_cidr}"]
-    protocol = "tcp"
-    ports = "${var.shared_tcp_ports}"
+      var.vpc_cidr,
+    ]
+    protocol     = "tcp"
+    ports        = var.shared_tcp_ports
     traffic_type = "ingress"
   }
 }
 
 resource "cloudstack_network_acl_rule" "data_plane_sec_group_shared_udp_ports" {
-  count = "${var.secure ? 1 : 0}"
-  acl_id = "${cloudstack_network_acl.data_plane_sec_group.id}"
+  count  = var.secure ? 1 : 0
+  acl_id = cloudstack_network_acl.data_plane_sec_group[0].id
 
   rule {
     action = "allow"
     cidr_list = [
-      "${var.vpc_cidr}"]
-    protocol = "udp"
-    ports = "${var.shared_udp_ports}"
+      var.vpc_cidr,
+    ]
+    protocol     = "udp"
+    ports        = var.shared_udp_ports
     traffic_type = "ingress"
   }
 }
 
 resource "cloudstack_network_acl_rule" "data_plane_sec_group_external" {
-  count = "${var.secure ? 1 : 0}"
-  acl_id = "${cloudstack_network_acl.data_plane_sec_group.id}"
+  count  = var.secure ? 1 : 0
+  acl_id = cloudstack_network_acl.data_plane_sec_group[0].id
 
   rule {
     action = "allow"
     cidr_list = [
-      "0.0.0.0/0"]
-    protocol = "all"
-    ports = "${var.cf_external_ports}"
+      "0.0.0.0/0",
+    ]
+    protocol     = "all"
+    ports        = var.cf_external_ports
     traffic_type = "ingress"
   }
 }
 
 resource "cloudstack_network_acl_rule" "data_plane_sec_group_icmp" {
-  count = "${var.secure ? 1 : 0}"
-  acl_id = "${cloudstack_network_acl.data_plane_sec_group.id}"
+  count  = var.secure ? 1 : 0
+  acl_id = cloudstack_network_acl.data_plane_sec_group[0].id
 
   rule {
     action = "allow"
     cidr_list = [
-      "0.0.0.0/0"]
-    protocol = "icmp"
-    icmp_type = -1
-    icmp_code = -1
-    ports = []
+      "0.0.0.0/0",
+    ]
+    protocol     = "icmp"
+    icmp_type    = -1
+    icmp_code    = -1
+    ports        = []
     traffic_type = "ingress"
   }
 }
+
