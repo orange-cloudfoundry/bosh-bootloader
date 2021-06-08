@@ -6,7 +6,6 @@ type CloudStack struct {
 	Endpoint           string `json:"-"`
 	ApiKey             string `json:"-"`
 	SecretAccessKey    string `json:"-"`
-	DefaultKeyName     string `json:"-"`
 	Zone               string `json:"-"`
 	PrivateKey         string `json:"-"`
 	InternalCidr       string `json:"-"`

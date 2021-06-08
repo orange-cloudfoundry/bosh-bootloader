@@ -68,7 +68,6 @@ var _ = Describe("InputGenerator", func() {
 				CloudStack: storage.CloudStack{
 					ApiKey:          "some-access-key-id",
 					SecretAccessKey: "some-secret-access-key",
-					DefaultKeyName:  "key-name",
 				},
 			}
 			credentials := inputGenerator.Credentials(state)
@@ -76,7 +75,6 @@ var _ = Describe("InputGenerator", func() {
 			Expect(credentials).To(Equal(map[string]string{
 				"cloudstack_api_key":           "some-access-key-id",
 				"cloudstack_secret_access_key": "some-secret-access-key",
-				"cloudstack_key_name":          "key-name",
 			}))
 		})
 	})

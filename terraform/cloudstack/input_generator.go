@@ -42,6 +42,5 @@ func (i InputGenerator) Credentials(state storage.State) map[string]string {
 	return map[string]string{
 		"cloudstack_api_key":           state.CloudStack.ApiKey,
 		"cloudstack_secret_access_key": state.CloudStack.SecretAccessKey,
-		"cloudstack_key_name":          state.CloudStack.DefaultKeyName,
 	}
 }
