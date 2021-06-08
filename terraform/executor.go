@@ -106,7 +106,7 @@ func formatVars(inputs map[string]interface{}) string {
 		} else if valList, ok := value.([]string); ok {
 			value = fmt.Sprintf(`["%s"]`, strings.Join(valList, `","`))
 		}
-		formattedVars = fmt.Sprintf("%s\n%s=%s", formattedVars, name, value)
+		formattedVars = fmt.Sprintf("%s\n%s=%s", formattedVars, name, fmt.Sprint(value))
 	}
 	return formattedVars
 }

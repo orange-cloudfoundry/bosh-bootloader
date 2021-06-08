@@ -26,8 +26,8 @@ func (i InputGenerator) Generate(state storage.State) (map[string]interface{}, e
 		"cloudstack_endpoint": state.CloudStack.Endpoint,
 		"cloudstack_zone":     state.CloudStack.Zone,
 		"short_env_id":        shortEnvID,
-		"secure":              fmt.Sprintf("%t", state.CloudStack.Secure),
-		"iso_segment":         fmt.Sprintf("%t", state.CloudStack.IsoSegment),
+		"secure":              state.CloudStack.Secure,
+		"iso_segment":         state.CloudStack.IsoSegment,
 	}
 	if state.CloudStack.NetworkVpcOffering != "" {
 		m["network_vpc_offering"] = state.CloudStack.NetworkVpcOffering

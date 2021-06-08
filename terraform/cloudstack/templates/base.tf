@@ -43,7 +43,7 @@ variable "vpc_cidr" {
 }
 
 variable "dns" {
-  type = list(string)
+  type    = list(string)
   default = [
     "8.8.8.8",
   ]
@@ -98,8 +98,8 @@ resource "cloudstack_network_acl_rule" "ingress_allow_all" {
   acl_id = cloudstack_network_acl.allow_all.id
 
   rule {
-    action = "allow"
-    cidr_list = [
+    action       = "allow"
+    cidr_list    = [
       "0.0.0.0/0",
     ]
     protocol     = "all"
@@ -112,8 +112,8 @@ resource "cloudstack_network_acl_rule" "egress_allow_all" {
   acl_id = cloudstack_network_acl.allow_all.id
 
   rule {
-    action = "allow"
-    cidr_list = [
+    action       = "allow"
+    cidr_list    = [
       "0.0.0.0/0",
     ]
     protocol     = "all"
@@ -129,9 +129,9 @@ resource "cloudstack_network" "bosh_subnet" {
   display_text     = "bosh-subnet"
   network_offering = var.network_vpc_offering
   zone             = var.cloudstack_zone
-  acl_id = var.secure ? element(
-    concat(cloudstack_network_acl.bosh_subnet_sec_group.*.id, [""]),
-    0,
+  acl_id           = var.secure ? element(
+  concat(cloudstack_network_acl.bosh_subnet_sec_group.*.id, [""]),
+  0,
   ) : cloudstack_network_acl.allow_all.id
 }
 
@@ -142,9 +142,9 @@ resource "cloudstack_network" "compilation_subnet" {
   display_text     = "compilation-subnet"
   network_offering = var.network_vpc_offering
   zone             = var.cloudstack_zone
-  acl_id = var.secure ? element(
-    concat(cloudstack_network_acl.bosh_subnet_sec_group.*.id, [""]),
-    0,
+  acl_id           = var.secure ? element(
+  concat(cloudstack_network_acl.bosh_subnet_sec_group.*.id, [""]),
+  0,
   ) : cloudstack_network_acl.allow_all.id
 }
 
@@ -155,9 +155,9 @@ resource "cloudstack_network" "control_plane" {
   display_text     = "control-plane"
   network_offering = var.network_vpc_offering
   zone             = var.cloudstack_zone
-  acl_id = var.secure ? element(
-    concat(cloudstack_network_acl.control_plane_sec_group.*.id, [""]),
-    0,
+  acl_id           = var.secure ? element(
+  concat(cloudstack_network_acl.control_plane_sec_group.*.id, [""]),
+  0,
   ) : cloudstack_network_acl.allow_all.id
 }
 
@@ -168,9 +168,9 @@ resource "cloudstack_network" "data_plane" {
   display_text     = "data-plane"
   network_offering = var.network_vpc_offering
   zone             = var.cloudstack_zone
-  acl_id = var.secure ? element(
-    concat(cloudstack_network_acl.data_plane_sec_group.*.id, [""]),
-    0,
+  acl_id           = var.secure ? element(
+  concat(cloudstack_network_acl.data_plane_sec_group.*.id, [""]),
+  0,
   ) : cloudstack_network_acl.allow_all.id
 }
 
@@ -182,9 +182,9 @@ resource "cloudstack_network" "data_plane_public" {
   display_text     = "data-plane-public"
   network_offering = var.network_vpc_offering
   zone             = var.cloudstack_zone
-  acl_id = var.secure ? element(
-    concat(cloudstack_network_acl.data_plane_sec_group.*.id, [""]),
-    0,
+  acl_id           = var.secure ? element(
+  concat(cloudstack_network_acl.data_plane_sec_group.*.id, [""]),
+  0,
   ) : cloudstack_network_acl.allow_all.id
 }
 
@@ -258,24 +258,25 @@ output "dns" {
 
 output "internal_subnet_cidr_mapping" {
   value = {
-    cloudstack_network.data_plane.name                                    = cloudstack_network.data_plane.cidr
-    cloudstack_network.control_plane.name                                 = cloudstack_network.control_plane.cidr
-    cloudstack_network.bosh_subnet.name                                   = cloudstack_network.bosh_subnet.cidr
-    element(concat(cloudstack_network.data_plane_public.*.name, [""]), 0) = element(concat(cloudstack_network.data_plane_public.*.cidr, [""]), 0)
-    cloudstack_network.compilation_subnet.name                            = cloudstack_network.compilation_subnet.cidr
+    (cloudstack_network.data_plane.name)         = cloudstack_network.data_plane.cidr,
+    (cloudstack_network.control_plane.name)      = cloudstack_network.control_plane.cidr,
+    (cloudstack_network.bosh_subnet.name)        = cloudstack_network.bosh_subnet.cidr,
+    (element(concat(cloudstack_network.data_plane_public.*.name, [
+      ""]), 0))                                  = element(concat(cloudstack_network.data_plane_public.*.cidr, [
+      ""]), 0),
+    (cloudstack_network.compilation_subnet.name) = cloudstack_network.compilation_subnet.cidr,
   }
 }
 
 output "internal_subnet_gw_mapping" {
   value = {
-    cloudstack_network.data_plane.name    = cloudstack_network.data_plane.gateway
-    cloudstack_network.control_plane.name = cloudstack_network.control_plane.gateway
-    cloudstack_network.bosh_subnet.name   = cloudstack_network.bosh_subnet.gateway
-    element(concat(cloudstack_network.data_plane_public.*.name, [""]), 0) = element(
-      concat(cloudstack_network.data_plane_public.*.gateway, [""]),
-      0,
-    )
-    cloudstack_network.compilation_subnet.name = cloudstack_network.compilation_subnet.gateway
+    (cloudstack_network.data_plane.name)                                    = cloudstack_network.data_plane.gateway,
+    (cloudstack_network.control_plane.name)                                 = cloudstack_network.control_plane.gateway,
+    (cloudstack_network.bosh_subnet.name)                                   = cloudstack_network.bosh_subnet.gateway,
+    (element(concat(cloudstack_network.data_plane_public.*.name, [""]), 0)) = element(
+    concat(cloudstack_network.data_plane_public.*.gateway, [""]),
+    0,
+    ),
+    (cloudstack_network.compilation_subnet.name)                            = cloudstack_network.compilation_subnet.gateway,
   }
 }
-
