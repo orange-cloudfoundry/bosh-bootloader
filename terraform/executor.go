@@ -30,7 +30,6 @@ type Executor struct {
 
 type tfOutput struct {
 	Sensitive bool
-	Type      string
 	Value     interface{}
 }
 

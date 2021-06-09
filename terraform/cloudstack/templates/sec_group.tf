@@ -1,5 +1,5 @@
 variable "cf_external_ports" {
-  type = list(string)
+  type    = list(string)
   default = [
     80,
     443,
@@ -9,7 +9,7 @@ variable "cf_external_ports" {
 }
 
 variable "bosh_ports" {
-  type = list(string)
+  type    = list(string)
   default = [
     22,
     6868,
@@ -20,7 +20,7 @@ variable "bosh_ports" {
 }
 
 variable "bosh_external_ports" {
-  type = list(string)
+  type    = list(string)
   default = [
     22,
     6868,
@@ -32,7 +32,7 @@ variable "bosh_external_ports" {
 }
 
 variable "shared_tcp_ports" {
-  type = list(string)
+  type    = list(string)
   default = [
     1801,
     3000,
@@ -59,7 +59,7 @@ variable "shared_tcp_ports" {
 }
 
 variable "shared_udp_ports" {
-  type = list(string)
+  type    = list(string)
   default = [
     8301,
     8302,
@@ -78,8 +78,8 @@ resource "cloudstack_network_acl_rule" "bosh_subnet_sec_group_egress" {
   acl_id = cloudstack_network_acl.bosh_subnet_sec_group[0].id
 
   rule {
-    action = "allow"
-    cidr_list = [
+    action       = "allow"
+    cidr_list    = [
       "0.0.0.0/0",
     ]
     protocol     = "all"
@@ -88,28 +88,13 @@ resource "cloudstack_network_acl_rule" "bosh_subnet_sec_group_egress" {
   }
 }
 
-resource "cloudstack_network_acl_rule" "bosh_subnet_sec_group_udp" {
-  count  = var.secure ? 1 : 0
-  acl_id = cloudstack_network_acl.bosh_subnet_sec_group[0].id
-
-  rule {
-    action = "allow"
-    cidr_list = [
-      "0.0.0.0/0",
-    ]
-    protocol     = "udp"
-    ports        = []
-    traffic_type = "ingress"
-  }
-}
-
 resource "cloudstack_network_acl_rule" "bosh_subnet_sec_group_external" {
   count  = var.secure ? 1 : 0
   acl_id = cloudstack_network_acl.bosh_subnet_sec_group[0].id
 
   rule {
-    action = "allow"
-    cidr_list = [
+    action       = "allow"
+    cidr_list    = [
       "0.0.0.0/0",
     ]
     protocol     = "tcp"
@@ -123,8 +108,8 @@ resource "cloudstack_network_acl_rule" "bosh_subnet_sec_group_icmp" {
   acl_id = cloudstack_network_acl.bosh_subnet_sec_group[0].id
 
   rule {
-    action = "allow"
-    cidr_list = [
+    action       = "allow"
+    cidr_list    = [
       "0.0.0.0/0",
     ]
     protocol     = "icmp"
@@ -146,8 +131,8 @@ resource "cloudstack_network_acl_rule" "control_plane_sec_group_egress" {
   acl_id = cloudstack_network_acl.control_plane_sec_group[0].id
 
   rule {
-    action = "allow"
-    cidr_list = [
+    action       = "allow"
+    cidr_list    = [
       "0.0.0.0/0",
     ]
     protocol     = "all"
@@ -161,8 +146,8 @@ resource "cloudstack_network_acl_rule" "control_plane_sec_group_bosh" {
   acl_id = cloudstack_network_acl.control_plane_sec_group[0].id
 
   rule {
-    action = "allow"
-    cidr_list = [
+    action       = "allow"
+    cidr_list    = [
       var.vpc_cidr,
     ]
     protocol     = "tcp"
@@ -176,8 +161,8 @@ resource "cloudstack_network_acl_rule" "control_plane_sec_group_shared_tcp_ports
   acl_id = cloudstack_network_acl.control_plane_sec_group[0].id
 
   rule {
-    action = "allow"
-    cidr_list = [
+    action       = "allow"
+    cidr_list    = [
       var.vpc_cidr,
     ]
     protocol     = "tcp"
@@ -191,8 +176,8 @@ resource "cloudstack_network_acl_rule" "control_plane_sec_group_shared_udp_ports
   acl_id = cloudstack_network_acl.control_plane_sec_group[0].id
 
   rule {
-    action = "allow"
-    cidr_list = [
+    action       = "allow"
+    cidr_list    = [
       var.vpc_cidr,
     ]
     protocol     = "udp"
@@ -206,8 +191,8 @@ resource "cloudstack_network_acl_rule" "control_plane_sec_group_icmp" {
   acl_id = cloudstack_network_acl.control_plane_sec_group[0].id
 
   rule {
-    action = "allow"
-    cidr_list = [
+    action       = "allow"
+    cidr_list    = [
       "0.0.0.0/0",
     ]
     protocol     = "icmp"
@@ -229,8 +214,8 @@ resource "cloudstack_network_acl_rule" "data_plane_sec_group_egress" {
   acl_id = cloudstack_network_acl.data_plane_sec_group[0].id
 
   rule {
-    action = "allow"
-    cidr_list = [
+    action       = "allow"
+    cidr_list    = [
       "0.0.0.0/0",
     ]
     protocol     = "all"
@@ -244,8 +229,8 @@ resource "cloudstack_network_acl_rule" "data_plane_sec_group_bosh" {
   acl_id = cloudstack_network_acl.data_plane_sec_group[0].id
 
   rule {
-    action = "allow"
-    cidr_list = [
+    action       = "allow"
+    cidr_list    = [
       var.vpc_cidr,
     ]
     protocol     = "tcp"
@@ -259,8 +244,8 @@ resource "cloudstack_network_acl_rule" "data_plane_sec_group_shared_tcp_ports" {
   acl_id = cloudstack_network_acl.data_plane_sec_group[0].id
 
   rule {
-    action = "allow"
-    cidr_list = [
+    action       = "allow"
+    cidr_list    = [
       var.vpc_cidr,
     ]
     protocol     = "tcp"
@@ -274,8 +259,8 @@ resource "cloudstack_network_acl_rule" "data_plane_sec_group_shared_udp_ports" {
   acl_id = cloudstack_network_acl.data_plane_sec_group[0].id
 
   rule {
-    action = "allow"
-    cidr_list = [
+    action       = "allow"
+    cidr_list    = [
       var.vpc_cidr,
     ]
     protocol     = "udp"
@@ -289,8 +274,8 @@ resource "cloudstack_network_acl_rule" "data_plane_sec_group_external" {
   acl_id = cloudstack_network_acl.data_plane_sec_group[0].id
 
   rule {
-    action = "allow"
-    cidr_list = [
+    action       = "allow"
+    cidr_list    = [
       "0.0.0.0/0",
     ]
     protocol     = "all"
@@ -304,8 +289,8 @@ resource "cloudstack_network_acl_rule" "data_plane_sec_group_icmp" {
   acl_id = cloudstack_network_acl.data_plane_sec_group[0].id
 
   rule {
-    action = "allow"
-    cidr_list = [
+    action       = "allow"
+    cidr_list    = [
       "0.0.0.0/0",
     ]
     protocol     = "icmp"

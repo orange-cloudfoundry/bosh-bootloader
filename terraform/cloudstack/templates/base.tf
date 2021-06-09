@@ -251,9 +251,7 @@ output "cloudstack_endpoint" {
 }
 
 output "dns" {
-  value = [
-    var.dns,
-  ]
+  value = var.dns
 }
 
 output "internal_subnet_cidr_mapping" {
