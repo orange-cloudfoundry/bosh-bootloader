@@ -108,7 +108,7 @@ func main() {
 		terraformCLI = bufferingCLI
 		out = ioutil.Discard
 	}
-	terraformExecutor := terraform.NewExecutor(terraformCLI, bufferingCLI, stateStore, afs, appConfig.Global.Debug, out)
+	terraformExecutor := terraform.NewExecutor(terraformCLI, bufferingCLI, stateStore, afs, appConfig.Global.Debug, out, globals.NoConfirm)
 
 	// BOSH
 	boshPath, err := config.GetBOSHPath()

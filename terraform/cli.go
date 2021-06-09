@@ -42,6 +42,7 @@ func (c CLI) RunWithEnv(stdout io.Writer, workingDirectory string, args []string
 
 	command.Stdout = io.MultiWriter(stdout, c.outputBuffer)
 	command.Stderr = c.errorBuffer
+	command.Stdin = os.Stdin
 
 	return command.Run()
 }
