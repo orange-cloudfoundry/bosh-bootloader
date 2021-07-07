@@ -30,9 +30,12 @@ function create_mod() {
 
 
 echo -e "\nGenerating Binary..."
-
-
-version=$(echo "${TRAVIS_BRANCH:-dev}" | sed 's/^v//')
+if [ -z "${VERSION}" ]; then
+  VERSION=$(echo "${TRAVIS_BRANCH}" | sed 's/^v//')
+  if [ -z "${VERSION}" ]; then
+    VERSION=$(git describe --tags | sed 's/^v//')
+  fi
+fi
 
 BASEDIR=$(dirname $0)
 export CGO_ENABLED=0
@@ -50,7 +53,7 @@ create_mod
 rm -f ${CURRENTDIR}/terraform/binary_dist/terraform.zip
 
 pushd $CURRENTDIR/bbl
-    packr2 build -ldflags="-s -w -X main.Version=${version}-ora" -v -o ../out/bbl github.com/cloudfoundry/bosh-bootloader/bbl
+    packr2 build -ldflags="-s -w -X main.Version=${VERSION}-ora" -v -o ../out/bbl github.com/cloudfoundry/bosh-bootloader/bbl
 popd
 
 rm -f ${CURRENTDIR}/terraform/binary_dist/terraform${EXT}
