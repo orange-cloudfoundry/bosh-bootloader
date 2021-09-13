@@ -3,7 +3,7 @@ package commands
 import (
 	"fmt"
 
-	"github.com/cloudfoundry/bosh-bootloader/bosh"
+	"github.com/orange-cloudfoundry/bosh-bootloader/bosh"
 	"github.com/coreos/go-semver/semver"
 )
 

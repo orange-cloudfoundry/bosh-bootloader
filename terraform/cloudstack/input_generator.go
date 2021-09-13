@@ -3,7 +3,7 @@ package cloudstack
 import (
 	"crypto/sha1"
 	"fmt"
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 )
 
 const terraformNameCharLimit = 45

@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/cloudfoundry/bosh-bootloader/certs"
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/certs"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 )
 
 type LBArgsHandler struct {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 )
 
 const (

@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/cloudfoundry/bosh-bootloader/application"
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/application"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

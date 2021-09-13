@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 )
 
 func ValidateIAAS(state storage.State) error {

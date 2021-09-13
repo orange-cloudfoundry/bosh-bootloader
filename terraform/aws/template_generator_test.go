@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/cloudfoundry/bosh-bootloader/storage"
-	"github.com/cloudfoundry/bosh-bootloader/terraform/aws"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/terraform/aws"
 	"github.com/pmezard/go-difflib/difflib"
 
 	. "github.com/onsi/ginkgo"

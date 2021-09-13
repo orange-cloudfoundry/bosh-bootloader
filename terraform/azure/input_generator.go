@@ -3,7 +3,7 @@ package azure
 import (
 	"strings"
 
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 )
 
 type InputGenerator struct {

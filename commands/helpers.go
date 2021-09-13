@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/cloudfoundry/bosh-bootloader/helpers"
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/helpers"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 )
 
 func handleTerraformError(err error, state storage.State, stateStore stateStore) error {

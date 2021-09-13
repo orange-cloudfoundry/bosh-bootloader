@@ -3,8 +3,8 @@ package acceptance_test
 import (
 	"fmt"
 
-	acceptance "github.com/cloudfoundry/bosh-bootloader/acceptance-tests"
-	"github.com/cloudfoundry/bosh-bootloader/acceptance-tests/actors"
+	acceptance "github.com/orange-cloudfoundry/bosh-bootloader/acceptance-tests"
+	"github.com/orange-cloudfoundry/bosh-bootloader/acceptance-tests/actors"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

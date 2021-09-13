@@ -3,7 +3,7 @@ package helpers_test
 import (
 	"errors"
 
-	"github.com/cloudfoundry/bosh-bootloader/helpers"
+	"github.com/orange-cloudfoundry/bosh-bootloader/helpers"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

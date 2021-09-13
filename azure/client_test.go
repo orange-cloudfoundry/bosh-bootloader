@@ -6,8 +6,8 @@ import (
 	"github.com/Azure/azure-sdk-for-go/arm/compute"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/mocks"
-	"github.com/cloudfoundry/bosh-bootloader/azure"
-	"github.com/cloudfoundry/bosh-bootloader/fakes"
+	"github.com/orange-cloudfoundry/bosh-bootloader/azure"
+	"github.com/orange-cloudfoundry/bosh-bootloader/fakes"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

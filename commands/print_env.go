@@ -6,10 +6,10 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/cloudfoundry/bosh-bootloader/fileio"
-	"github.com/cloudfoundry/bosh-bootloader/flags"
-	"github.com/cloudfoundry/bosh-bootloader/renderers"
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/fileio"
+	"github.com/orange-cloudfoundry/bosh-bootloader/flags"
+	"github.com/orange-cloudfoundry/bosh-bootloader/renderers"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 )
 
 // PrintEnv defines a PrintEnv command

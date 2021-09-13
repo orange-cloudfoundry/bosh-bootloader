@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/cloudfoundry/bosh-bootloader/fileio"
+	"github.com/orange-cloudfoundry/bosh-bootloader/fileio"
 
 	yaml "gopkg.in/yaml.v2"
 )

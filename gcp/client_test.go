@@ -3,8 +3,8 @@ package gcp_test
 import (
 	"errors"
 
-	"github.com/cloudfoundry/bosh-bootloader/fakes"
-	"github.com/cloudfoundry/bosh-bootloader/gcp"
+	"github.com/orange-cloudfoundry/bosh-bootloader/fakes"
+	"github.com/orange-cloudfoundry/bosh-bootloader/gcp"
 	compute "google.golang.org/api/compute/v1"
 
 	. "github.com/onsi/ginkgo"

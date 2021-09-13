@@ -3,7 +3,7 @@ package actors
 import (
 	"fmt"
 
-	"github.com/cloudfoundry/bosh-bootloader/acceptance-tests"
+	"github.com/orange-cloudfoundry/bosh-bootloader/acceptance-tests"
 )
 
 type IAASLBHelper interface {

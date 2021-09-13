@@ -1,6 +1,6 @@
 package fakes
 
-import "github.com/cloudfoundry/bosh-bootloader/gcp"
+import "github.com/orange-cloudfoundry/bosh-bootloader/gcp"
 
 type GCPClientProvider struct {
 	ClientCall struct {

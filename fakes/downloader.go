@@ -1,7 +1,7 @@
 package fakes
 
 import (
-	"github.com/cloudfoundry/bosh-bootloader/config"
+	"github.com/orange-cloudfoundry/bosh-bootloader/config"
 )
 
 type Downloader struct {

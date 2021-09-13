@@ -1,8 +1,8 @@
 package fakes
 
 import (
-	"github.com/cloudfoundry/bosh-bootloader/bosh"
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/bosh"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 )
 
 type BOSHConfigUpdater struct {

@@ -3,9 +3,9 @@ package aws_test
 import (
 	"errors"
 
-	"github.com/cloudfoundry/bosh-bootloader/fakes"
-	"github.com/cloudfoundry/bosh-bootloader/storage"
-	"github.com/cloudfoundry/bosh-bootloader/terraform/aws"
+	"github.com/orange-cloudfoundry/bosh-bootloader/fakes"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/terraform/aws"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

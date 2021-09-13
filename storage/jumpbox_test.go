@@ -4,7 +4,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	. "github.com/cloudfoundry/bosh-bootloader/storage"
+	. "github.com/orange-cloudfoundry/bosh-bootloader/storage"
 )
 
 var _ = Describe("Jumpbox", func() {

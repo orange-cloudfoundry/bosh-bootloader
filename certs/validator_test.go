@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/cloudfoundry/bosh-bootloader/certs"
-	"github.com/cloudfoundry/bosh-bootloader/testhelpers"
+	"github.com/orange-cloudfoundry/bosh-bootloader/certs"
+	"github.com/orange-cloudfoundry/bosh-bootloader/testhelpers"
 	"github.com/cloudfoundry/multierror"
 
 	. "github.com/onsi/ginkgo"

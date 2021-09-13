@@ -1,8 +1,8 @@
 package azure_test
 
 import (
-	"github.com/cloudfoundry/bosh-bootloader/storage"
-	"github.com/cloudfoundry/bosh-bootloader/terraform/azure"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/terraform/azure"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

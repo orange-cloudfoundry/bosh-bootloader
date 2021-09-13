@@ -1,0 +1,10 @@
+#!/bin/bash -eu
+
+ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+
+set -x
+
+cd ${ROOT_DIR}
+go generate -v -x ./...
+cat bosh/bosh-packr.go
+

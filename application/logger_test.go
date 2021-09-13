@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"math/rand"
 
-	"github.com/cloudfoundry/bosh-bootloader/application"
+	"github.com/orange-cloudfoundry/bosh-bootloader/application"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/ginkgo/extensions/table"

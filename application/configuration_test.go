@@ -1,7 +1,7 @@
 package application_test
 
 import (
-	"github.com/cloudfoundry/bosh-bootloader/application"
+	"github.com/orange-cloudfoundry/bosh-bootloader/application"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

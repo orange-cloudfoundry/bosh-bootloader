@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/cloudfoundry/bosh-bootloader/application"
-	"github.com/cloudfoundry/bosh-bootloader/aws"
-	"github.com/cloudfoundry/bosh-bootloader/storage"
-	"github.com/cloudfoundry/bosh-bootloader/testhelpers"
+	"github.com/orange-cloudfoundry/bosh-bootloader/application"
+	"github.com/orange-cloudfoundry/bosh-bootloader/aws"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/testhelpers"
 
 	. "github.com/onsi/gomega"
 
 	awslib "github.com/aws/aws-sdk-go/aws"
-	acceptance "github.com/cloudfoundry/bosh-bootloader/acceptance-tests"
+	acceptance "github.com/orange-cloudfoundry/bosh-bootloader/acceptance-tests"
 
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"

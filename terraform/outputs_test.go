@@ -1,7 +1,7 @@
 package terraform_test
 
 import (
-	"github.com/cloudfoundry/bosh-bootloader/terraform"
+	"github.com/orange-cloudfoundry/bosh-bootloader/terraform"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

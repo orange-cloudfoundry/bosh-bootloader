@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/cloudfoundry/bosh-bootloader/flags"
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/flags"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 )
 
 type FilteredDeleter interface {

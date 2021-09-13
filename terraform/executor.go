@@ -12,8 +12,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/cloudfoundry/bosh-bootloader/fileio"
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/fileio"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 )
 
 var redactedError = "Some output has been redacted, use `bbl latest-error` to see it or run again with --debug for additional debug output"

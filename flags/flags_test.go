@@ -1,7 +1,7 @@
 package flags_test
 
 import (
-	"github.com/cloudfoundry/bosh-bootloader/flags"
+	"github.com/orange-cloudfoundry/bosh-bootloader/flags"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

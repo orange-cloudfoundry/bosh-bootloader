@@ -1,7 +1,7 @@
 package renderers_test
 
 import (
-	"github.com/cloudfoundry/bosh-bootloader/renderers"
+	"github.com/orange-cloudfoundry/bosh-bootloader/renderers"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

@@ -6,8 +6,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cloudfoundry/bosh-bootloader/fakes"
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/fakes"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 	"github.com/nu7hatch/gouuid"
 
 	. "github.com/onsi/ginkgo"

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os/exec"
 
-	acceptance "github.com/cloudfoundry/bosh-bootloader/acceptance-tests"
-	"github.com/cloudfoundry/bosh-bootloader/acceptance-tests/actors"
+	acceptance "github.com/orange-cloudfoundry/bosh-bootloader/acceptance-tests"
+	"github.com/orange-cloudfoundry/bosh-bootloader/acceptance-tests/actors"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gexec"

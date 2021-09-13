@@ -18,7 +18,7 @@ var pathToBBL string
 var _ = BeforeSuite(func() {
 	var err error
 
-	pathToBBL, err = gexec.Build("github.com/cloudfoundry/bosh-bootloader/bbl")
+	pathToBBL, err = gexec.Build("github.com/orange-cloudfoundry/bosh-bootloader/bbl")
 	Expect(err).NotTo(HaveOccurred())
 })
 

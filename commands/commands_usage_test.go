@@ -3,7 +3,7 @@ package commands_test
 import (
 	"fmt"
 
-	"github.com/cloudfoundry/bosh-bootloader/commands"
+	"github.com/orange-cloudfoundry/bosh-bootloader/commands"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/ginkgo/extensions/table"

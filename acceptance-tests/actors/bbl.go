@@ -11,7 +11,7 @@ import (
 	"syscall"
 	"time"
 
-	acceptance "github.com/cloudfoundry/bosh-bootloader/acceptance-tests"
+	acceptance "github.com/orange-cloudfoundry/bosh-bootloader/acceptance-tests"
 	"github.com/kr/pty"
 
 	"github.com/onsi/ginkgo"

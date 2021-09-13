@@ -1,9 +1,11 @@
+//go:generate packr2
+
 package openstack
 
 import (
 	"strings"
 
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 	"github.com/gobuffalo/packr/v2"
 )
 

@@ -1,3 +1,5 @@
+//go:generate packr2
+
 package bosh_test
 
 import (
@@ -7,10 +9,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cloudfoundry/bosh-bootloader/bosh"
-	"github.com/cloudfoundry/bosh-bootloader/fakes"
-	"github.com/cloudfoundry/bosh-bootloader/fileio"
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/bosh"
+	"github.com/orange-cloudfoundry/bosh-bootloader/fakes"
+	"github.com/orange-cloudfoundry/bosh-bootloader/fileio"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/spf13/afero"
 

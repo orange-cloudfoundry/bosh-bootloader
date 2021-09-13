@@ -7,7 +7,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/adal"
 	"github.com/Azure/go-autorest/autorest/azure"
-	acceptance "github.com/cloudfoundry/bosh-bootloader/acceptance-tests"
+	acceptance "github.com/orange-cloudfoundry/bosh-bootloader/acceptance-tests"
 
 	. "github.com/onsi/gomega"
 )

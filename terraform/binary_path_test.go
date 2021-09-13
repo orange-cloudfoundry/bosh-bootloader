@@ -1,3 +1,5 @@
+//go:generate packr2
+
 package terraform_test
 
 import (
@@ -6,8 +8,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/cloudfoundry/bosh-bootloader/fakes"
-	"github.com/cloudfoundry/bosh-bootloader/terraform"
+	"github.com/orange-cloudfoundry/bosh-bootloader/fakes"
+	"github.com/orange-cloudfoundry/bosh-bootloader/terraform"
 	"github.com/gobuffalo/packd"
 	"github.com/gobuffalo/packr/v2"
 

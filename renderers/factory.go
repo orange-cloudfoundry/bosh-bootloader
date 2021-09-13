@@ -3,7 +3,7 @@ package renderers
 import (
 	"fmt"
 
-	"github.com/cloudfoundry/bosh-bootloader/helpers"
+	"github.com/orange-cloudfoundry/bosh-bootloader/helpers"
 )
 
 type factory struct {

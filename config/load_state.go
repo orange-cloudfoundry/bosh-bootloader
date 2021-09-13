@@ -5,9 +5,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cloudfoundry/bosh-bootloader/application"
-	"github.com/cloudfoundry/bosh-bootloader/fileio"
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/application"
+	"github.com/orange-cloudfoundry/bosh-bootloader/fileio"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 	"github.com/jessevdk/go-flags"
 )
 

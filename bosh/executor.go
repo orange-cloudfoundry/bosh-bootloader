@@ -1,3 +1,5 @@
+//go:generate packr2
+
 package bosh
 
 import (
@@ -11,8 +13,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/cloudfoundry/bosh-bootloader/fileio"
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/fileio"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 	"github.com/gobuffalo/packr/v2"
 )
 

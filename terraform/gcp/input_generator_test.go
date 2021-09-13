@@ -1,8 +1,8 @@
 package gcp_test
 
 import (
-	"github.com/cloudfoundry/bosh-bootloader/storage"
-	"github.com/cloudfoundry/bosh-bootloader/terraform/gcp"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/terraform/gcp"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )

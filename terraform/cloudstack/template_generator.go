@@ -1,7 +1,7 @@
 package cloudstack
 
 import (
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 	"strings"
 )
 

@@ -28,7 +28,7 @@ var (
 var _ = BeforeSuite(func() {
 	var err error
 
-	pathToBBL, err = gexec.Build("github.com/cloudfoundry/bosh-bootloader/bbl")
+	pathToBBL, err = gexec.Build("github.com/orange-cloudfoundry/bosh-bootloader/bbl")
 	Expect(err).NotTo(HaveOccurred())
 
 	bblPlanTimeout = getTimeout("BBL_PLAN_TIMEOUT", 5*time.Minute)

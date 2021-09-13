@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/cloudfoundry/bosh-bootloader/backends"
+	"github.com/orange-cloudfoundry/bosh-bootloader/backends"
 )
 
 type Downloader struct {

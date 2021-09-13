@@ -4,9 +4,9 @@ import (
 	"errors"
 
 	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/cloudfoundry/bosh-bootloader/aws"
-	"github.com/cloudfoundry/bosh-bootloader/fakes"
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/aws"
+	"github.com/orange-cloudfoundry/bosh-bootloader/fakes"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 
 	awslib "github.com/aws/aws-sdk-go/aws"
 	awsec2 "github.com/aws/aws-sdk-go/service/ec2"

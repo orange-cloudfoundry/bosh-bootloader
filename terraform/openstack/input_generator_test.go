@@ -1,8 +1,8 @@
 package openstack_test
 
 import (
-	"github.com/cloudfoundry/bosh-bootloader/storage"
-	"github.com/cloudfoundry/bosh-bootloader/terraform/openstack"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/terraform/openstack"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

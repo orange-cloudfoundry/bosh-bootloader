@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cloudfoundry/bosh-bootloader/commands"
+	"github.com/orange-cloudfoundry/bosh-bootloader/commands"
 )
 
 type StateValidator struct {

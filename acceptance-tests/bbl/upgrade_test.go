@@ -11,8 +11,8 @@ import (
 	"path/filepath"
 	"runtime"
 
-	acceptance "github.com/cloudfoundry/bosh-bootloader/acceptance-tests"
-	"github.com/cloudfoundry/bosh-bootloader/acceptance-tests/actors"
+	acceptance "github.com/orange-cloudfoundry/bosh-bootloader/acceptance-tests"
+	"github.com/orange-cloudfoundry/bosh-bootloader/acceptance-tests/actors"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -20,7 +20,7 @@ import (
 )
 
 const (
-	BBLReleaseURL = "https://github.com/cloudfoundry/bosh-bootloader/releases/download/%s/%s"
+	BBLReleaseURL = "https://github.com/orange-cloudfoundry/bosh-bootloader/releases/download/%s/%s"
 )
 
 var _ = Describe("Upgrade", func() {

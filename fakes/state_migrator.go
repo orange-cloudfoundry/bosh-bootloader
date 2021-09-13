@@ -1,6 +1,6 @@
 package fakes
 
-import "github.com/cloudfoundry/bosh-bootloader/storage"
+import "github.com/orange-cloudfoundry/bosh-bootloader/storage"
 
 type StateMigrator struct {
 	MigrateCall struct {

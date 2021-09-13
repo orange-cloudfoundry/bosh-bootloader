@@ -1,7 +1,7 @@
 package bosh_test
 
 import (
-	"github.com/cloudfoundry/bosh-bootloader/bosh"
+	"github.com/orange-cloudfoundry/bosh-bootloader/bosh"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

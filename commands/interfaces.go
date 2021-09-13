@@ -1,9 +1,9 @@
 package commands
 
 import (
-	"github.com/cloudfoundry/bosh-bootloader/certs"
-	"github.com/cloudfoundry/bosh-bootloader/storage"
-	"github.com/cloudfoundry/bosh-bootloader/terraform"
+	"github.com/orange-cloudfoundry/bosh-bootloader/certs"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/terraform"
 )
 
 type plan interface {

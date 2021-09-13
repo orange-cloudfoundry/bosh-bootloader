@@ -5,8 +5,8 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	acceptance "github.com/cloudfoundry/bosh-bootloader/acceptance-tests"
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	acceptance "github.com/orange-cloudfoundry/bosh-bootloader/acceptance-tests"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gexec"

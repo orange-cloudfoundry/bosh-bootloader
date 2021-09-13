@@ -1,6 +1,6 @@
 package fakes
 
-import "github.com/cloudfoundry/bosh-bootloader/certs"
+import "github.com/orange-cloudfoundry/bosh-bootloader/certs"
 
 type CertificateValidator struct {
 	ReadAndValidateCall struct {

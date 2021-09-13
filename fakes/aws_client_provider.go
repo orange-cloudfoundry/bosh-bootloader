@@ -1,8 +1,8 @@
 package fakes
 
 import (
-	"github.com/cloudfoundry/bosh-bootloader/aws"
-	"github.com/cloudfoundry/bosh-bootloader/storage"
+	"github.com/orange-cloudfoundry/bosh-bootloader/aws"
+	"github.com/orange-cloudfoundry/bosh-bootloader/storage"
 )
 
 type AWSClientProvider struct {

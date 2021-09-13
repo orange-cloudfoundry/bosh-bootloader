@@ -7,8 +7,8 @@ import (
 
 	"golang.org/x/oauth2/google"
 
-	acceptance "github.com/cloudfoundry/bosh-bootloader/acceptance-tests"
-	"github.com/cloudfoundry/bosh-bootloader/testhelpers"
+	acceptance "github.com/orange-cloudfoundry/bosh-bootloader/acceptance-tests"
+	"github.com/orange-cloudfoundry/bosh-bootloader/testhelpers"
 	compute "google.golang.org/api/compute/v1"
 
 	. "github.com/onsi/gomega"
