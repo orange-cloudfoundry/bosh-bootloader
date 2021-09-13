@@ -1,6 +1,6 @@
 module github.com/cloudfoundry/bosh-bootloader
 
-go 1.13
+go 1.16
 
 require (
 	code.cloudfoundry.org/multierror v0.0.0-20170123201326-dafed03eebc6 // indirect
