@@ -31,8 +31,8 @@ require (
 	github.com/mholt/archiver v2.0.1-0.20180417220235-e4ef56d48eb0+incompatible
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
 	github.com/nwaples/rardecode v0.0.0-20171029023500-e06696f847ae // indirect
-	github.com/onsi/ginkgo v1.7.0
-	github.com/onsi/gomega v1.4.3
+	github.com/onsi/ginkgo v1.16.4
+	github.com/onsi/gomega v1.16.0
 	github.com/pborman/uuid v0.0.0-20170612153648-e790cca94e6c // indirect
 	github.com/pierrec/lz4 v2.0.3+incompatible // indirect
 	github.com/pivotal-cf-experimental/gomegamatchers v0.0.0-20180326192815-e36bfcc98c3a
@@ -42,9 +42,9 @@ require (
 	github.com/spf13/afero v1.2.0
 	github.com/ulikunitz/xz v0.5.4 // indirect
 	github.com/vmware/govmomi v0.18.0 // indirect
-	golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
+	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 	golang.org/x/oauth2 v0.0.0-20181203162652-d668ce993890
 	google.golang.org/api v0.1.0
 	gopkg.in/ini.v1 v1.51.1 // indirect
-	gopkg.in/yaml.v2 v2.2.2
+	gopkg.in/yaml.v2 v2.4.0
 )
