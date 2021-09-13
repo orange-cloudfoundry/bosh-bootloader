@@ -16,3 +16,5 @@ function create_mod() {
 
   stat "${mod_fmt}" "${ROOT_DIR}/terraform/binary_dist/terraform" > "${ROOT_DIR}/terraform/binary_dist/terraform-mod-time"
 }
+
+create_mod
