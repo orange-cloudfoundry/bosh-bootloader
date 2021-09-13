@@ -3,6 +3,7 @@ module github.com/cloudfoundry/bosh-bootloader
 go 1.16
 
 require (
+	cloud.google.com/go v0.36.0 // indirect
 	code.cloudfoundry.org/multierror v0.0.0-20170123201326-dafed03eebc6 // indirect
 	github.com/Azure/azure-sdk-for-go v12.5.0-beta+incompatible
 	github.com/Azure/go-autorest v9.10.0+incompatible
@@ -14,13 +15,11 @@ require (
 	github.com/cloudfoundry/multierror v0.0.0-20170123201326-dafed03eebc6
 	github.com/coreos/go-semver v0.2.0
 	github.com/dsnet/compress v0.0.0-20171208185109-cc9eb1d7ad76 // indirect
+	github.com/fatih/color v1.7.0 // indirect
 	github.com/genevieve/leftovers v0.55.1-0.20190805182303-e86fd74c0714
 	github.com/go-ini/ini v1.37.0 // indirect
-	github.com/gobuffalo/buffalo-plugins v1.13.0 // indirect
-	github.com/gobuffalo/genny v0.0.0-20190219203444-c95082806342 // indirect
-	github.com/gobuffalo/meta v0.0.0-20190207205153-50a99e08b8cf // indirect
-	github.com/gobuffalo/packd v0.0.0-20181212173646-eca3b8fd6687
-	github.com/gobuffalo/packr/v2 v2.0.1
+	github.com/gobuffalo/packd v1.0.0
+	github.com/gobuffalo/packr/v2 v2.8.1
 	github.com/golang/snappy v0.0.0-20180518054509-2e65f85255db // indirect
 	github.com/hashicorp/errwrap v0.0.0-20180715044906-d6c0cd880357 // indirect
 	github.com/hashicorp/go-multierror v0.0.0-20180717150148-3d5d8f294aa0 // indirect
@@ -28,6 +27,8 @@ require (
 	github.com/jmespath/go-jmespath v0.0.0-20160202185014-0b12d6b521d8 // indirect
 	github.com/kr/pty v1.1.3
 	github.com/lytics/cloudstorage v0.0.0-20180517181525-27319609bc1c
+	github.com/mattn/go-colorable v0.0.9 // indirect
+	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/mholt/archiver v2.0.1-0.20180417220235-e4ef56d48eb0+incompatible
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
 	github.com/nwaples/rardecode v0.0.0-20171029023500-e06696f847ae // indirect
@@ -37,14 +38,14 @@ require (
 	github.com/pierrec/lz4 v2.0.3+incompatible // indirect
 	github.com/pivotal-cf-experimental/gomegamatchers v0.0.0-20180326192815-e36bfcc98c3a
 	github.com/pmezard/go-difflib v1.0.0
-	github.com/rogpeppe/go-internal v1.2.2 // indirect
 	github.com/smartystreets/goconvey v1.6.4 // indirect
 	github.com/spf13/afero v1.2.0
 	github.com/ulikunitz/xz v0.5.4 // indirect
 	github.com/vmware/govmomi v0.18.0 // indirect
-	golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
+	golang.org/x/crypto v0.0.0-20191122220453-ac88ee75c92c
 	golang.org/x/oauth2 v0.0.0-20181203162652-d668ce993890
 	google.golang.org/api v0.1.0
+	google.golang.org/appengine v1.4.0 // indirect
 	gopkg.in/ini.v1 v1.51.1 // indirect
 	gopkg.in/yaml.v2 v2.2.2
 )
