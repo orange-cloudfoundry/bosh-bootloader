@@ -27,7 +27,7 @@ require (
 	github.com/lytics/cloudstorage v0.0.0-20180517181525-27319609bc1c
 	github.com/mattn/go-colorable v0.0.9 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect
-	github.com/mholt/archiver v2.0.1-0.20180417220235-e4ef56d48eb0+incompatible
+	github.com/mholt/archiver v2.1.0+incompatible
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
 	github.com/nwaples/rardecode v0.0.0-20171029023500-e06696f847ae // indirect
 	github.com/onsi/ginkgo v1.16.4

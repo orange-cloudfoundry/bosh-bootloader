@@ -203,7 +203,7 @@ github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.4
 ## explicit
 github.com/mattn/go-isatty
-# github.com/mholt/archiver v2.0.1-0.20180417220235-e4ef56d48eb0+incompatible
+# github.com/mholt/archiver v2.1.0+incompatible
 ## explicit
 github.com/mholt/archiver
 # github.com/mitchellh/go-homedir v1.1.0
