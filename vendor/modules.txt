@@ -102,6 +102,8 @@ github.com/cloudfoundry/multierror
 # github.com/coreos/go-semver v0.2.0
 ## explicit
 github.com/coreos/go-semver/semver
+# github.com/creack/pty v1.1.7
+github.com/creack/pty
 # github.com/dgrijalva/jwt-go v3.2.0+incompatible
 github.com/dgrijalva/jwt-go
 # github.com/dsnet/compress v0.0.0-20171208185109-cc9eb1d7ad76
@@ -183,7 +185,7 @@ github.com/jmespath/go-jmespath
 github.com/karrick/godirwalk
 # github.com/konsorten/go-windows-terminal-sequences v1.0.2
 github.com/konsorten/go-windows-terminal-sequences
-# github.com/kr/pty v1.1.3
+# github.com/kr/pty v1.1.8
 ## explicit
 github.com/kr/pty
 # github.com/lytics/cloudstorage v0.0.0-20180517181525-27319609bc1c
