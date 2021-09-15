@@ -99,7 +99,7 @@ github.com/cloudfoundry/bbl-state-resource/storage
 # github.com/cloudfoundry/multierror v0.0.0-20170123201326-dafed03eebc6
 ## explicit
 github.com/cloudfoundry/multierror
-# github.com/coreos/go-semver v0.2.0
+# github.com/coreos/go-semver v0.3.0
 ## explicit
 github.com/coreos/go-semver/semver
 # github.com/creack/pty v1.1.7

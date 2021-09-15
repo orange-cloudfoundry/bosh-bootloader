@@ -13,7 +13,7 @@ require (
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
 	github.com/cloudfoundry/bbl-state-resource v0.0.0-20180409211107-a02832129633
 	github.com/cloudfoundry/multierror v0.0.0-20170123201326-dafed03eebc6
-	github.com/coreos/go-semver v0.2.0
+	github.com/coreos/go-semver v0.3.0
 	github.com/dsnet/compress v0.0.0-20171208185109-cc9eb1d7ad76 // indirect
 	github.com/fatih/color v1.7.0 // indirect
 	github.com/genevieve/leftovers v0.55.1-0.20190805182303-e86fd74c0714
