@@ -1,6 +1,6 @@
 [submodule "bosh/deployments/bosh-deployment"]
 	path = bosh/deployments/bosh-deployment
-	url = https://github.com/orange-cloudfoundry/bosh-deployment.git
+	url = ../../cloudfoundry/bosh-deployment.git
 [submodule "bosh/deployments/jumpbox-deployment"]
 	path = bosh/deployments/jumpbox-deployment
 	url = https://github.com/orange-cloudfoundry/jumpbox-deployment.git
