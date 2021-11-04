@@ -147,7 +147,7 @@ github.com/genevieve/leftovers/gcp/storage
 github.com/genevieve/leftovers/vsphere
 # github.com/gobuffalo/logger v1.0.3
 github.com/gobuffalo/logger
-# github.com/gobuffalo/packd v1.0.0
+# github.com/gobuffalo/packd v1.0.1
 ## explicit
 github.com/gobuffalo/packd
 github.com/gobuffalo/packd/internal/takeon/github.com/markbates/errx
