@@ -13,19 +13,17 @@ require (
 	github.com/cloudfoundry/bbl-state-resource v0.0.0-20180409211107-a02832129633
 	github.com/cloudfoundry/multierror v0.0.0-20170123201326-dafed03eebc6
 	github.com/coreos/go-semver v0.3.0
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/dsnet/compress v0.0.0-20171208185109-cc9eb1d7ad76 // indirect
-	github.com/fatih/color v1.7.0 // indirect
 	github.com/genevieve/leftovers v0.55.1-0.20190805182303-e86fd74c0714
 	github.com/gobuffalo/packd v1.0.1
-	github.com/gobuffalo/packr/v2 v2.8.1
-	github.com/hashicorp/errwrap v0.0.0-20180715044906-d6c0cd880357 // indirect
-	github.com/hashicorp/go-multierror v0.0.0-20180717150148-3d5d8f294aa0 // indirect
+	github.com/gobuffalo/packr/v2 v2.8.2
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/kr/pty v1.1.8
 	github.com/lytics/cloudstorage v0.0.0-20180517181525-27319609bc1c
-	github.com/mattn/go-colorable v0.0.9 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/mholt/archiver v2.1.0+incompatible
+	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
 	github.com/nwaples/rardecode v0.0.0-20171029023500-e06696f847ae // indirect
 	github.com/onsi/ginkgo v1.16.5
