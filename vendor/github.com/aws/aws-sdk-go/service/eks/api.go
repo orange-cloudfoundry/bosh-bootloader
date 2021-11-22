@@ -273,9 +273,11 @@ func (c *EKS) CreateAddonRequest(input *CreateAddonInput) (req *request.Request,
 //
 // Amazon EKS add-ons help to automate the provisioning and lifecycle management
 // of common operational software for Amazon EKS clusters. Amazon EKS add-ons
-// can only be used with Amazon EKS clusters running version 1.18 with platform
-// version eks.3 or later because add-ons rely on the Server-side Apply Kubernetes
-// feature, which is only available in Kubernetes 1.18 and later.
+// require clusters running version 1.18 or later because Amazon EKS add-ons
+// rely on the Server-side Apply Kubernetes feature, which is only available
+// in Kubernetes 1.18 and later. For more information, see Amazon EKS add-ons
+// (https://docs.aws.amazon.com/eks/latest/userguide/eks-add-ons.html) in the
+// Amazon EKS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1183,6 +1185,13 @@ func (c *EKS) DeregisterClusterRequest(input *DeregisterClusterInput) (req *requ
 //
 //   * ServiceUnavailableException
 //   The service is unavailable. Back off and retry the operation.
+//
+//   * AccessDeniedException
+//   You don't have permissions to perform the requested operation. The user or
+//   role that is making the request must have at least one IAM permissions policy
+//   attached that grants the required permissions. For more information, see
+//   Access Management (https://docs.aws.amazon.com/IAM/latest/UserGuide/access.html)
+//   in the IAM User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/DeregisterCluster
 func (c *EKS) DeregisterCluster(input *DeregisterClusterInput) (*DeregisterClusterOutput, error) {
@@ -3096,8 +3105,8 @@ func (c *EKS) RegisterClusterRequest(input *RegisterClusterInput) (req *request.
 //
 // After the Manifest is updated and applied, then the connected cluster is
 // visible to the Amazon EKS control plane. If the Manifest is not applied within
-// a set amount of time, then the connected cluster will no longer be visible
-// and must be deregistered. See DeregisterCluster.
+// three days, then the connected cluster will no longer be visible and must
+// be deregistered. See DeregisterCluster.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3124,6 +3133,13 @@ func (c *EKS) RegisterClusterRequest(input *RegisterClusterInput) (req *request.
 //
 //   * ServiceUnavailableException
 //   The service is unavailable. Back off and retry the operation.
+//
+//   * AccessDeniedException
+//   You don't have permissions to perform the requested operation. The user or
+//   role that is making the request must have at least one IAM permissions policy
+//   attached that grants the required permissions. For more information, see
+//   Access Management (https://docs.aws.amazon.com/IAM/latest/UserGuide/access.html)
+//   in the IAM User Guide.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/RegisterCluster
 func (c *EKS) RegisterCluster(input *RegisterClusterInput) (*RegisterClusterOutput, error) {
@@ -3889,7 +3905,76 @@ func (c *EKS) UpdateNodegroupVersionWithContext(ctx aws.Context, input *UpdateNo
 	return out, req.Send()
 }
 
-// An Amazon EKS add-on.
+// You don't have permissions to perform the requested operation. The user or
+// role that is making the request must have at least one IAM permissions policy
+// attached that grants the required permissions. For more information, see
+// Access Management (https://docs.aws.amazon.com/IAM/latest/UserGuide/access.html)
+// in the IAM User Guide.
+type AccessDeniedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessDeniedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AccessDeniedException) GoString() string {
+	return s.String()
+}
+
+func newErrorAccessDeniedException(v protocol.ResponseMetadata) error {
+	return &AccessDeniedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *AccessDeniedException) Code() string {
+	return "AccessDeniedException"
+}
+
+// Message returns the exception's message.
+func (s *AccessDeniedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *AccessDeniedException) OrigErr() error {
+	return nil
+}
+
+func (s *AccessDeniedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *AccessDeniedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *AccessDeniedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// An Amazon EKS add-on. For more information, see Amazon EKS add-ons (https://docs.aws.amazon.com/eks/latest/userguide/eks-add-ons.html)
+// in the Amazon EKS User Guide.
 type Addon struct {
 	_ struct{} `type:"structure"`
 
@@ -4948,8 +5033,8 @@ type ConnectorConfigResponse struct {
 	// The cluster's cloud service provider.
 	Provider *string `locationName:"provider" type:"string"`
 
-	// The Amazon Resource Name (ARN) of the role that is used by the EKS connector
-	// to communicate with AWS services from the connected Kubernetes cluster.
+	// The Amazon Resource Name (ARN) of the role to communicate with services from
+	// the connected Kubernetes cluster.
 	RoleArn *string `locationName:"roleArn" type:"string"`
 }
 
@@ -5133,7 +5218,8 @@ func (s *CreateAddonInput) SetTags(v map[string]*string) *CreateAddonInput {
 type CreateAddonOutput struct {
 	_ struct{} `type:"structure"`
 
-	// An Amazon EKS add-on.
+	// An Amazon EKS add-on. For more information, see Amazon EKS add-ons (https://docs.aws.amazon.com/eks/latest/userguide/eks-add-ons.html)
+	// in the Amazon EKS User Guide.
 	Addon *Addon `locationName:"addon" type:"structure"`
 }
 
@@ -5845,7 +5931,7 @@ func (s *CreateNodegroupOutput) SetNodegroup(v *Nodegroup) *CreateNodegroupOutpu
 }
 
 type DeleteAddonInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the add-on. The name must match one of the names returned by
 	// ListAddons (https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html).
@@ -5925,7 +6011,8 @@ func (s *DeleteAddonInput) SetPreserve(v bool) *DeleteAddonInput {
 type DeleteAddonOutput struct {
 	_ struct{} `type:"structure"`
 
-	// An Amazon EKS add-on.
+	// An Amazon EKS add-on. For more information, see Amazon EKS add-ons (https://docs.aws.amazon.com/eks/latest/userguide/eks-add-ons.html)
+	// in the Amazon EKS User Guide.
 	Addon *Addon `locationName:"addon" type:"structure"`
 }
 
@@ -5954,7 +6041,7 @@ func (s *DeleteAddonOutput) SetAddon(v *Addon) *DeleteAddonOutput {
 }
 
 type DeleteClusterInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the cluster to delete.
 	//
@@ -6034,7 +6121,7 @@ func (s *DeleteClusterOutput) SetCluster(v *Cluster) *DeleteClusterOutput {
 }
 
 type DeleteFargateProfileInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the Amazon EKS cluster associated with the Fargate profile to
 	// delete.
@@ -6132,7 +6219,7 @@ func (s *DeleteFargateProfileOutput) SetFargateProfile(v *FargateProfile) *Delet
 }
 
 type DeleteNodegroupInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the Amazon EKS cluster that is associated with your node group.
 	//
@@ -6229,7 +6316,7 @@ func (s *DeleteNodegroupOutput) SetNodegroup(v *Nodegroup) *DeleteNodegroupOutpu
 }
 
 type DeregisterClusterInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the connected cluster to deregister.
 	//
@@ -6309,7 +6396,7 @@ func (s *DeregisterClusterOutput) SetCluster(v *Cluster) *DeregisterClusterOutpu
 }
 
 type DescribeAddonInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the add-on. The name must match one of the names returned by
 	// ListAddons (https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html).
@@ -6378,7 +6465,8 @@ func (s *DescribeAddonInput) SetClusterName(v string) *DescribeAddonInput {
 type DescribeAddonOutput struct {
 	_ struct{} `type:"structure"`
 
-	// An Amazon EKS add-on.
+	// An Amazon EKS add-on. For more information, see Amazon EKS add-ons (https://docs.aws.amazon.com/eks/latest/userguide/eks-add-ons.html)
+	// in the Amazon EKS User Guide.
 	Addon *Addon `locationName:"addon" type:"structure"`
 }
 
@@ -6407,7 +6495,7 @@ func (s *DescribeAddonOutput) SetAddon(v *Addon) *DescribeAddonOutput {
 }
 
 type DescribeAddonVersionsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the add-on. The name must match one of the names returned by
 	// ListAddons (https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html).
@@ -6531,7 +6619,7 @@ func (s *DescribeAddonVersionsOutput) SetNextToken(v string) *DescribeAddonVersi
 }
 
 type DescribeClusterInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the cluster to describe.
 	//
@@ -6611,7 +6699,7 @@ func (s *DescribeClusterOutput) SetCluster(v *Cluster) *DescribeClusterOutput {
 }
 
 type DescribeFargateProfileInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the Amazon EKS cluster associated with the Fargate profile.
 	//
@@ -6807,7 +6895,7 @@ func (s *DescribeIdentityProviderConfigOutput) SetIdentityProviderConfig(v *Iden
 }
 
 type DescribeNodegroupInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the Amazon EKS cluster associated with the node group.
 	//
@@ -6904,7 +6992,7 @@ func (s *DescribeNodegroupOutput) SetNodegroup(v *Nodegroup) *DescribeNodegroupO
 }
 
 type DescribeUpdateInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the add-on. The name must match one of the names returned by
 	// ListAddons (https://docs.aws.amazon.com/eks/latest/APIReference/API_ListAddons.html).
@@ -7733,7 +7821,7 @@ type Issue struct {
 	//
 	//    * NodeCreationFailure: Your launched instances are unable to register
 	//    with your Amazon EKS cluster. Common causes of this failure are insufficient
-	//    node IAM role (https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html)
+	//    node IAM role (https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html)
 	//    permissions or lack of outbound internet access for the nodes.
 	Code *string `locationName:"code" type:"string" enum:"NodegroupIssueCode"`
 
@@ -7790,7 +7878,7 @@ type KubernetesNetworkConfigRequest struct {
 	// does not overlap with resources in other networks that are peered or connected
 	// to your VPC. The block must meet the following requirements:
 	//
-	//    * Within one of the following private IP address blocks: 10.0.0.0/8, 172.16.0.0.0/12,
+	//    * Within one of the following private IP address blocks: 10.0.0.0/8, 172.16.0.0/12,
 	//    or 192.168.0.0/16.
 	//
 	//    * Doesn't overlap with any CIDR block assigned to the VPC that you selected
@@ -7927,7 +8015,7 @@ func (s *LaunchTemplateSpecification) SetVersion(v string) *LaunchTemplateSpecif
 }
 
 type ListAddonsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the cluster.
 	//
@@ -8055,7 +8143,7 @@ func (s *ListAddonsOutput) SetNextToken(v string) *ListAddonsOutput {
 }
 
 type ListClustersInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// Indicates whether connected clusters are included in the returned list. Default
 	// value is 'ALL'.
@@ -8173,7 +8261,7 @@ func (s *ListClustersOutput) SetNextToken(v string) *ListClustersOutput {
 }
 
 type ListFargateProfilesInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the Amazon EKS cluster that you would like to list Fargate profiles
 	// in.
@@ -8296,7 +8384,7 @@ func (s *ListFargateProfilesOutput) SetNextToken(v string) *ListFargateProfilesO
 }
 
 type ListIdentityProviderConfigsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The cluster name that you want to list identity provider configurations for.
 	//
@@ -8418,7 +8506,7 @@ func (s *ListIdentityProviderConfigsOutput) SetNextToken(v string) *ListIdentity
 }
 
 type ListNodegroupsInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The name of the Amazon EKS cluster that you would like to list node groups
 	// in.
@@ -8541,7 +8629,7 @@ func (s *ListNodegroupsOutput) SetNodegroups(v []*string) *ListNodegroupsOutput 
 }
 
 type ListTagsForResourceInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The Amazon Resource Name (ARN) that identifies the resource for which to
 	// list the tags. Currently, the supported resources are Amazon EKS clusters
@@ -8623,7 +8711,7 @@ func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForRe
 }
 
 type ListUpdatesInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The names of the installed add-ons that have available updates.
 	AddonName *string `location:"querystring" locationName:"addonName" type:"string"`
@@ -9181,6 +9269,25 @@ type NodegroupScalingConfig struct {
 	_ struct{} `type:"structure"`
 
 	// The current number of nodes that the managed node group should maintain.
+	//
+	// If you use Cluster Autoscaler, you shouldn't change the desiredSize value
+	// directly, as this can cause the Cluster Autoscaler to suddenly scale up or
+	// scale down.
+	//
+	// Whenever this parameter changes, the number of worker nodes in the node group
+	// is updated to the specified size. If this parameter is given a value that
+	// is smaller than the current number of running worker nodes, the necessary
+	// number of worker nodes are terminated to match the given value. When using
+	// CloudFormation, no action occurs if you remove this parameter from your CFN
+	// template.
+	//
+	// This parameter can be different from minSize in some cases, such as when
+	// starting with extra hosts for testing. This parameter can also be different
+	// when you want to start with an estimated number of needed hosts, but let
+	// Cluster Autoscaler reduce the number if there are too many. When Cluster
+	// Autoscaler is used, the desiredSize parameter is altered by Cluster Autoscaler
+	// (but can be out-of-date for short periods of time). Cluster Autoscaler doesn't
+	// scale a managed node group lower than minSize or higher than maxSize.
 	DesiredSize *int64 `locationName:"desiredSize" type:"integer"`
 
 	// The maximum number of nodes that the managed node group can scale out to.
@@ -9734,10 +9841,16 @@ type RegisterClusterInput struct {
 	// ConnectorConfig is a required field
 	ConnectorConfig *ConnectorConfigRequest `locationName:"connectorConfig" type:"structure" required:"true"`
 
-	// Define a unique name for this cluster within your AWS account.
+	// Define a unique name for this cluster for your Region.
 	//
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
+
+	// The metadata that you apply to the cluster to assist with categorization
+	// and organization. Each tag consists of a key and an optional value, both
+	// of which you define. Cluster tags do not propagate to any other resources
+	// associated with the cluster.
+	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 }
 
 // String returns the string representation.
@@ -9770,6 +9883,9 @@ func (s *RegisterClusterInput) Validate() error {
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
 	if s.ConnectorConfig != nil {
 		if err := s.ConnectorConfig.Validate(); err != nil {
 			invalidParams.AddNested("ConnectorConfig", err.(request.ErrInvalidParams))
@@ -9797,6 +9913,12 @@ func (s *RegisterClusterInput) SetConnectorConfig(v *ConnectorConfigRequest) *Re
 // SetName sets the Name field's value.
 func (s *RegisterClusterInput) SetName(v string) *RegisterClusterInput {
 	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *RegisterClusterInput) SetTags(v map[string]*string) *RegisterClusterInput {
+	s.Tags = v
 	return s
 }
 
@@ -10466,7 +10588,7 @@ func (s *UnsupportedAvailabilityZoneException) RequestID() string {
 }
 
 type UntagResourceInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" nopayload:"true"`
 
 	// The Amazon Resource Name (ARN) of the resource from which to delete tags.
 	// Currently, the supported resources are Amazon EKS clusters and managed node
@@ -11699,6 +11821,12 @@ const (
 
 	// AMITypesCustom is a AMITypes enum value
 	AMITypesCustom = "CUSTOM"
+
+	// AMITypesBottlerocketArm64 is a AMITypes enum value
+	AMITypesBottlerocketArm64 = "BOTTLEROCKET_ARM_64"
+
+	// AMITypesBottlerocketX8664 is a AMITypes enum value
+	AMITypesBottlerocketX8664 = "BOTTLEROCKET_x86_64"
 )
 
 // AMITypes_Values returns all elements of the AMITypes enum
@@ -11708,6 +11836,8 @@ func AMITypes_Values() []string {
 		AMITypesAl2X8664Gpu,
 		AMITypesAl2Arm64,
 		AMITypesCustom,
+		AMITypesBottlerocketArm64,
+		AMITypesBottlerocketX8664,
 	}
 }
 
