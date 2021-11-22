@@ -106,6 +106,7 @@ github.com/coreos/go-semver/semver
 # github.com/creack/pty v1.1.7
 github.com/creack/pty
 # github.com/dgrijalva/jwt-go v3.2.0+incompatible
+## explicit
 github.com/dgrijalva/jwt-go
 # github.com/dsnet/compress v0.0.0-20171208185109-cc9eb1d7ad76
 ## explicit
@@ -116,7 +117,6 @@ github.com/dsnet/compress/internal
 github.com/dsnet/compress/internal/errors
 github.com/dsnet/compress/internal/prefix
 # github.com/fatih/color v1.7.0
-## explicit
 github.com/fatih/color
 # github.com/fsnotify/fsnotify v1.4.9
 github.com/fsnotify/fsnotify
@@ -145,13 +145,13 @@ github.com/genevieve/leftovers/gcp/iam
 github.com/genevieve/leftovers/gcp/sql
 github.com/genevieve/leftovers/gcp/storage
 github.com/genevieve/leftovers/vsphere
-# github.com/gobuffalo/logger v1.0.3
+# github.com/gobuffalo/logger v1.0.6
 github.com/gobuffalo/logger
 # github.com/gobuffalo/packd v1.0.1
 ## explicit
 github.com/gobuffalo/packd
 github.com/gobuffalo/packd/internal/takeon/github.com/markbates/errx
-# github.com/gobuffalo/packr/v2 v2.8.1
+# github.com/gobuffalo/packr/v2 v2.8.2
 ## explicit
 github.com/gobuffalo/packr/v2
 github.com/gobuffalo/packr/v2/file
@@ -173,21 +173,17 @@ github.com/golang/snappy
 github.com/googleapis/gax-go/v2
 github.com/googleapis/gax-go/v2/apierror
 github.com/googleapis/gax-go/v2/apierror/internal/proto
-# github.com/hashicorp/errwrap v0.0.0-20180715044906-d6c0cd880357
-## explicit
+# github.com/hashicorp/errwrap v1.0.0
 github.com/hashicorp/errwrap
-# github.com/hashicorp/go-multierror v0.0.0-20180717150148-3d5d8f294aa0
-## explicit
+# github.com/hashicorp/go-multierror v1.0.0
 github.com/hashicorp/go-multierror
 # github.com/jessevdk/go-flags v1.5.0
 ## explicit
 github.com/jessevdk/go-flags
 # github.com/jmespath/go-jmespath v0.4.0
 github.com/jmespath/go-jmespath
-# github.com/karrick/godirwalk v1.15.8
+# github.com/karrick/godirwalk v1.16.1
 github.com/karrick/godirwalk
-# github.com/konsorten/go-windows-terminal-sequences v1.0.2
-github.com/konsorten/go-windows-terminal-sequences
 # github.com/kr/pty v1.1.8
 ## explicit
 github.com/kr/pty
@@ -203,7 +199,6 @@ github.com/markbates/oncer
 # github.com/markbates/safe v1.0.1
 github.com/markbates/safe
 # github.com/mattn/go-colorable v0.0.9
-## explicit
 github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.4
 ## explicit
@@ -212,6 +207,7 @@ github.com/mattn/go-isatty
 ## explicit
 github.com/mholt/archiver
 # github.com/mitchellh/go-homedir v1.1.0
+## explicit
 github.com/mitchellh/go-homedir
 # github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
 ## explicit
@@ -277,7 +273,7 @@ github.com/pivotal-cf-experimental/gomegamatchers/internal/prettyprint
 # github.com/pmezard/go-difflib v1.0.0
 ## explicit
 github.com/pmezard/go-difflib/difflib
-# github.com/sirupsen/logrus v1.4.2
+# github.com/sirupsen/logrus v1.8.1
 github.com/sirupsen/logrus
 # github.com/spf13/afero v1.6.0
 ## explicit
@@ -337,8 +333,7 @@ golang.org/x/crypto/pkcs12/internal/rc2
 golang.org/x/crypto/poly1305
 golang.org/x/crypto/ssh
 golang.org/x/crypto/ssh/internal/bcrypt_pbkdf
-golang.org/x/crypto/ssh/terminal
-# golang.org/x/net v0.0.0-20210614182718-04defd469f4e
+# golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d
 golang.org/x/net/context
 golang.org/x/net/context/ctxhttp
 golang.org/x/net/html
@@ -362,8 +357,11 @@ golang.org/x/oauth2/jwt
 # golang.org/x/sys v0.0.0-20210917161153-d61c044b1678
 golang.org/x/sys/cpu
 golang.org/x/sys/internal/unsafeheader
+golang.org/x/sys/plan9
 golang.org/x/sys/unix
 golang.org/x/sys/windows
+# golang.org/x/term v0.0.0-20210927222741-03fcf44c2211
+golang.org/x/term
 # golang.org/x/text v0.3.6
 golang.org/x/text/encoding
 golang.org/x/text/encoding/charmap
