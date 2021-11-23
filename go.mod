@@ -17,7 +17,7 @@ require (
 	github.com/dsnet/compress v0.0.0-20171208185109-cc9eb1d7ad76 // indirect
 	github.com/genevieve/leftovers v0.55.1-0.20190805182303-e86fd74c0714
 	github.com/gobuffalo/packd v1.0.1
-	github.com/gobuffalo/packr/v2 v2.8.2
+	github.com/gobuffalo/packr/v2 v2.8.3
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/kr/pty v1.1.8
 	github.com/lytics/cloudstorage v0.0.0-20180517181525-27319609bc1c
