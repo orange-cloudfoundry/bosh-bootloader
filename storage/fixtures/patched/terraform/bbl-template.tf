@@ -1,21 +1,21 @@
 variable "project_id" {
-  type = "string"
+  type = string
 }
 
 variable "region" {
-  type = "string"
+  type = string
 }
 
 variable "zone" {
-  type = "string"
+  type = string
 }
 
 variable "env_id" {
-  type = "string"
+  type = string
 }
 
 variable "credentials" {
-  type = "string"
+  type = string
 }
 
 provider "google" {
@@ -25,7 +25,7 @@ provider "google" {
 }
 
 variable "subnet_cidr" {
-  type    = "string"
+  type    = string
   default = "10.0.0.0/16"
 }
 

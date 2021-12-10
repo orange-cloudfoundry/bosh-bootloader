@@ -1,9 +1,9 @@
 variable "system_domain" {
-  type = "string"
+  type = string
 }
 
 variable "parent_zone" {
-  type        = "string"
+  type        = string
   default     = ""
   description = "The name of the parent zone for the provided system domain if it exists."
 }
@@ -28,7 +28,7 @@ resource "aws_route53_zone" "env_dns_zone" {
 
   name = "${var.system_domain}"
 
-  tags {
+  tags = {
     Name = "${var.env_id}-hosted-zone"
   }
 }
