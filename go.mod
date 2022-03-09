@@ -3,6 +3,7 @@ module github.com/cloudfoundry/bosh-bootloader
 go 1.16
 
 require (
+	cloud.google.com/go/iam v0.3.0 // indirect
 	code.cloudfoundry.org/multierror v0.0.0-20170123201326-dafed03eebc6 // indirect
 	github.com/Azure/azure-sdk-for-go v12.5.0-beta+incompatible
 	github.com/Azure/go-autorest v9.10.0+incompatible
@@ -36,7 +37,7 @@ require (
 	github.com/ulikunitz/xz v0.5.4 // indirect
 	github.com/vmware/govmomi v0.18.0 // indirect
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
-	golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f
-	google.golang.org/api v0.58.0
+	golang.org/x/oauth2 v0.0.0-20220223155221-ee480838109b
+	google.golang.org/api v0.71.0
 	gopkg.in/yaml.v2 v2.4.0
 )
