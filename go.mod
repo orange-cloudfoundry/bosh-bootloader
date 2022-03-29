@@ -8,7 +8,7 @@ require (
 	github.com/Azure/go-autorest v9.10.0+incompatible
 	github.com/Pallinder/go-randomdata v1.2.0 // indirect
 	github.com/araddon/gou v0.0.0-20180509225133-7db4be5742ae
-	github.com/aws/aws-sdk-go v1.40.59
+	github.com/aws/aws-sdk-go v1.43.27
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
 	github.com/cloudfoundry/bbl-state-resource v0.0.0-20180409211107-a02832129633
 	github.com/cloudfoundry/multierror v0.0.0-20170123201326-dafed03eebc6
