@@ -220,7 +220,7 @@ github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.4
 ## explicit
 github.com/mattn/go-isatty
-# github.com/mholt/archiver v2.1.0+incompatible
+# github.com/mholt/archiver v3.1.1+incompatible
 ## explicit
 github.com/mholt/archiver
 # github.com/mitchellh/go-homedir v1.1.0
@@ -321,6 +321,9 @@ github.com/vmware/govmomi/vim25/progress
 github.com/vmware/govmomi/vim25/soap
 github.com/vmware/govmomi/vim25/types
 github.com/vmware/govmomi/vim25/xml
+# github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8
+## explicit
+github.com/xi2/xz
 # go.opencensus.io v0.23.0
 go.opencensus.io
 go.opencensus.io/internal
