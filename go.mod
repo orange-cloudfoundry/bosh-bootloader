@@ -5,7 +5,11 @@ go 1.16
 require (
 	code.cloudfoundry.org/multierror v0.0.0-20170123201326-dafed03eebc6 // indirect
 	github.com/Azure/azure-sdk-for-go v12.5.0-beta+incompatible
-	github.com/Azure/go-autorest v9.10.0+incompatible
+	github.com/Azure/go-autorest/autorest v0.11.25
+	github.com/Azure/go-autorest/autorest/adal v0.9.18
+	github.com/Azure/go-autorest/autorest/mocks v0.4.2
+	github.com/Azure/go-autorest/autorest/to v0.4.0 // indirect
+	github.com/Azure/go-autorest/autorest/validation v0.3.1 // indirect
 	github.com/Pallinder/go-randomdata v1.2.0 // indirect
 	github.com/araddon/gou v0.0.0-20180509225133-7db4be5742ae
 	github.com/aws/aws-sdk-go v1.40.59
@@ -13,7 +17,6 @@ require (
 	github.com/cloudfoundry/bbl-state-resource v0.0.0-20180409211107-a02832129633
 	github.com/cloudfoundry/multierror v0.0.0-20170123201326-dafed03eebc6
 	github.com/coreos/go-semver v0.3.0
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/dsnet/compress v0.0.0-20171208185109-cc9eb1d7ad76 // indirect
 	github.com/genevieve/leftovers v0.55.1-0.20190805182303-e86fd74c0714
 	github.com/gobuffalo/packd v1.0.1
@@ -35,7 +38,7 @@ require (
 	github.com/spf13/afero v1.8.2
 	github.com/ulikunitz/xz v0.5.4 // indirect
 	github.com/vmware/govmomi v0.18.0 // indirect
-	golang.org/x/crypto v0.0.0-20211108221036-ceb1ce70b4fa
+	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
 	golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f
 	google.golang.org/api v0.58.0
 	gopkg.in/yaml.v2 v2.4.0
