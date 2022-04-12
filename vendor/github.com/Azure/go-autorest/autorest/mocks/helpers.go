@@ -16,7 +16,6 @@ package mocks
 
 import (
 	"fmt"
-	"io"
 	"net/http"
 	"time"
 )
@@ -73,12 +72,7 @@ func NewRequestWithCloseBodyContent(c string) *http.Request {
 
 // NewRequestForURL instantiates a new request using the passed URL.
 func NewRequestForURL(u string) *http.Request {
-	return NewRequestWithParams("GET", u, NewBody(""))
-}
-
-// NewRequestWithParams instantiates a new request using the provided parameters.
-func NewRequestWithParams(method, u string, body io.Reader) *http.Request {
-	r, err := http.NewRequest(method, u, body)
+	r, err := http.NewRequest("GET", u, NewBody(""))
 	if err != nil {
 		panic(fmt.Sprintf("mocks: ERROR (%v) parsing testing URL %s", err, u))
 	}
@@ -88,19 +82,6 @@ func NewRequestWithParams(method, u string, body io.Reader) *http.Request {
 // NewResponse instantiates a new response.
 func NewResponse() *http.Response {
 	return NewResponseWithContent("")
-}
-
-// NewResponseWithBytes instantiates a new response with the passed bytes as the body content.
-func NewResponseWithBytes(input []byte) *http.Response {
-	return &http.Response{
-		Status:     "200 OK",
-		StatusCode: 200,
-		Proto:      "HTTP/1.0",
-		ProtoMajor: 1,
-		ProtoMinor: 0,
-		Body:       NewBodyWithBytes(input),
-		Request:    NewRequest(),
-	}
 }
 
 // NewResponseWithContent instantiates a new response with the passed string as the body content.
@@ -130,7 +111,6 @@ func NewResponseWithStatus(s string, c int) *http.Response {
 func NewResponseWithBodyAndStatus(body *Body, c int, s string) *http.Response {
 	resp := NewResponse()
 	resp.Body = body
-	resp.ContentLength = body.Length()
 	resp.Status = s
 	resp.StatusCode = c
 	return resp
