@@ -22,14 +22,9 @@ import (
 	"strings"
 )
 
-const (
-	// EnvironmentFilepathName captures the name of the environment variable containing the path to the file
-	// to be used while populating the Azure Environment.
-	EnvironmentFilepathName = "AZURE_ENVIRONMENT_FILEPATH"
-
-	// NotAvailable is used for endpoints and resource IDs that are not available for a given cloud.
-	NotAvailable = "N/A"
-)
+// EnvironmentFilepathName captures the name of the environment variable containing the path to the file
+// to be used while populating the Azure Environment.
+const EnvironmentFilepathName = "AZURE_ENVIRONMENT_FILEPATH"
 
 var environments = map[string]Environment{
 	"AZURECHINACLOUD":        ChinaCloud,
@@ -38,53 +33,26 @@ var environments = map[string]Environment{
 	"AZUREUSGOVERNMENTCLOUD": USGovernmentCloud,
 }
 
-// ResourceIdentifier contains a set of Azure resource IDs.
-type ResourceIdentifier struct {
-	Graph               string `json:"graph"`
-	KeyVault            string `json:"keyVault"`
-	Datalake            string `json:"datalake"`
-	Batch               string `json:"batch"`
-	OperationalInsights string `json:"operationalInsights"`
-	OSSRDBMS            string `json:"ossRDBMS"`
-	Storage             string `json:"storage"`
-	Synapse             string `json:"synapse"`
-	ServiceBus          string `json:"serviceBus"`
-	SQLDatabase         string `json:"sqlDatabase"`
-	CosmosDB            string `json:"cosmosDB"`
-	ManagedHSM          string `json:"managedHSM"`
-}
-
 // Environment represents a set of endpoints for each of Azure's Clouds.
 type Environment struct {
-	Name                         string             `json:"name"`
-	ManagementPortalURL          string             `json:"managementPortalURL"`
-	PublishSettingsURL           string             `json:"publishSettingsURL"`
-	ServiceManagementEndpoint    string             `json:"serviceManagementEndpoint"`
-	ResourceManagerEndpoint      string             `json:"resourceManagerEndpoint"`
-	ActiveDirectoryEndpoint      string             `json:"activeDirectoryEndpoint"`
-	GalleryEndpoint              string             `json:"galleryEndpoint"`
-	KeyVaultEndpoint             string             `json:"keyVaultEndpoint"`
-	ManagedHSMEndpoint           string             `json:"managedHSMEndpoint"`
-	GraphEndpoint                string             `json:"graphEndpoint"`
-	ServiceBusEndpoint           string             `json:"serviceBusEndpoint"`
-	BatchManagementEndpoint      string             `json:"batchManagementEndpoint"`
-	StorageEndpointSuffix        string             `json:"storageEndpointSuffix"`
-	CosmosDBDNSSuffix            string             `json:"cosmosDBDNSSuffix"`
-	MariaDBDNSSuffix             string             `json:"mariaDBDNSSuffix"`
-	MySQLDatabaseDNSSuffix       string             `json:"mySqlDatabaseDNSSuffix"`
-	PostgresqlDatabaseDNSSuffix  string             `json:"postgresqlDatabaseDNSSuffix"`
-	SQLDatabaseDNSSuffix         string             `json:"sqlDatabaseDNSSuffix"`
-	TrafficManagerDNSSuffix      string             `json:"trafficManagerDNSSuffix"`
-	KeyVaultDNSSuffix            string             `json:"keyVaultDNSSuffix"`
-	ManagedHSMDNSSuffix          string             `json:"managedHSMDNSSuffix"`
-	ServiceBusEndpointSuffix     string             `json:"serviceBusEndpointSuffix"`
-	ServiceManagementVMDNSSuffix string             `json:"serviceManagementVMDNSSuffix"`
-	ResourceManagerVMDNSSuffix   string             `json:"resourceManagerVMDNSSuffix"`
-	ContainerRegistryDNSSuffix   string             `json:"containerRegistryDNSSuffix"`
-	TokenAudience                string             `json:"tokenAudience"`
-	APIManagementHostNameSuffix  string             `json:"apiManagementHostNameSuffix"`
-	SynapseEndpointSuffix        string             `json:"synapseEndpointSuffix"`
-	ResourceIdentifiers          ResourceIdentifier `json:"resourceIdentifiers"`
+	Name                         string `json:"name"`
+	ManagementPortalURL          string `json:"managementPortalURL"`
+	PublishSettingsURL           string `json:"publishSettingsURL"`
+	ServiceManagementEndpoint    string `json:"serviceManagementEndpoint"`
+	ResourceManagerEndpoint      string `json:"resourceManagerEndpoint"`
+	ActiveDirectoryEndpoint      string `json:"activeDirectoryEndpoint"`
+	GalleryEndpoint              string `json:"galleryEndpoint"`
+	KeyVaultEndpoint             string `json:"keyVaultEndpoint"`
+	GraphEndpoint                string `json:"graphEndpoint"`
+	ServiceBusEndpoint           string `json:"serviceBusEndpoint"`
+	StorageEndpointSuffix        string `json:"storageEndpointSuffix"`
+	SQLDatabaseDNSSuffix         string `json:"sqlDatabaseDNSSuffix"`
+	TrafficManagerDNSSuffix      string `json:"trafficManagerDNSSuffix"`
+	KeyVaultDNSSuffix            string `json:"keyVaultDNSSuffix"`
+	ServiceBusEndpointSuffix     string `json:"serviceBusEndpointSuffix"`
+	ServiceManagementVMDNSSuffix string `json:"serviceManagementVMDNSSuffix"`
+	ResourceManagerVMDNSSuffix   string `json:"resourceManagerVMDNSSuffix"`
+	ContainerRegistryDNSSuffix   string `json:"containerRegistryDNSSuffix"`
 }
 
 var (
@@ -98,40 +66,16 @@ var (
 		ActiveDirectoryEndpoint:      "https://login.microsoftonline.com/",
 		GalleryEndpoint:              "https://gallery.azure.com/",
 		KeyVaultEndpoint:             "https://vault.azure.net/",
-		ManagedHSMEndpoint:           "https://managedhsm.azure.net/",
 		GraphEndpoint:                "https://graph.windows.net/",
 		ServiceBusEndpoint:           "https://servicebus.windows.net/",
-		BatchManagementEndpoint:      "https://batch.core.windows.net/",
 		StorageEndpointSuffix:        "core.windows.net",
-		CosmosDBDNSSuffix:            "documents.azure.com",
-		MariaDBDNSSuffix:             "mariadb.database.azure.com",
-		MySQLDatabaseDNSSuffix:       "mysql.database.azure.com",
-		PostgresqlDatabaseDNSSuffix:  "postgres.database.azure.com",
 		SQLDatabaseDNSSuffix:         "database.windows.net",
 		TrafficManagerDNSSuffix:      "trafficmanager.net",
 		KeyVaultDNSSuffix:            "vault.azure.net",
-		ManagedHSMDNSSuffix:          "managedhsm.azure.net",
 		ServiceBusEndpointSuffix:     "servicebus.windows.net",
 		ServiceManagementVMDNSSuffix: "cloudapp.net",
 		ResourceManagerVMDNSSuffix:   "cloudapp.azure.com",
 		ContainerRegistryDNSSuffix:   "azurecr.io",
-		TokenAudience:                "https://management.azure.com/",
-		APIManagementHostNameSuffix:  "azure-api.net",
-		SynapseEndpointSuffix:        "dev.azuresynapse.net",
-		ResourceIdentifiers: ResourceIdentifier{
-			Graph:               "https://graph.windows.net/",
-			KeyVault:            "https://vault.azure.net",
-			Datalake:            "https://datalake.azure.net/",
-			Batch:               "https://batch.core.windows.net/",
-			OperationalInsights: "https://api.loganalytics.io",
-			OSSRDBMS:            "https://ossrdbms-aad.database.windows.net",
-			Storage:             "https://storage.azure.com/",
-			Synapse:             "https://dev.azuresynapse.net",
-			ServiceBus:          "https://servicebus.azure.net/",
-			SQLDatabase:         "https://database.windows.net/",
-			CosmosDB:            "https://cosmos.azure.com",
-			ManagedHSM:          "https://managedhsm.azure.net",
-		},
 	}
 
 	// USGovernmentCloud is the cloud environment for the US Government
@@ -144,40 +88,16 @@ var (
 		ActiveDirectoryEndpoint:      "https://login.microsoftonline.us/",
 		GalleryEndpoint:              "https://gallery.usgovcloudapi.net/",
 		KeyVaultEndpoint:             "https://vault.usgovcloudapi.net/",
-		ManagedHSMEndpoint:           NotAvailable,
 		GraphEndpoint:                "https://graph.windows.net/",
 		ServiceBusEndpoint:           "https://servicebus.usgovcloudapi.net/",
-		BatchManagementEndpoint:      "https://batch.core.usgovcloudapi.net/",
 		StorageEndpointSuffix:        "core.usgovcloudapi.net",
-		CosmosDBDNSSuffix:            "documents.azure.us",
-		MariaDBDNSSuffix:             "mariadb.database.usgovcloudapi.net",
-		MySQLDatabaseDNSSuffix:       "mysql.database.usgovcloudapi.net",
-		PostgresqlDatabaseDNSSuffix:  "postgres.database.usgovcloudapi.net",
 		SQLDatabaseDNSSuffix:         "database.usgovcloudapi.net",
 		TrafficManagerDNSSuffix:      "usgovtrafficmanager.net",
 		KeyVaultDNSSuffix:            "vault.usgovcloudapi.net",
-		ManagedHSMDNSSuffix:          NotAvailable,
 		ServiceBusEndpointSuffix:     "servicebus.usgovcloudapi.net",
 		ServiceManagementVMDNSSuffix: "usgovcloudapp.net",
-		ResourceManagerVMDNSSuffix:   "cloudapp.usgovcloudapi.net",
-		ContainerRegistryDNSSuffix:   "azurecr.us",
-		TokenAudience:                "https://management.usgovcloudapi.net/",
-		APIManagementHostNameSuffix:  "azure-api.us",
-		SynapseEndpointSuffix:        NotAvailable,
-		ResourceIdentifiers: ResourceIdentifier{
-			Graph:               "https://graph.windows.net/",
-			KeyVault:            "https://vault.usgovcloudapi.net",
-			Datalake:            NotAvailable,
-			Batch:               "https://batch.core.usgovcloudapi.net/",
-			OperationalInsights: "https://api.loganalytics.us",
-			OSSRDBMS:            "https://ossrdbms-aad.database.usgovcloudapi.net",
-			Storage:             "https://storage.azure.com/",
-			Synapse:             NotAvailable,
-			ServiceBus:          "https://servicebus.azure.net/",
-			SQLDatabase:         "https://database.usgovcloudapi.net/",
-			CosmosDB:            "https://cosmos.azure.com",
-			ManagedHSM:          NotAvailable,
-		},
+		ResourceManagerVMDNSSuffix:   "cloudapp.windowsazure.us",
+		ContainerRegistryDNSSuffix:   "azurecr.io",
 	}
 
 	// ChinaCloud is the cloud environment operated in China
@@ -190,40 +110,16 @@ var (
 		ActiveDirectoryEndpoint:      "https://login.chinacloudapi.cn/",
 		GalleryEndpoint:              "https://gallery.chinacloudapi.cn/",
 		KeyVaultEndpoint:             "https://vault.azure.cn/",
-		ManagedHSMEndpoint:           NotAvailable,
 		GraphEndpoint:                "https://graph.chinacloudapi.cn/",
 		ServiceBusEndpoint:           "https://servicebus.chinacloudapi.cn/",
-		BatchManagementEndpoint:      "https://batch.chinacloudapi.cn/",
 		StorageEndpointSuffix:        "core.chinacloudapi.cn",
-		CosmosDBDNSSuffix:            "documents.azure.cn",
-		MariaDBDNSSuffix:             "mariadb.database.chinacloudapi.cn",
-		MySQLDatabaseDNSSuffix:       "mysql.database.chinacloudapi.cn",
-		PostgresqlDatabaseDNSSuffix:  "postgres.database.chinacloudapi.cn",
 		SQLDatabaseDNSSuffix:         "database.chinacloudapi.cn",
 		TrafficManagerDNSSuffix:      "trafficmanager.cn",
 		KeyVaultDNSSuffix:            "vault.azure.cn",
-		ManagedHSMDNSSuffix:          NotAvailable,
 		ServiceBusEndpointSuffix:     "servicebus.chinacloudapi.cn",
 		ServiceManagementVMDNSSuffix: "chinacloudapp.cn",
-		ResourceManagerVMDNSSuffix:   "cloudapp.chinacloudapi.cn",
-		ContainerRegistryDNSSuffix:   "azurecr.cn",
-		TokenAudience:                "https://management.chinacloudapi.cn/",
-		APIManagementHostNameSuffix:  "azure-api.cn",
-		SynapseEndpointSuffix:        "dev.azuresynapse.azure.cn",
-		ResourceIdentifiers: ResourceIdentifier{
-			Graph:               "https://graph.chinacloudapi.cn/",
-			KeyVault:            "https://vault.azure.cn",
-			Datalake:            NotAvailable,
-			Batch:               "https://batch.chinacloudapi.cn/",
-			OperationalInsights: NotAvailable,
-			OSSRDBMS:            "https://ossrdbms-aad.database.chinacloudapi.cn",
-			Storage:             "https://storage.azure.com/",
-			Synapse:             "https://dev.azuresynapse.net",
-			ServiceBus:          "https://servicebus.azure.net/",
-			SQLDatabase:         "https://database.chinacloudapi.cn/",
-			CosmosDB:            "https://cosmos.azure.com",
-			ManagedHSM:          NotAvailable,
-		},
+		ResourceManagerVMDNSSuffix:   "cloudapp.azure.cn",
+		ContainerRegistryDNSSuffix:   "azurecr.io",
 	}
 
 	// GermanCloud is the cloud environment operated in Germany
@@ -236,40 +132,16 @@ var (
 		ActiveDirectoryEndpoint:      "https://login.microsoftonline.de/",
 		GalleryEndpoint:              "https://gallery.cloudapi.de/",
 		KeyVaultEndpoint:             "https://vault.microsoftazure.de/",
-		ManagedHSMEndpoint:           NotAvailable,
 		GraphEndpoint:                "https://graph.cloudapi.de/",
 		ServiceBusEndpoint:           "https://servicebus.cloudapi.de/",
-		BatchManagementEndpoint:      "https://batch.cloudapi.de/",
 		StorageEndpointSuffix:        "core.cloudapi.de",
-		CosmosDBDNSSuffix:            "documents.microsoftazure.de",
-		MariaDBDNSSuffix:             "mariadb.database.cloudapi.de",
-		MySQLDatabaseDNSSuffix:       "mysql.database.cloudapi.de",
-		PostgresqlDatabaseDNSSuffix:  "postgres.database.cloudapi.de",
 		SQLDatabaseDNSSuffix:         "database.cloudapi.de",
 		TrafficManagerDNSSuffix:      "azuretrafficmanager.de",
 		KeyVaultDNSSuffix:            "vault.microsoftazure.de",
-		ManagedHSMDNSSuffix:          NotAvailable,
 		ServiceBusEndpointSuffix:     "servicebus.cloudapi.de",
 		ServiceManagementVMDNSSuffix: "azurecloudapp.de",
 		ResourceManagerVMDNSSuffix:   "cloudapp.microsoftazure.de",
-		ContainerRegistryDNSSuffix:   NotAvailable,
-		TokenAudience:                "https://management.microsoftazure.de/",
-		APIManagementHostNameSuffix:  NotAvailable,
-		SynapseEndpointSuffix:        NotAvailable,
-		ResourceIdentifiers: ResourceIdentifier{
-			Graph:               "https://graph.cloudapi.de/",
-			KeyVault:            "https://vault.microsoftazure.de",
-			Datalake:            NotAvailable,
-			Batch:               "https://batch.cloudapi.de/",
-			OperationalInsights: NotAvailable,
-			OSSRDBMS:            "https://ossrdbms-aad.database.cloudapi.de",
-			Storage:             "https://storage.azure.com/",
-			Synapse:             NotAvailable,
-			ServiceBus:          "https://servicebus.azure.net/",
-			SQLDatabase:         "https://database.cloudapi.de/",
-			CosmosDB:            "https://cosmos.azure.com",
-			ManagedHSM:          NotAvailable,
-		},
+		ContainerRegistryDNSSuffix:   "azurecr.io",
 	}
 )
 
@@ -306,9 +178,4 @@ func EnvironmentFromFile(location string) (unmarshaled Environment, err error) {
 	err = json.Unmarshal(fileContents, &unmarshaled)
 
 	return
-}
-
-// SetEnvironment updates the environment map with the specified values.
-func SetEnvironment(name string, env Environment) {
-	environments[strings.ToUpper(name)] = env
 }

@@ -24,9 +24,6 @@ import (
 	"strings"
 )
 
-// Disabled controls if parameter validation should be globally disabled.  The default is false.
-var Disabled bool
-
 // Constraint stores constraint name, target field name
 // Rule and chain validations.
 type Constraint struct {
@@ -71,9 +68,6 @@ const (
 // Validate method validates constraints on parameter
 // passed in validation array.
 func Validate(m []Validation) error {
-	if Disabled {
-		return nil
-	}
 	for _, item := range m {
 		v := reflect.ValueOf(item.TargetValue)
 		for _, constraint := range item.Constraints {
@@ -142,29 +136,29 @@ func validatePtr(x reflect.Value, v Constraint) error {
 
 func validateInt(x reflect.Value, v Constraint) error {
 	i := x.Int()
-	r, ok := toInt64(v.Rule)
+	r, ok := v.Rule.(int)
 	if !ok {
 		return createError(x, v, fmt.Sprintf("rule must be integer value for %v constraint; got: %v", v.Name, v.Rule))
 	}
 	switch v.Name {
 	case MultipleOf:
-		if i%r != 0 {
+		if i%int64(r) != 0 {
 			return createError(x, v, fmt.Sprintf("value must be a multiple of %v", r))
 		}
 	case ExclusiveMinimum:
-		if i <= r {
+		if i <= int64(r) {
 			return createError(x, v, fmt.Sprintf("value must be greater than %v", r))
 		}
 	case ExclusiveMaximum:
-		if i >= r {
+		if i >= int64(r) {
 			return createError(x, v, fmt.Sprintf("value must be less than %v", r))
 		}
 	case InclusiveMinimum:
-		if i < r {
+		if i < int64(r) {
 			return createError(x, v, fmt.Sprintf("value must be greater than or equal to %v", r))
 		}
 	case InclusiveMaximum:
-		if i > r {
+		if i > int64(r) {
 			return createError(x, v, fmt.Sprintf("value must be less than or equal to %v", r))
 		}
 	default:
@@ -394,13 +388,8 @@ func createError(x reflect.Value, v Constraint, err string) error {
 		v.Target, v.Name, getInterfaceValue(x), err)
 }
 
-func toInt64(v interface{}) (int64, bool) {
-	if i64, ok := v.(int64); ok {
-		return i64, true
-	}
-	// older generators emit max constants as int, so if int64 fails fall back to int
-	if i32, ok := v.(int); ok {
-		return int64(i32), true
-	}
-	return 0, false
+// NewErrorWithValidationError appends package type and method name in
+// validation error.
+func NewErrorWithValidationError(err error, packageType, method string) error {
+	return fmt.Errorf("%s#%s: Invalid input: %v", packageType, method, err)
 }
