@@ -19,36 +19,21 @@ github.com/Azure/azure-sdk-for-go/arm/compute
 github.com/Azure/azure-sdk-for-go/arm/network
 github.com/Azure/azure-sdk-for-go/arm/resources/resources
 github.com/Azure/azure-sdk-for-go/arm/storage
-# github.com/Azure/go-autorest v14.2.0+incompatible
-github.com/Azure/go-autorest
-# github.com/Azure/go-autorest/autorest v0.11.25
+# github.com/Azure/go-autorest v9.10.0+incompatible
 ## explicit
 github.com/Azure/go-autorest/autorest
-github.com/Azure/go-autorest/autorest/azure
-# github.com/Azure/go-autorest/autorest/adal v0.9.18
-## explicit
 github.com/Azure/go-autorest/autorest/adal
-# github.com/Azure/go-autorest/autorest/date v0.3.0
+github.com/Azure/go-autorest/autorest/azure
 github.com/Azure/go-autorest/autorest/date
-# github.com/Azure/go-autorest/autorest/mocks v0.4.2
-## explicit
 github.com/Azure/go-autorest/autorest/mocks
-# github.com/Azure/go-autorest/autorest/to v0.4.0
-## explicit
 github.com/Azure/go-autorest/autorest/to
-# github.com/Azure/go-autorest/autorest/validation v0.3.1
-## explicit
 github.com/Azure/go-autorest/autorest/validation
-# github.com/Azure/go-autorest/logger v0.2.1
-github.com/Azure/go-autorest/logger
-# github.com/Azure/go-autorest/tracing v0.6.0
-github.com/Azure/go-autorest/tracing
 # github.com/Pallinder/go-randomdata v1.2.0
 ## explicit
 # github.com/araddon/gou v0.0.0-20180509225133-7db4be5742ae
 ## explicit
 github.com/araddon/gou
-# github.com/aws/aws-sdk-go v1.43.37
+# github.com/aws/aws-sdk-go v1.43.38
 ## explicit
 github.com/aws/aws-sdk-go/aws
 github.com/aws/aws-sdk-go/aws/arn
@@ -123,6 +108,9 @@ github.com/cloudfoundry/multierror
 github.com/coreos/go-semver/semver
 # github.com/creack/pty v1.1.7
 github.com/creack/pty
+# github.com/dgrijalva/jwt-go v3.2.0+incompatible
+## explicit
+github.com/dgrijalva/jwt-go
 # github.com/dsnet/compress v0.0.0-20171208185109-cc9eb1d7ad76
 ## explicit
 github.com/dsnet/compress
@@ -174,8 +162,6 @@ github.com/gobuffalo/packr/v2/file/resolver
 github.com/gobuffalo/packr/v2/file/resolver/encoding/hex
 github.com/gobuffalo/packr/v2/jam/parser
 github.com/gobuffalo/packr/v2/plog
-# github.com/golang-jwt/jwt/v4 v4.2.0
-github.com/golang-jwt/jwt/v4
 # github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e
 github.com/golang/groupcache/lru
 # github.com/golang/protobuf v1.5.2
@@ -220,7 +206,7 @@ github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.4
 ## explicit
 github.com/mattn/go-isatty
-# github.com/mholt/archiver v3.1.1+incompatible
+# github.com/mholt/archiver v2.1.0+incompatible
 ## explicit
 github.com/mholt/archiver
 # github.com/mitchellh/go-homedir v1.1.0
@@ -321,9 +307,6 @@ github.com/vmware/govmomi/vim25/progress
 github.com/vmware/govmomi/vim25/soap
 github.com/vmware/govmomi/vim25/types
 github.com/vmware/govmomi/vim25/xml
-# github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8
-## explicit
-github.com/xi2/xz
 # go.opencensus.io v0.23.0
 go.opencensus.io
 go.opencensus.io/internal
@@ -341,7 +324,7 @@ go.opencensus.io/trace
 go.opencensus.io/trace/internal
 go.opencensus.io/trace/propagation
 go.opencensus.io/trace/tracestate
-# golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
+# golang.org/x/crypto v0.0.0-20211108221036-ceb1ce70b4fa
 ## explicit
 golang.org/x/crypto/blowfish
 golang.org/x/crypto/chacha20

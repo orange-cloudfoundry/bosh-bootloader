@@ -6,18 +6,15 @@ require (
 	cloud.google.com/go/iam v0.3.0 // indirect
 	code.cloudfoundry.org/multierror v0.0.0-20170123201326-dafed03eebc6 // indirect
 	github.com/Azure/azure-sdk-for-go v12.5.0-beta+incompatible
-	github.com/Azure/go-autorest/autorest v0.11.25
-	github.com/Azure/go-autorest/autorest/adal v0.9.18
-	github.com/Azure/go-autorest/autorest/mocks v0.4.2
-	github.com/Azure/go-autorest/autorest/to v0.4.0 // indirect
-	github.com/Azure/go-autorest/autorest/validation v0.3.1 // indirect
+	github.com/Azure/go-autorest v9.10.0+incompatible
 	github.com/Pallinder/go-randomdata v1.2.0 // indirect
 	github.com/araddon/gou v0.0.0-20180509225133-7db4be5742ae
-	github.com/aws/aws-sdk-go v1.43.37
+	github.com/aws/aws-sdk-go v1.43.38
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
 	github.com/cloudfoundry/bbl-state-resource v0.0.0-20180409211107-a02832129633
 	github.com/cloudfoundry/multierror v0.0.0-20170123201326-dafed03eebc6
 	github.com/coreos/go-semver v0.3.0
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/dsnet/compress v0.0.0-20171208185109-cc9eb1d7ad76 // indirect
 	github.com/genevieve/leftovers v0.55.1-0.20190805182303-e86fd74c0714
 	github.com/gobuffalo/packd v1.0.1
@@ -26,7 +23,7 @@ require (
 	github.com/kr/pty v1.1.8
 	github.com/lytics/cloudstorage v0.0.0-20180517181525-27319609bc1c
 	github.com/mattn/go-isatty v0.0.4 // indirect
-	github.com/mholt/archiver v3.1.1+incompatible
+	github.com/mholt/archiver v2.1.0+incompatible
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
 	github.com/nwaples/rardecode v0.0.0-20171029023500-e06696f847ae // indirect
@@ -39,8 +36,7 @@ require (
 	github.com/spf13/afero v1.8.2
 	github.com/ulikunitz/xz v0.5.4 // indirect
 	github.com/vmware/govmomi v0.18.0 // indirect
-	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
-	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3
+	golang.org/x/crypto v0.0.0-20211108221036-ceb1ce70b4fa
 	golang.org/x/oauth2 v0.0.0-20220309155454-6242fa91716a
 	google.golang.org/api v0.74.0
 	gopkg.in/yaml.v2 v2.4.0
