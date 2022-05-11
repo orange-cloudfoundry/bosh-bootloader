@@ -482,8 +482,8 @@ func (s *AdminAuditData) MarshalJSON() ([]byte, error) {
 // "DATA_READ" }, { "log_type": "DATA_WRITE", "exempted_members": [
 // "user:aliya@example.com" ] } ] } ] } For sampleservice, this policy
 // enables DATA_READ, DATA_WRITE and ADMIN_READ logging. It also exempts
-// jose@example.com from DATA_READ logging, and aliya@example.com from
-// DATA_WRITE logging.
+// `jose@example.com` from DATA_READ logging, and `aliya@example.com`
+// from DATA_WRITE logging.
 type AuditConfig struct {
 	// AuditLogConfigs: The configuration for logging of each type of
 	// permission.
@@ -663,8 +663,8 @@ type Binding struct {
 	// (https://cloud.google.com/iam/help/conditions/resource-policies).
 	Condition *Expr `json:"condition,omitempty"`
 
-	// Members: Specifies the principals requesting access for a Cloud
-	// Platform resource. `members` can have the following values: *
+	// Members: Specifies the principals requesting access for a Google
+	// Cloud resource. `members` can have the following values: *
 	// `allUsers`: A special identifier that represents anyone who is on the
 	// internet; with or without a Google account. *
 	// `allAuthenticatedUsers`: A special identifier that represents anyone
@@ -739,7 +739,7 @@ type BindingDelta struct {
 	// Condition: The condition that is associated with this binding.
 	Condition *Expr `json:"condition,omitempty"`
 
-	// Member: A single identity requesting access for a Cloud Platform
+	// Member: A single identity requesting access for a Google Cloud
 	// resource. Follows the same format of Binding.members. Required
 	Member string `json:"member,omitempty"`
 
@@ -902,8 +902,7 @@ type DisableServiceAccountRequest struct {
 // duplicated empty messages in your APIs. A typical example is to use
 // it as the request or the response type of an API method. For
 // instance: service Foo { rpc Bar(google.protobuf.Empty) returns
-// (google.protobuf.Empty); } The JSON representation for `Empty` is
-// empty JSON object `{}`.
+// (google.protobuf.Empty); }
 type Empty struct {
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
@@ -1991,6 +1990,49 @@ func (s *Role) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// Saml: Represents an SAML 2.0 identity provider.
+type Saml struct {
+	// IdpMetadataXml: Required. SAML Identity provider configuration
+	// metadata xml doc. The xml document should comply with SAML 2.0
+	// specification
+	// (https://www.oasis-open.org/committees/download.php/56785/sstc-saml-metadata-errata-2.0-wd-05.pdf).
+	// The max size of the acceptable xml document will be bounded to 128k
+	// characters. The metadata xml document should satisfy the following
+	// constraints: 1) Must contain an Identity Provider Entity ID. 2) Must
+	// contain at least one non-expired signing key certificate. 3) For each
+	// signing key: a) Valid from should be no more than 7 days from now. b)
+	// Valid to should be no more than 10 years in the future. 4) Upto 3 IdP
+	// signing keys are allowed in the metadata xml. When updating the
+	// provider's metadata xml, at lease one non-expired signing key must
+	// overlap with the existing metadata. This requirement is skipped if
+	// there are no non-expired signing keys present in the existing
+	// metadata
+	IdpMetadataXml string `json:"idpMetadataXml,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "IdpMetadataXml") to
+	// unconditionally include in API requests. By default, fields with
+	// empty or default values are omitted from API requests. However, any
+	// non-pointer, non-interface field appearing in ForceSendFields will be
+	// sent to the server regardless of whether the field is empty or not.
+	// This may be used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "IdpMetadataXml") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *Saml) MarshalJSON() ([]byte, error) {
+	type NoMethod Saml
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // ServiceAccount: An IAM service account. A service account is an
 // account for an application or a virtual machine (VM) instance, not a
 // person. You can use a service account to call Google APIs. To learn
@@ -2195,7 +2237,7 @@ func (s *ServiceAccountKey) MarshalJSON() ([]byte, error) {
 type SetIamPolicyRequest struct {
 	// Policy: REQUIRED: The complete policy to be applied to the
 	// `resource`. The size of the policy is limited to a few 10s of KB. An
-	// empty policy is a valid policy but certain Cloud Platform services
+	// empty policy is a valid policy but certain Google Cloud services
 	// (such as Projects) might reject them.
 	Policy *Policy `json:"policy,omitempty"`
 
@@ -2429,7 +2471,7 @@ func (s *Status) MarshalJSON() ([]byte, error) {
 // method.
 type TestIamPermissionsRequest struct {
 	// Permissions: The set of permissions to check for the `resource`.
-	// Permissions with wildcards (such as '*' or 'storage.*') are not
+	// Permissions with wildcards (such as `*` or `storage.*`) are not
 	// allowed. For more information see IAM Overview
 	// (https://cloud.google.com/iam/docs/overview#permissions).
 	Permissions []string `json:"permissions,omitempty"`
@@ -2568,10 +2610,10 @@ type UndeleteWorkloadIdentityPoolRequest struct {
 // UploadServiceAccountKeyRequest: The service account key upload
 // request.
 type UploadServiceAccountKeyRequest struct {
-	// PublicKeyData: A field that allows clients to upload their own public
-	// key. If set, use this public key data to create a service account key
-	// for given service account. Please note, the expected format for this
-	// field is X509_PEM.
+	// PublicKeyData: The public key to associate with the service account.
+	// Must be an RSA public key that is wrapped in an X.509 v3 certificate.
+	// Include the first line, `-----BEGIN CERTIFICATE-----`, and the last
+	// line, `-----END CERTIFICATE-----`.
 	PublicKeyData string `json:"publicKeyData,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "PublicKeyData") to
@@ -2745,6 +2787,9 @@ type WorkloadIdentityPoolProvider struct {
 
 	// Oidc: An OpenId Connect 1.0 identity provider.
 	Oidc *Oidc `json:"oidc,omitempty"`
+
+	// Saml: An SAML 2.0 identity provider.
+	Saml *Saml `json:"saml,omitempty"`
 
 	// State: Output only. The state of the provider.
 	//
@@ -11490,8 +11535,10 @@ type ProjectsServiceAccountsKeysUploadCall struct {
 	header_                        http.Header
 }
 
-// Upload: Creates a ServiceAccountKey, using a public key that you
-// provide.
+// Upload: Uploads the public key portion of a key pair that you manage,
+// and associates the public key with a ServiceAccount. After you upload
+// the public key, you can use the private key from the key pair as a
+// service account key.
 //
 // - name: The resource name of the service account in the following
 //   format: `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using
@@ -11596,7 +11643,7 @@ func (c *ProjectsServiceAccountsKeysUploadCall) Do(opts ...googleapi.CallOption)
 	}
 	return ret, nil
 	// {
-	//   "description": "Creates a ServiceAccountKey, using a public key that you provide.",
+	//   "description": "Uploads the public key portion of a key pair that you manage, and associates the public key with a ServiceAccount. After you upload the public key, you can use the private key from the key pair as a service account key.",
 	//   "flatPath": "v1/projects/{projectsId}/serviceAccounts/{serviceAccountsId}/keys:upload",
 	//   "httpMethod": "POST",
 	//   "id": "iam.projects.serviceAccounts.keys.upload",
