@@ -33,7 +33,7 @@ require (
 	github.com/pierrec/lz4 v2.0.3+incompatible // indirect
 	github.com/pivotal-cf-experimental/gomegamatchers v0.0.0-20180326192815-e36bfcc98c3a
 	github.com/pmezard/go-difflib v1.0.0
-	github.com/spf13/afero v1.8.2
+	github.com/spf13/afero v1.9.0
 	github.com/ulikunitz/xz v0.5.4 // indirect
 	github.com/vmware/govmomi v0.18.0 // indirect
 	golang.org/x/crypto v0.0.0-20211108221036-ceb1ce70b4fa

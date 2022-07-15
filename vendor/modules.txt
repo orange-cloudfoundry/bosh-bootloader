@@ -279,7 +279,7 @@ github.com/pivotal-cf-experimental/gomegamatchers/internal/prettyprint
 github.com/pmezard/go-difflib/difflib
 # github.com/sirupsen/logrus v1.8.1
 github.com/sirupsen/logrus
-# github.com/spf13/afero v1.8.2
+# github.com/spf13/afero v1.9.0
 ## explicit
 github.com/spf13/afero
 github.com/spf13/afero/mem
