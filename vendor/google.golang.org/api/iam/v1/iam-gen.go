@@ -8,31 +8,31 @@
 //
 // For product documentation, see: https://cloud.google.com/iam/
 //
-// Creating a client
+// # Creating a client
 //
 // Usage example:
 //
-//   import "google.golang.org/api/iam/v1"
-//   ...
-//   ctx := context.Background()
-//   iamService, err := iam.NewService(ctx)
+//	import "google.golang.org/api/iam/v1"
+//	...
+//	ctx := context.Background()
+//	iamService, err := iam.NewService(ctx)
 //
 // In this example, Google Application Default Credentials are used for authentication.
 //
 // For information on how to create and obtain Application Default Credentials, see https://developers.google.com/identity/protocols/application-default-credentials.
 //
-// Other authentication options
+// # Other authentication options
 //
 // To use an API key for authentication (note: some APIs do not support API keys), use option.WithAPIKey:
 //
-//   iamService, err := iam.NewService(ctx, option.WithAPIKey("AIza..."))
+//	iamService, err := iam.NewService(ctx, option.WithAPIKey("AIza..."))
 //
 // To use an OAuth token (e.g., a user token obtained via a three-legged OAuth flow), use option.WithTokenSource:
 //
-//   config := &oauth2.Config{...}
-//   // ...
-//   token, err := config.Exchange(ctx, ...)
-//   iamService, err := iam.NewService(ctx, option.WithTokenSource(config.TokenSource(ctx, token)))
+//	config := &oauth2.Config{...}
+//	// ...
+//	token, err := config.Exchange(ctx, ...)
+//	iamService, err := iam.NewService(ctx, option.WithTokenSource(config.TokenSource(ctx, token)))
 //
 // See https://godoc.org/google.golang.org/api/option/ for details on options.
 package iam // import "google.golang.org/api/iam/v1"
@@ -482,8 +482,8 @@ func (s *AdminAuditData) MarshalJSON() ([]byte, error) {
 // "DATA_READ" }, { "log_type": "DATA_WRITE", "exempted_members": [
 // "user:aliya@example.com" ] } ] } ] } For sampleservice, this policy
 // enables DATA_READ, DATA_WRITE and ADMIN_READ logging. It also exempts
-// jose@example.com from DATA_READ logging, and aliya@example.com from
-// DATA_WRITE logging.
+// `jose@example.com` from DATA_READ logging, and `aliya@example.com`
+// from DATA_WRITE logging.
 type AuditConfig struct {
 	// AuditLogConfigs: The configuration for logging of each type of
 	// permission.
@@ -663,24 +663,29 @@ type Binding struct {
 	// (https://cloud.google.com/iam/help/conditions/resource-policies).
 	Condition *Expr `json:"condition,omitempty"`
 
-	// Members: Specifies the principals requesting access for a Cloud
-	// Platform resource. `members` can have the following values: *
+	// Members: Specifies the principals requesting access for a Google
+	// Cloud resource. `members` can have the following values: *
 	// `allUsers`: A special identifier that represents anyone who is on the
 	// internet; with or without a Google account. *
 	// `allAuthenticatedUsers`: A special identifier that represents anyone
-	// who is authenticated with a Google account or a service account. *
-	// `user:{emailid}`: An email address that represents a specific Google
-	// account. For example, `alice@example.com` . *
-	// `serviceAccount:{emailid}`: An email address that represents a
-	// service account. For example,
-	// `my-other-app@appspot.gserviceaccount.com`. * `group:{emailid}`: An
-	// email address that represents a Google group. For example,
-	// `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An
-	// email address (plus unique identifier) representing a user that has
-	// been recently deleted. For example,
-	// `alice@example.com?uid=123456789012345678901`. If the user is
-	// recovered, this value reverts to `user:{emailid}` and the recovered
-	// user retains the role in the binding. *
+	// who is authenticated with a Google account or a service account. Does
+	// not include identities that come from external identity providers
+	// (IdPs) through identity federation. * `user:{emailid}`: An email
+	// address that represents a specific Google account. For example,
+	// `alice@example.com` . * `serviceAccount:{emailid}`: An email address
+	// that represents a Google service account. For example,
+	// `my-other-app@appspot.gserviceaccount.com`. *
+	// `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`:
+	//  An identifier for a Kubernetes service account
+	// (https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts).
+	// For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`.
+	// * `group:{emailid}`: An email address that represents a Google group.
+	// For example, `admins@example.com`. *
+	// `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus
+	// unique identifier) representing a user that has been recently
+	// deleted. For example, `alice@example.com?uid=123456789012345678901`.
+	// If the user is recovered, this value reverts to `user:{emailid}` and
+	// the recovered user retains the role in the binding. *
 	// `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address
 	// (plus unique identifier) representing a service account that has been
 	// recently deleted. For example,
@@ -739,7 +744,7 @@ type BindingDelta struct {
 	// Condition: The condition that is associated with this binding.
 	Condition *Expr `json:"condition,omitempty"`
 
-	// Member: A single identity requesting access for a Cloud Platform
+	// Member: A single identity requesting access for a Google Cloud
 	// resource. Follows the same format of Binding.members. Required
 	Member string `json:"member,omitempty"`
 
@@ -902,8 +907,7 @@ type DisableServiceAccountRequest struct {
 // duplicated empty messages in your APIs. A typical example is to use
 // it as the request or the response type of an API method. For
 // instance: service Foo { rpc Bar(google.protobuf.Empty) returns
-// (google.protobuf.Empty); } The JSON representation for `Empty` is
-// empty JSON object `{}`.
+// (google.protobuf.Empty); }
 type Empty struct {
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
@@ -1417,7 +1421,7 @@ func (s *Operation) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// PatchServiceAccountRequest: The request for PatchServiceAccount. You
+// PatchServiceAccountRequest: The service account patch request. You
 // can patch only the `display_name` and `description` fields. You must
 // use the `update_mask` field to specify which of these fields you want
 // to patch. Only the fields specified in the request are guaranteed to
@@ -1991,6 +1995,49 @@ func (s *Role) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// Saml: Represents an SAML 2.0 identity provider.
+type Saml struct {
+	// IdpMetadataXml: Required. SAML Identity provider configuration
+	// metadata xml doc. The xml document should comply with SAML 2.0
+	// specification
+	// (https://www.oasis-open.org/committees/download.php/56785/sstc-saml-metadata-errata-2.0-wd-05.pdf).
+	// The max size of the acceptable xml document will be bounded to 128k
+	// characters. The metadata xml document should satisfy the following
+	// constraints: 1) Must contain an Identity Provider Entity ID. 2) Must
+	// contain at least one non-expired signing key certificate. 3) For each
+	// signing key: a) Valid from should be no more than 7 days from now. b)
+	// Valid to should be no more than 10 years in the future. 4) Upto 3 IdP
+	// signing keys are allowed in the metadata xml. When updating the
+	// provider's metadata xml, at lease one non-expired signing key must
+	// overlap with the existing metadata. This requirement is skipped if
+	// there are no non-expired signing keys present in the existing
+	// metadata
+	IdpMetadataXml string `json:"idpMetadataXml,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "IdpMetadataXml") to
+	// unconditionally include in API requests. By default, fields with
+	// empty or default values are omitted from API requests. However, any
+	// non-pointer, non-interface field appearing in ForceSendFields will be
+	// sent to the server regardless of whether the field is empty or not.
+	// This may be used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "IdpMetadataXml") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *Saml) MarshalJSON() ([]byte, error) {
+	type NoMethod Saml
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // ServiceAccount: An IAM service account. A service account is an
 // account for an application or a virtual machine (VM) instance, not a
 // person. You can use a service account to call Google APIs. To learn
@@ -2195,7 +2242,7 @@ func (s *ServiceAccountKey) MarshalJSON() ([]byte, error) {
 type SetIamPolicyRequest struct {
 	// Policy: REQUIRED: The complete policy to be applied to the
 	// `resource`. The size of the policy is limited to a few 10s of KB. An
-	// empty policy is a valid policy but certain Cloud Platform services
+	// empty policy is a valid policy but certain Google Cloud services
 	// (such as Projects) might reject them.
 	Policy *Policy `json:"policy,omitempty"`
 
@@ -2429,7 +2476,7 @@ func (s *Status) MarshalJSON() ([]byte, error) {
 // method.
 type TestIamPermissionsRequest struct {
 	// Permissions: The set of permissions to check for the `resource`.
-	// Permissions with wildcards (such as '*' or 'storage.*') are not
+	// Permissions with wildcards (such as `*` or `storage.*`) are not
 	// allowed. For more information see IAM Overview
 	// (https://cloud.google.com/iam/docs/overview#permissions).
 	Permissions []string `json:"permissions,omitempty"`
@@ -2568,10 +2615,10 @@ type UndeleteWorkloadIdentityPoolRequest struct {
 // UploadServiceAccountKeyRequest: The service account key upload
 // request.
 type UploadServiceAccountKeyRequest struct {
-	// PublicKeyData: A field that allows clients to upload their own public
-	// key. If set, use this public key data to create a service account key
-	// for given service account. Please note, the expected format for this
-	// field is X509_PEM.
+	// PublicKeyData: The public key to associate with the service account.
+	// Must be an RSA public key that is wrapped in an X.509 v3 certificate.
+	// Include the first line, `-----BEGIN CERTIFICATE-----`, and the last
+	// line, `-----END CERTIFICATE-----`.
 	PublicKeyData string `json:"publicKeyData,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "PublicKeyData") to
@@ -2656,6 +2703,11 @@ func (s *WorkloadIdentityPool) MarshalJSON() ([]byte, error) {
 	type NoMethod WorkloadIdentityPool
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// WorkloadIdentityPoolOperationMetadata: Metadata for long-running
+// WorkloadIdentityPool operations.
+type WorkloadIdentityPoolOperationMetadata struct {
 }
 
 // WorkloadIdentityPoolProvider: A configuration for an external
@@ -2745,6 +2797,9 @@ type WorkloadIdentityPoolProvider struct {
 
 	// Oidc: An OpenId Connect 1.0 identity provider.
 	Oidc *Oidc `json:"oidc,omitempty"`
+
+	// Saml: An SAML 2.0 identity provider.
+	Saml *Saml `json:"saml,omitempty"`
 
 	// State: Output only. The state of the provider.
 	//
@@ -3649,28 +3704,28 @@ type OrganizationsRolesCreateCall struct {
 
 // Create: Creates a new custom Role.
 //
-// - parent: The `parent` parameter's value depends on the target
-//   resource for the request, namely `projects`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles) or
-//   `organizations`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
-//   Each resource type's `parent` value format is described below: *
-//   `projects.roles.create()`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles/create):
-//   `projects/{PROJECT_ID}`. This method creates project-level custom
-//   roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles).
-//   Example request URL:
-//   `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles` *
-//   `organizations.roles.create()`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/create):
-//   `organizations/{ORGANIZATION_ID}`. This method creates
-//   organization-level custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles).
-//   Example request URL:
-//   `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
-//   ` Note: Wildcard (*) values are invalid; you must specify a
-//   complete project ID or organization ID.
+//   - parent: The `parent` parameter's value depends on the target
+//     resource for the request, namely `projects`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles) or
+//     `organizations`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
+//     Each resource type's `parent` value format is described below: *
+//     `projects.roles.create()`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles/create):
+//     `projects/{PROJECT_ID}`. This method creates project-level custom
+//     roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles).
+//     Example request URL:
+//     `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles` *
+//     `organizations.roles.create()`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/create):
+//     `organizations/{ORGANIZATION_ID}`. This method creates
+//     organization-level custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles).
+//     Example request URL:
+//     `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
+//     ` Note: Wildcard (*) values are invalid; you must specify a
+//     complete project ID or organization ID.
 func (r *OrganizationsRolesService) Create(parent string, createrolerequest *CreateRoleRequest) *OrganizationsRolesCreateCall {
 	c := &OrganizationsRolesCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.parent = parent
@@ -3819,28 +3874,28 @@ type OrganizationsRolesDeleteCall struct {
 // recovered. * If an IAM policy contains a binding to the custom role,
 // the binding is permanently removed.
 //
-// - name: The `name` parameter's value depends on the target resource
-//   for the request, namely `projects`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles) or
-//   `organizations`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
-//   Each resource type's `name` value format is described below: *
-//   `projects.roles.delete()`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles/delete):
-//   `projects/{PROJECT_ID}/roles/{CUSTOM_ROLE_ID}`. This method deletes
-//   only custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles) that
-//   have been created at the project level. Example request URL:
-//   `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles/{CUSTOM_R
-//   OLE_ID}` * `organizations.roles.delete()`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/delete):
-//   `organizations/{ORGANIZATION_ID}/roles/{CUSTOM_ROLE_ID}`. This
-//   method deletes only custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles) that
-//   have been created at the organization level. Example request URL:
-//   `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
-//   /{CUSTOM_ROLE_ID}` Note: Wildcard (*) values are invalid; you must
-//   specify a complete project ID or organization ID.
+//   - name: The `name` parameter's value depends on the target resource
+//     for the request, namely `projects`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles) or
+//     `organizations`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
+//     Each resource type's `name` value format is described below: *
+//     `projects.roles.delete()`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles/delete):
+//     `projects/{PROJECT_ID}/roles/{CUSTOM_ROLE_ID}`. This method deletes
+//     only custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles) that
+//     have been created at the project level. Example request URL:
+//     `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles/{CUSTOM_R
+//     OLE_ID}` * `organizations.roles.delete()`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/delete):
+//     `organizations/{ORGANIZATION_ID}/roles/{CUSTOM_ROLE_ID}`. This
+//     method deletes only custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles) that
+//     have been created at the organization level. Example request URL:
+//     `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
+//     /{CUSTOM_ROLE_ID}` Note: Wildcard (*) values are invalid; you must
+//     specify a complete project ID or organization ID.
 func (r *OrganizationsRolesService) Delete(name string) *OrganizationsRolesDeleteCall {
 	c := &OrganizationsRolesDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -3986,36 +4041,36 @@ type OrganizationsRolesGetCall struct {
 
 // Get: Gets the definition of a Role.
 //
-// - name: The `name` parameter's value depends on the target resource
-//   for the request, namely `roles`
-//   (https://cloud.google.com/iam/reference/rest/v1/roles), `projects`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles), or
-//   `organizations`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
-//   Each resource type's `name` value format is described below: *
-//   `roles.get()`
-//   (https://cloud.google.com/iam/reference/rest/v1/roles/get):
-//   `roles/{ROLE_NAME}`. This method returns results from all
-//   predefined roles
-//   (https://cloud.google.com/iam/docs/understanding-roles#predefined_roles)
-//   in Cloud IAM. Example request URL:
-//   `https://iam.googleapis.com/v1/roles/{ROLE_NAME}` *
-//   `projects.roles.get()`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles/get):
-//   `projects/{PROJECT_ID}/roles/{CUSTOM_ROLE_ID}`. This method returns
-//   only custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles) that
-//   have been created at the project level. Example request URL:
-//   `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles/{CUSTOM_R
-//   OLE_ID}` * `organizations.roles.get()`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/get):
-//   `organizations/{ORGANIZATION_ID}/roles/{CUSTOM_ROLE_ID}`. This
-//   method returns only custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles) that
-//   have been created at the organization level. Example request URL:
-//   `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
-//   /{CUSTOM_ROLE_ID}` Note: Wildcard (*) values are invalid; you must
-//   specify a complete project ID or organization ID.
+//   - name: The `name` parameter's value depends on the target resource
+//     for the request, namely `roles`
+//     (https://cloud.google.com/iam/reference/rest/v1/roles), `projects`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles), or
+//     `organizations`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
+//     Each resource type's `name` value format is described below: *
+//     `roles.get()`
+//     (https://cloud.google.com/iam/reference/rest/v1/roles/get):
+//     `roles/{ROLE_NAME}`. This method returns results from all
+//     predefined roles
+//     (https://cloud.google.com/iam/docs/understanding-roles#predefined_roles)
+//     in Cloud IAM. Example request URL:
+//     `https://iam.googleapis.com/v1/roles/{ROLE_NAME}` *
+//     `projects.roles.get()`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles/get):
+//     `projects/{PROJECT_ID}/roles/{CUSTOM_ROLE_ID}`. This method returns
+//     only custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles) that
+//     have been created at the project level. Example request URL:
+//     `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles/{CUSTOM_R
+//     OLE_ID}` * `organizations.roles.get()`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/get):
+//     `organizations/{ORGANIZATION_ID}/roles/{CUSTOM_ROLE_ID}`. This
+//     method returns only custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles) that
+//     have been created at the organization level. Example request URL:
+//     `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
+//     /{CUSTOM_ROLE_ID}` Note: Wildcard (*) values are invalid; you must
+//     specify a complete project ID or organization ID.
 func (r *OrganizationsRolesService) Get(name string) *OrganizationsRolesGetCall {
 	c := &OrganizationsRolesGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -4162,35 +4217,35 @@ type OrganizationsRolesListCall struct {
 // List: Lists every predefined Role that IAM supports, or every custom
 // role that is defined for an organization or project.
 //
-// - parent: The `parent` parameter's value depends on the target
-//   resource for the request, namely `roles`
-//   (https://cloud.google.com/iam/reference/rest/v1/roles), `projects`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles), or
-//   `organizations`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
-//   Each resource type's `parent` value format is described below: *
-//   `roles.list()`
-//   (https://cloud.google.com/iam/reference/rest/v1/roles/list): An
-//   empty string. This method doesn't require a resource; it simply
-//   returns all predefined roles
-//   (https://cloud.google.com/iam/docs/understanding-roles#predefined_roles)
-//   in Cloud IAM. Example request URL:
-//   `https://iam.googleapis.com/v1/roles` * `projects.roles.list()`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles/list):
-//   `projects/{PROJECT_ID}`. This method lists all project-level custom
-//   roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles).
-//   Example request URL:
-//   `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles` *
-//   `organizations.roles.list()`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/list):
-//   `organizations/{ORGANIZATION_ID}`. This method lists all
-//   organization-level custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles).
-//   Example request URL:
-//   `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
-//   ` Note: Wildcard (*) values are invalid; you must specify a
-//   complete project ID or organization ID.
+//   - parent: The `parent` parameter's value depends on the target
+//     resource for the request, namely `roles`
+//     (https://cloud.google.com/iam/reference/rest/v1/roles), `projects`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles), or
+//     `organizations`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
+//     Each resource type's `parent` value format is described below: *
+//     `roles.list()`
+//     (https://cloud.google.com/iam/reference/rest/v1/roles/list): An
+//     empty string. This method doesn't require a resource; it simply
+//     returns all predefined roles
+//     (https://cloud.google.com/iam/docs/understanding-roles#predefined_roles)
+//     in Cloud IAM. Example request URL:
+//     `https://iam.googleapis.com/v1/roles` * `projects.roles.list()`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles/list):
+//     `projects/{PROJECT_ID}`. This method lists all project-level custom
+//     roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles).
+//     Example request URL:
+//     `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles` *
+//     `organizations.roles.list()`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/list):
+//     `organizations/{ORGANIZATION_ID}`. This method lists all
+//     organization-level custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles).
+//     Example request URL:
+//     `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
+//     ` Note: Wildcard (*) values are invalid; you must specify a
+//     complete project ID or organization ID.
 func (r *OrganizationsRolesService) List(parent string) *OrganizationsRolesListCall {
 	c := &OrganizationsRolesListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.parent = parent
@@ -4226,9 +4281,12 @@ func (c *OrganizationsRolesListCall) ShowDeleted(showDeleted bool) *Organization
 // return the `includedPermissions` field.
 //
 // Possible values:
-//   "BASIC" - Omits the `included_permissions` field. This is the
+//
+//	"BASIC" - Omits the `included_permissions` field. This is the
+//
 // default value.
-//   "FULL" - Returns all fields.
+//
+//	"FULL" - Returns all fields.
 func (c *OrganizationsRolesListCall) View(view string) *OrganizationsRolesListCall {
 	c.urlParams_.Set("view", view)
 	return c
@@ -4423,28 +4481,28 @@ type OrganizationsRolesPatchCall struct {
 
 // Patch: Updates the definition of a custom Role.
 //
-// - name: The `name` parameter's value depends on the target resource
-//   for the request, namely `projects`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles) or
-//   `organizations`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
-//   Each resource type's `name` value format is described below: *
-//   `projects.roles.patch()`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles/patch):
-//   `projects/{PROJECT_ID}/roles/{CUSTOM_ROLE_ID}`. This method updates
-//   only custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles) that
-//   have been created at the project level. Example request URL:
-//   `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles/{CUSTOM_R
-//   OLE_ID}` * `organizations.roles.patch()`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/patch):
-//   `organizations/{ORGANIZATION_ID}/roles/{CUSTOM_ROLE_ID}`. This
-//   method updates only custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles) that
-//   have been created at the organization level. Example request URL:
-//   `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
-//   /{CUSTOM_ROLE_ID}` Note: Wildcard (*) values are invalid; you must
-//   specify a complete project ID or organization ID.
+//   - name: The `name` parameter's value depends on the target resource
+//     for the request, namely `projects`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles) or
+//     `organizations`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
+//     Each resource type's `name` value format is described below: *
+//     `projects.roles.patch()`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles/patch):
+//     `projects/{PROJECT_ID}/roles/{CUSTOM_ROLE_ID}`. This method updates
+//     only custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles) that
+//     have been created at the project level. Example request URL:
+//     `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles/{CUSTOM_R
+//     OLE_ID}` * `organizations.roles.patch()`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/patch):
+//     `organizations/{ORGANIZATION_ID}/roles/{CUSTOM_ROLE_ID}`. This
+//     method updates only custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles) that
+//     have been created at the organization level. Example request URL:
+//     `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
+//     /{CUSTOM_ROLE_ID}` Note: Wildcard (*) values are invalid; you must
+//     specify a complete project ID or organization ID.
 func (r *OrganizationsRolesService) Patch(name string, role *Role) *OrganizationsRolesPatchCall {
 	c := &OrganizationsRolesPatchCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -4599,28 +4657,28 @@ type OrganizationsRolesUndeleteCall struct {
 
 // Undelete: Undeletes a custom Role.
 //
-// - name: The `name` parameter's value depends on the target resource
-//   for the request, namely `projects`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles) or
-//   `organizations`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
-//   Each resource type's `name` value format is described below: *
-//   `projects.roles.undelete()`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles/undelete):
-//   `projects/{PROJECT_ID}/roles/{CUSTOM_ROLE_ID}`. This method
-//   undeletes only custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles) that
-//   have been created at the project level. Example request URL:
-//   `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles/{CUSTOM_R
-//   OLE_ID}` * `organizations.roles.undelete()`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/undelete):
-//   `organizations/{ORGANIZATION_ID}/roles/{CUSTOM_ROLE_ID}`. This
-//   method undeletes only custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles) that
-//   have been created at the organization level. Example request URL:
-//   `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
-//   /{CUSTOM_ROLE_ID}` Note: Wildcard (*) values are invalid; you must
-//   specify a complete project ID or organization ID.
+//   - name: The `name` parameter's value depends on the target resource
+//     for the request, namely `projects`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles) or
+//     `organizations`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
+//     Each resource type's `name` value format is described below: *
+//     `projects.roles.undelete()`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles/undelete):
+//     `projects/{PROJECT_ID}/roles/{CUSTOM_ROLE_ID}`. This method
+//     undeletes only custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles) that
+//     have been created at the project level. Example request URL:
+//     `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles/{CUSTOM_R
+//     OLE_ID}` * `organizations.roles.undelete()`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/undelete):
+//     `organizations/{ORGANIZATION_ID}/roles/{CUSTOM_ROLE_ID}`. This
+//     method undeletes only custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles) that
+//     have been created at the organization level. Example request URL:
+//     `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
+//     /{CUSTOM_ROLE_ID}` Note: Wildcard (*) values are invalid; you must
+//     specify a complete project ID or organization ID.
 func (r *OrganizationsRolesService) Undelete(name string, undeleterolerequest *UndeleteRoleRequest) *OrganizationsRolesUndeleteCall {
 	c := &OrganizationsRolesUndeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -4911,8 +4969,8 @@ type ProjectsLocationsWorkloadIdentityPoolsCreateCall struct {
 // Create: Creates a new WorkloadIdentityPool. You cannot reuse the name
 // of a deleted pool until 30 days after deletion.
 //
-// - parent: The parent resource to create the pool in. The only
-//   supported location is `global`.
+//   - parent: The parent resource to create the pool in. The only
+//     supported location is `global`.
 func (r *ProjectsLocationsWorkloadIdentityPoolsService) Create(parent string, workloadidentitypool *WorkloadIdentityPool) *ProjectsLocationsWorkloadIdentityPoolsCreateCall {
 	c := &ProjectsLocationsWorkloadIdentityPoolsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.parent = parent
@@ -7256,28 +7314,28 @@ type ProjectsRolesCreateCall struct {
 
 // Create: Creates a new custom Role.
 //
-// - parent: The `parent` parameter's value depends on the target
-//   resource for the request, namely `projects`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles) or
-//   `organizations`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
-//   Each resource type's `parent` value format is described below: *
-//   `projects.roles.create()`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles/create):
-//   `projects/{PROJECT_ID}`. This method creates project-level custom
-//   roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles).
-//   Example request URL:
-//   `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles` *
-//   `organizations.roles.create()`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/create):
-//   `organizations/{ORGANIZATION_ID}`. This method creates
-//   organization-level custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles).
-//   Example request URL:
-//   `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
-//   ` Note: Wildcard (*) values are invalid; you must specify a
-//   complete project ID or organization ID.
+//   - parent: The `parent` parameter's value depends on the target
+//     resource for the request, namely `projects`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles) or
+//     `organizations`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
+//     Each resource type's `parent` value format is described below: *
+//     `projects.roles.create()`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles/create):
+//     `projects/{PROJECT_ID}`. This method creates project-level custom
+//     roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles).
+//     Example request URL:
+//     `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles` *
+//     `organizations.roles.create()`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/create):
+//     `organizations/{ORGANIZATION_ID}`. This method creates
+//     organization-level custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles).
+//     Example request URL:
+//     `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
+//     ` Note: Wildcard (*) values are invalid; you must specify a
+//     complete project ID or organization ID.
 func (r *ProjectsRolesService) Create(parent string, createrolerequest *CreateRoleRequest) *ProjectsRolesCreateCall {
 	c := &ProjectsRolesCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.parent = parent
@@ -7426,28 +7484,28 @@ type ProjectsRolesDeleteCall struct {
 // recovered. * If an IAM policy contains a binding to the custom role,
 // the binding is permanently removed.
 //
-// - name: The `name` parameter's value depends on the target resource
-//   for the request, namely `projects`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles) or
-//   `organizations`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
-//   Each resource type's `name` value format is described below: *
-//   `projects.roles.delete()`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles/delete):
-//   `projects/{PROJECT_ID}/roles/{CUSTOM_ROLE_ID}`. This method deletes
-//   only custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles) that
-//   have been created at the project level. Example request URL:
-//   `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles/{CUSTOM_R
-//   OLE_ID}` * `organizations.roles.delete()`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/delete):
-//   `organizations/{ORGANIZATION_ID}/roles/{CUSTOM_ROLE_ID}`. This
-//   method deletes only custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles) that
-//   have been created at the organization level. Example request URL:
-//   `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
-//   /{CUSTOM_ROLE_ID}` Note: Wildcard (*) values are invalid; you must
-//   specify a complete project ID or organization ID.
+//   - name: The `name` parameter's value depends on the target resource
+//     for the request, namely `projects`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles) or
+//     `organizations`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
+//     Each resource type's `name` value format is described below: *
+//     `projects.roles.delete()`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles/delete):
+//     `projects/{PROJECT_ID}/roles/{CUSTOM_ROLE_ID}`. This method deletes
+//     only custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles) that
+//     have been created at the project level. Example request URL:
+//     `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles/{CUSTOM_R
+//     OLE_ID}` * `organizations.roles.delete()`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/delete):
+//     `organizations/{ORGANIZATION_ID}/roles/{CUSTOM_ROLE_ID}`. This
+//     method deletes only custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles) that
+//     have been created at the organization level. Example request URL:
+//     `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
+//     /{CUSTOM_ROLE_ID}` Note: Wildcard (*) values are invalid; you must
+//     specify a complete project ID or organization ID.
 func (r *ProjectsRolesService) Delete(name string) *ProjectsRolesDeleteCall {
 	c := &ProjectsRolesDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -7593,36 +7651,36 @@ type ProjectsRolesGetCall struct {
 
 // Get: Gets the definition of a Role.
 //
-// - name: The `name` parameter's value depends on the target resource
-//   for the request, namely `roles`
-//   (https://cloud.google.com/iam/reference/rest/v1/roles), `projects`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles), or
-//   `organizations`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
-//   Each resource type's `name` value format is described below: *
-//   `roles.get()`
-//   (https://cloud.google.com/iam/reference/rest/v1/roles/get):
-//   `roles/{ROLE_NAME}`. This method returns results from all
-//   predefined roles
-//   (https://cloud.google.com/iam/docs/understanding-roles#predefined_roles)
-//   in Cloud IAM. Example request URL:
-//   `https://iam.googleapis.com/v1/roles/{ROLE_NAME}` *
-//   `projects.roles.get()`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles/get):
-//   `projects/{PROJECT_ID}/roles/{CUSTOM_ROLE_ID}`. This method returns
-//   only custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles) that
-//   have been created at the project level. Example request URL:
-//   `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles/{CUSTOM_R
-//   OLE_ID}` * `organizations.roles.get()`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/get):
-//   `organizations/{ORGANIZATION_ID}/roles/{CUSTOM_ROLE_ID}`. This
-//   method returns only custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles) that
-//   have been created at the organization level. Example request URL:
-//   `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
-//   /{CUSTOM_ROLE_ID}` Note: Wildcard (*) values are invalid; you must
-//   specify a complete project ID or organization ID.
+//   - name: The `name` parameter's value depends on the target resource
+//     for the request, namely `roles`
+//     (https://cloud.google.com/iam/reference/rest/v1/roles), `projects`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles), or
+//     `organizations`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
+//     Each resource type's `name` value format is described below: *
+//     `roles.get()`
+//     (https://cloud.google.com/iam/reference/rest/v1/roles/get):
+//     `roles/{ROLE_NAME}`. This method returns results from all
+//     predefined roles
+//     (https://cloud.google.com/iam/docs/understanding-roles#predefined_roles)
+//     in Cloud IAM. Example request URL:
+//     `https://iam.googleapis.com/v1/roles/{ROLE_NAME}` *
+//     `projects.roles.get()`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles/get):
+//     `projects/{PROJECT_ID}/roles/{CUSTOM_ROLE_ID}`. This method returns
+//     only custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles) that
+//     have been created at the project level. Example request URL:
+//     `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles/{CUSTOM_R
+//     OLE_ID}` * `organizations.roles.get()`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/get):
+//     `organizations/{ORGANIZATION_ID}/roles/{CUSTOM_ROLE_ID}`. This
+//     method returns only custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles) that
+//     have been created at the organization level. Example request URL:
+//     `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
+//     /{CUSTOM_ROLE_ID}` Note: Wildcard (*) values are invalid; you must
+//     specify a complete project ID or organization ID.
 func (r *ProjectsRolesService) Get(name string) *ProjectsRolesGetCall {
 	c := &ProjectsRolesGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -7769,35 +7827,35 @@ type ProjectsRolesListCall struct {
 // List: Lists every predefined Role that IAM supports, or every custom
 // role that is defined for an organization or project.
 //
-// - parent: The `parent` parameter's value depends on the target
-//   resource for the request, namely `roles`
-//   (https://cloud.google.com/iam/reference/rest/v1/roles), `projects`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles), or
-//   `organizations`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
-//   Each resource type's `parent` value format is described below: *
-//   `roles.list()`
-//   (https://cloud.google.com/iam/reference/rest/v1/roles/list): An
-//   empty string. This method doesn't require a resource; it simply
-//   returns all predefined roles
-//   (https://cloud.google.com/iam/docs/understanding-roles#predefined_roles)
-//   in Cloud IAM. Example request URL:
-//   `https://iam.googleapis.com/v1/roles` * `projects.roles.list()`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles/list):
-//   `projects/{PROJECT_ID}`. This method lists all project-level custom
-//   roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles).
-//   Example request URL:
-//   `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles` *
-//   `organizations.roles.list()`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/list):
-//   `organizations/{ORGANIZATION_ID}`. This method lists all
-//   organization-level custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles).
-//   Example request URL:
-//   `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
-//   ` Note: Wildcard (*) values are invalid; you must specify a
-//   complete project ID or organization ID.
+//   - parent: The `parent` parameter's value depends on the target
+//     resource for the request, namely `roles`
+//     (https://cloud.google.com/iam/reference/rest/v1/roles), `projects`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles), or
+//     `organizations`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
+//     Each resource type's `parent` value format is described below: *
+//     `roles.list()`
+//     (https://cloud.google.com/iam/reference/rest/v1/roles/list): An
+//     empty string. This method doesn't require a resource; it simply
+//     returns all predefined roles
+//     (https://cloud.google.com/iam/docs/understanding-roles#predefined_roles)
+//     in Cloud IAM. Example request URL:
+//     `https://iam.googleapis.com/v1/roles` * `projects.roles.list()`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles/list):
+//     `projects/{PROJECT_ID}`. This method lists all project-level custom
+//     roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles).
+//     Example request URL:
+//     `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles` *
+//     `organizations.roles.list()`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/list):
+//     `organizations/{ORGANIZATION_ID}`. This method lists all
+//     organization-level custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles).
+//     Example request URL:
+//     `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
+//     ` Note: Wildcard (*) values are invalid; you must specify a
+//     complete project ID or organization ID.
 func (r *ProjectsRolesService) List(parent string) *ProjectsRolesListCall {
 	c := &ProjectsRolesListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.parent = parent
@@ -7833,9 +7891,12 @@ func (c *ProjectsRolesListCall) ShowDeleted(showDeleted bool) *ProjectsRolesList
 // return the `includedPermissions` field.
 //
 // Possible values:
-//   "BASIC" - Omits the `included_permissions` field. This is the
+//
+//	"BASIC" - Omits the `included_permissions` field. This is the
+//
 // default value.
-//   "FULL" - Returns all fields.
+//
+//	"FULL" - Returns all fields.
 func (c *ProjectsRolesListCall) View(view string) *ProjectsRolesListCall {
 	c.urlParams_.Set("view", view)
 	return c
@@ -8030,28 +8091,28 @@ type ProjectsRolesPatchCall struct {
 
 // Patch: Updates the definition of a custom Role.
 //
-// - name: The `name` parameter's value depends on the target resource
-//   for the request, namely `projects`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles) or
-//   `organizations`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
-//   Each resource type's `name` value format is described below: *
-//   `projects.roles.patch()`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles/patch):
-//   `projects/{PROJECT_ID}/roles/{CUSTOM_ROLE_ID}`. This method updates
-//   only custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles) that
-//   have been created at the project level. Example request URL:
-//   `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles/{CUSTOM_R
-//   OLE_ID}` * `organizations.roles.patch()`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/patch):
-//   `organizations/{ORGANIZATION_ID}/roles/{CUSTOM_ROLE_ID}`. This
-//   method updates only custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles) that
-//   have been created at the organization level. Example request URL:
-//   `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
-//   /{CUSTOM_ROLE_ID}` Note: Wildcard (*) values are invalid; you must
-//   specify a complete project ID or organization ID.
+//   - name: The `name` parameter's value depends on the target resource
+//     for the request, namely `projects`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles) or
+//     `organizations`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
+//     Each resource type's `name` value format is described below: *
+//     `projects.roles.patch()`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles/patch):
+//     `projects/{PROJECT_ID}/roles/{CUSTOM_ROLE_ID}`. This method updates
+//     only custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles) that
+//     have been created at the project level. Example request URL:
+//     `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles/{CUSTOM_R
+//     OLE_ID}` * `organizations.roles.patch()`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/patch):
+//     `organizations/{ORGANIZATION_ID}/roles/{CUSTOM_ROLE_ID}`. This
+//     method updates only custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles) that
+//     have been created at the organization level. Example request URL:
+//     `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
+//     /{CUSTOM_ROLE_ID}` Note: Wildcard (*) values are invalid; you must
+//     specify a complete project ID or organization ID.
 func (r *ProjectsRolesService) Patch(name string, role *Role) *ProjectsRolesPatchCall {
 	c := &ProjectsRolesPatchCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -8206,28 +8267,28 @@ type ProjectsRolesUndeleteCall struct {
 
 // Undelete: Undeletes a custom Role.
 //
-// - name: The `name` parameter's value depends on the target resource
-//   for the request, namely `projects`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles) or
-//   `organizations`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
-//   Each resource type's `name` value format is described below: *
-//   `projects.roles.undelete()`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles/undelete):
-//   `projects/{PROJECT_ID}/roles/{CUSTOM_ROLE_ID}`. This method
-//   undeletes only custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles) that
-//   have been created at the project level. Example request URL:
-//   `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles/{CUSTOM_R
-//   OLE_ID}` * `organizations.roles.undelete()`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/undelete):
-//   `organizations/{ORGANIZATION_ID}/roles/{CUSTOM_ROLE_ID}`. This
-//   method undeletes only custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles) that
-//   have been created at the organization level. Example request URL:
-//   `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
-//   /{CUSTOM_ROLE_ID}` Note: Wildcard (*) values are invalid; you must
-//   specify a complete project ID or organization ID.
+//   - name: The `name` parameter's value depends on the target resource
+//     for the request, namely `projects`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles) or
+//     `organizations`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
+//     Each resource type's `name` value format is described below: *
+//     `projects.roles.undelete()`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles/undelete):
+//     `projects/{PROJECT_ID}/roles/{CUSTOM_ROLE_ID}`. This method
+//     undeletes only custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles) that
+//     have been created at the project level. Example request URL:
+//     `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles/{CUSTOM_R
+//     OLE_ID}` * `organizations.roles.undelete()`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/undelete):
+//     `organizations/{ORGANIZATION_ID}/roles/{CUSTOM_ROLE_ID}`. This
+//     method undeletes only custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles) that
+//     have been created at the organization level. Example request URL:
+//     `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
+//     /{CUSTOM_ROLE_ID}` Note: Wildcard (*) values are invalid; you must
+//     specify a complete project ID or organization ID.
 func (r *ProjectsRolesService) Undelete(name string, undeleterolerequest *UndeleteRoleRequest) *ProjectsRolesUndeleteCall {
 	c := &ProjectsRolesUndeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -8369,8 +8430,8 @@ type ProjectsServiceAccountsCreateCall struct {
 
 // Create: Creates a ServiceAccount.
 //
-// - name: The resource name of the project associated with the service
-//   accounts, such as `projects/my-project-123`.
+//   - name: The resource name of the project associated with the service
+//     accounts, such as `projects/my-project-123`.
 func (r *ProjectsServiceAccountsService) Create(name string, createserviceaccountrequest *CreateServiceAccountRequest) *ProjectsServiceAccountsCreateCall {
 	c := &ProjectsServiceAccountsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -8522,11 +8583,11 @@ type ProjectsServiceAccountsDeleteCall struct {
 // there are no unintended consequences, you can delete the service
 // account.
 //
-// - name: The resource name of the service account in the following
-//   format: `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using
-//   `-` as a wildcard for the `PROJECT_ID` will infer the project from
-//   the account. The `ACCOUNT` value can be the `email` address or the
-//   `unique_id` of the service account.
+//   - name: The resource name of the service account in the following
+//     format: `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using
+//     `-` as a wildcard for the `PROJECT_ID` will infer the project from
+//     the account. The `ACCOUNT` value can be the `email` address or the
+//     `unique_id` of the service account.
 func (r *ProjectsServiceAccountsService) Delete(name string) *ProjectsServiceAccountsDeleteCall {
 	c := &ProjectsServiceAccountsDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -8670,11 +8731,11 @@ type ProjectsServiceAccountsDisableCall struct {
 // for unintended consequences. If there are no unintended consequences,
 // you can delete the service account with DeleteServiceAccount.
 //
-// - name: The resource name of the service account in the following
-//   format: `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using
-//   `-` as a wildcard for the `PROJECT_ID` will infer the project from
-//   the account. The `ACCOUNT` value can be the `email` address or the
-//   `unique_id` of the service account.
+//   - name: The resource name of the service account in the following
+//     format: `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using
+//     `-` as a wildcard for the `PROJECT_ID` will infer the project from
+//     the account. The `ACCOUNT` value can be the `email` address or the
+//     `unique_id` of the service account.
 func (r *ProjectsServiceAccountsService) Disable(name string, disableserviceaccountrequest *DisableServiceAccountRequest) *ProjectsServiceAccountsDisableCall {
 	c := &ProjectsServiceAccountsDisableCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -8821,11 +8882,11 @@ type ProjectsServiceAccountsEnableCall struct {
 // because it was compromised—you cannot use this method to enable the
 // service account.
 //
-// - name: The resource name of the service account in the following
-//   format: `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using
-//   `-` as a wildcard for the `PROJECT_ID` will infer the project from
-//   the account. The `ACCOUNT` value can be the `email` address or the
-//   `unique_id` of the service account.
+//   - name: The resource name of the service account in the following
+//     format: `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using
+//     `-` as a wildcard for the `PROJECT_ID` will infer the project from
+//     the account. The `ACCOUNT` value can be the `email` address or the
+//     `unique_id` of the service account.
 func (r *ProjectsServiceAccountsService) Enable(name string, enableserviceaccountrequest *EnableServiceAccountRequest) *ProjectsServiceAccountsEnableCall {
 	c := &ProjectsServiceAccountsEnableCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -8967,11 +9028,11 @@ type ProjectsServiceAccountsGetCall struct {
 
 // Get: Gets a ServiceAccount.
 //
-// - name: The resource name of the service account in the following
-//   format: `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using
-//   `-` as a wildcard for the `PROJECT_ID` will infer the project from
-//   the account. The `ACCOUNT` value can be the `email` address or the
-//   `unique_id` of the service account.
+//   - name: The resource name of the service account in the following
+//     format: `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using
+//     `-` as a wildcard for the `PROJECT_ID` will infer the project from
+//     the account. The `ACCOUNT` value can be the `email` address or the
+//     `unique_id` of the service account.
 func (r *ProjectsServiceAccountsService) Get(name string) *ProjectsServiceAccountsGetCall {
 	c := &ProjectsServiceAccountsGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -9125,9 +9186,10 @@ type ProjectsServiceAccountsGetIamPolicyCall struct {
 // (https://cloud.google.com/resource-manager/reference/rest/v1/projects/getIamPolicy)
 // method.
 //
-// - resource: REQUIRED: The resource for which the policy is being
-//   requested. See the operation documentation for the appropriate
-//   value for this field.
+//   - resource: REQUIRED: The resource for which the policy is being
+//     requested. See Resource names
+//     (https://cloud.google.com/apis/design/resource_names) for the
+//     appropriate value for this field.
 func (r *ProjectsServiceAccountsService) GetIamPolicy(resource string) *ProjectsServiceAccountsGetIamPolicyCall {
 	c := &ProjectsServiceAccountsGetIamPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.resource = resource
@@ -9253,7 +9315,7 @@ func (c *ProjectsServiceAccountsGetIamPolicyCall) Do(opts ...googleapi.CallOptio
 	//       "type": "integer"
 	//     },
 	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy is being requested. See the operation documentation for the appropriate value for this field.",
+	//       "description": "REQUIRED: The resource for which the policy is being requested. See [Resource names](https://cloud.google.com/apis/design/resource_names) for the appropriate value for this field.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]+/serviceAccounts/[^/]+$",
 	//       "required": true,
@@ -9284,8 +9346,8 @@ type ProjectsServiceAccountsListCall struct {
 
 // List: Lists every ServiceAccount that belongs to a specific project.
 //
-// - name: The resource name of the project associated with the service
-//   accounts, such as `projects/my-project-123`.
+//   - name: The resource name of the project associated with the service
+//     accounts, such as `projects/my-project-123`.
 func (r *ProjectsServiceAccountsService) List(name string) *ProjectsServiceAccountsListCall {
 	c := &ProjectsServiceAccountsListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -9481,18 +9543,18 @@ type ProjectsServiceAccountsPatchCall struct {
 
 // Patch: Patches a ServiceAccount.
 //
-// - name: The resource name of the service account. Use one of the
-//   following formats: *
-//   `projects/{PROJECT_ID}/serviceAccounts/{EMAIL_ADDRESS}` *
-//   `projects/{PROJECT_ID}/serviceAccounts/{UNIQUE_ID}` As an
-//   alternative, you can use the `-` wildcard character instead of the
-//   project ID: * `projects/-/serviceAccounts/{EMAIL_ADDRESS}` *
-//   `projects/-/serviceAccounts/{UNIQUE_ID}` When possible, avoid using
-//   the `-` wildcard character, because it can cause response messages
-//   to contain misleading error codes. For example, if you try to get
-//   the service account `projects/-/serviceAccounts/fake@example.com`,
-//   which does not exist, the response contains an HTTP `403 Forbidden`
-//   error instead of a `404 Not Found` error.
+//   - name: The resource name of the service account. Use one of the
+//     following formats: *
+//     `projects/{PROJECT_ID}/serviceAccounts/{EMAIL_ADDRESS}` *
+//     `projects/{PROJECT_ID}/serviceAccounts/{UNIQUE_ID}` As an
+//     alternative, you can use the `-` wildcard character instead of the
+//     project ID: * `projects/-/serviceAccounts/{EMAIL_ADDRESS}` *
+//     `projects/-/serviceAccounts/{UNIQUE_ID}` When possible, avoid using
+//     the `-` wildcard character, because it can cause response messages
+//     to contain misleading error codes. For example, if you try to get
+//     the service account `projects/-/serviceAccounts/fake@example.com`,
+//     which does not exist, the response contains an HTTP `403 Forbidden`
+//     error instead of a `404 Not Found` error.
 func (r *ProjectsServiceAccountsService) Patch(name string, patchserviceaccountrequest *PatchServiceAccountRequest) *ProjectsServiceAccountsPatchCall {
 	c := &ProjectsServiceAccountsPatchCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -9647,9 +9709,10 @@ type ProjectsServiceAccountsSetIamPolicyCall struct {
 // or Manage access to other resources
 // (https://cloud.google.com/iam/help/access/manage-other-resources).
 //
-// - resource: REQUIRED: The resource for which the policy is being
-//   specified. See the operation documentation for the appropriate
-//   value for this field.
+//   - resource: REQUIRED: The resource for which the policy is being
+//     specified. See Resource names
+//     (https://cloud.google.com/apis/design/resource_names) for the
+//     appropriate value for this field.
 func (r *ProjectsServiceAccountsService) SetIamPolicy(resource string, setiampolicyrequest *SetIamPolicyRequest) *ProjectsServiceAccountsSetIamPolicyCall {
 	c := &ProjectsServiceAccountsSetIamPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.resource = resource
@@ -9757,7 +9820,7 @@ func (c *ProjectsServiceAccountsSetIamPolicyCall) Do(opts ...googleapi.CallOptio
 	//   ],
 	//   "parameters": {
 	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy is being specified. See the operation documentation for the appropriate value for this field.",
+	//       "description": "REQUIRED: The resource for which the policy is being specified. See [Resource names](https://cloud.google.com/apis/design/resource_names) for the appropriate value for this field.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]+/serviceAccounts/[^/]+$",
 	//       "required": true,
@@ -9797,13 +9860,13 @@ type ProjectsServiceAccountsSignBlobCall struct {
 // instructions. Signs a blob using the system-managed private key for a
 // ServiceAccount.
 //
-// - name: Deprecated. Migrate to Service Account Credentials API
-//   (https://cloud.google.com/iam/help/credentials/migrate-api). The
-//   resource name of the service account in the following format:
-//   `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using `-` as a
-//   wildcard for the `PROJECT_ID` will infer the project from the
-//   account. The `ACCOUNT` value can be the `email` address or the
-//   `unique_id` of the service account.
+//   - name: Deprecated. Migrate to Service Account Credentials API
+//     (https://cloud.google.com/iam/help/credentials/migrate-api). The
+//     resource name of the service account in the following format:
+//     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using `-` as a
+//     wildcard for the `PROJECT_ID` will infer the project from the
+//     account. The `ACCOUNT` value can be the `email` address or the
+//     `unique_id` of the service account.
 func (r *ProjectsServiceAccountsService) SignBlob(name string, signblobrequest *SignBlobRequest) *ProjectsServiceAccountsSignBlobCall {
 	c := &ProjectsServiceAccountsSignBlobCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -9951,13 +10014,13 @@ type ProjectsServiceAccountsSignJwtCall struct {
 // instructions. Signs a JSON Web Token (JWT) using the system-managed
 // private key for a ServiceAccount.
 //
-// - name: Deprecated. Migrate to Service Account Credentials API
-//   (https://cloud.google.com/iam/help/credentials/migrate-api). The
-//   resource name of the service account in the following format:
-//   `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using `-` as a
-//   wildcard for the `PROJECT_ID` will infer the project from the
-//   account. The `ACCOUNT` value can be the `email` address or the
-//   `unique_id` of the service account.
+//   - name: Deprecated. Migrate to Service Account Credentials API
+//     (https://cloud.google.com/iam/help/credentials/migrate-api). The
+//     resource name of the service account in the following format:
+//     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using `-` as a
+//     wildcard for the `PROJECT_ID` will infer the project from the
+//     account. The `ACCOUNT` value can be the `email` address or the
+//     `unique_id` of the service account.
 func (r *ProjectsServiceAccountsService) SignJwt(name string, signjwtrequest *SignJwtRequest) *ProjectsServiceAccountsSignJwtCall {
 	c := &ProjectsServiceAccountsSignJwtCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -10100,9 +10163,10 @@ type ProjectsServiceAccountsTestIamPermissionsCall struct {
 // TestIamPermissions: Tests whether the caller has the specified
 // permissions on a ServiceAccount.
 //
-// - resource: REQUIRED: The resource for which the policy detail is
-//   being requested. See the operation documentation for the
-//   appropriate value for this field.
+//   - resource: REQUIRED: The resource for which the policy detail is
+//     being requested. See Resource names
+//     (https://cloud.google.com/apis/design/resource_names) for the
+//     appropriate value for this field.
 func (r *ProjectsServiceAccountsService) TestIamPermissions(resource string, testiampermissionsrequest *TestIamPermissionsRequest) *ProjectsServiceAccountsTestIamPermissionsCall {
 	c := &ProjectsServiceAccountsTestIamPermissionsCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.resource = resource
@@ -10210,7 +10274,7 @@ func (c *ProjectsServiceAccountsTestIamPermissionsCall) Do(opts ...googleapi.Cal
 	//   ],
 	//   "parameters": {
 	//     "resource": {
-	//       "description": "REQUIRED: The resource for which the policy detail is being requested. See the operation documentation for the appropriate value for this field.",
+	//       "description": "REQUIRED: The resource for which the policy detail is being requested. See [Resource names](https://cloud.google.com/apis/design/resource_names) for the appropriate value for this field.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]+/serviceAccounts/[^/]+$",
 	//       "required": true,
@@ -10249,11 +10313,11 @@ type ProjectsServiceAccountsUndeleteCall struct {
 // way to restore a deleted service account that has been permanently
 // removed.
 //
-// - name: The resource name of the service account in the following
-//   format:
-//   `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT_UNIQUE_ID}`. Using
-//   `-` as a wildcard for the `PROJECT_ID` will infer the project from
-//   the account.
+//   - name: The resource name of the service account in the following
+//     format:
+//     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT_UNIQUE_ID}`. Using
+//     `-` as a wildcard for the `PROJECT_ID` will infer the project from
+//     the account.
 func (r *ProjectsServiceAccountsService) Undelete(name string, undeleteserviceaccountrequest *UndeleteServiceAccountRequest) *ProjectsServiceAccountsUndeleteCall {
 	c := &ProjectsServiceAccountsUndeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -10397,18 +10461,18 @@ type ProjectsServiceAccountsUpdateCall struct {
 // Use PatchServiceAccount instead. Updates a ServiceAccount. You can
 // update only the `display_name` field.
 //
-// - name: The resource name of the service account. Use one of the
-//   following formats: *
-//   `projects/{PROJECT_ID}/serviceAccounts/{EMAIL_ADDRESS}` *
-//   `projects/{PROJECT_ID}/serviceAccounts/{UNIQUE_ID}` As an
-//   alternative, you can use the `-` wildcard character instead of the
-//   project ID: * `projects/-/serviceAccounts/{EMAIL_ADDRESS}` *
-//   `projects/-/serviceAccounts/{UNIQUE_ID}` When possible, avoid using
-//   the `-` wildcard character, because it can cause response messages
-//   to contain misleading error codes. For example, if you try to get
-//   the service account `projects/-/serviceAccounts/fake@example.com`,
-//   which does not exist, the response contains an HTTP `403 Forbidden`
-//   error instead of a `404 Not Found` error.
+//   - name: The resource name of the service account. Use one of the
+//     following formats: *
+//     `projects/{PROJECT_ID}/serviceAccounts/{EMAIL_ADDRESS}` *
+//     `projects/{PROJECT_ID}/serviceAccounts/{UNIQUE_ID}` As an
+//     alternative, you can use the `-` wildcard character instead of the
+//     project ID: * `projects/-/serviceAccounts/{EMAIL_ADDRESS}` *
+//     `projects/-/serviceAccounts/{UNIQUE_ID}` When possible, avoid using
+//     the `-` wildcard character, because it can cause response messages
+//     to contain misleading error codes. For example, if you try to get
+//     the service account `projects/-/serviceAccounts/fake@example.com`,
+//     which does not exist, the response contains an HTTP `403 Forbidden`
+//     error instead of a `404 Not Found` error.
 func (r *ProjectsServiceAccountsService) Update(name string, serviceaccount *ServiceAccount) *ProjectsServiceAccountsUpdateCall {
 	c := &ProjectsServiceAccountsUpdateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -10550,11 +10614,11 @@ type ProjectsServiceAccountsKeysCreateCall struct {
 
 // Create: Creates a ServiceAccountKey.
 //
-// - name: The resource name of the service account in the following
-//   format: `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using
-//   `-` as a wildcard for the `PROJECT_ID` will infer the project from
-//   the account. The `ACCOUNT` value can be the `email` address or the
-//   `unique_id` of the service account.
+//   - name: The resource name of the service account in the following
+//     format: `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using
+//     `-` as a wildcard for the `PROJECT_ID` will infer the project from
+//     the account. The `ACCOUNT` value can be the `email` address or the
+//     `unique_id` of the service account.
 func (r *ProjectsServiceAccountsKeysService) Create(name string, createserviceaccountkeyrequest *CreateServiceAccountKeyRequest) *ProjectsServiceAccountsKeysCreateCall {
 	c := &ProjectsServiceAccountsKeysCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -10697,12 +10761,12 @@ type ProjectsServiceAccountsKeysDeleteCall struct {
 // does not revoke short-lived credentials that have been issued based
 // on the service account key.
 //
-// - name: The resource name of the service account key in the following
-//   format:
-//   `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}/keys/{key}`. Using
-//   `-` as a wildcard for the `PROJECT_ID` will infer the project from
-//   the account. The `ACCOUNT` value can be the `email` address or the
-//   `unique_id` of the service account.
+//   - name: The resource name of the service account key in the following
+//     format:
+//     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}/keys/{key}`. Using
+//     `-` as a wildcard for the `PROJECT_ID` will infer the project from
+//     the account. The `ACCOUNT` value can be the `email` address or the
+//     `unique_id` of the service account.
 func (r *ProjectsServiceAccountsKeysService) Delete(name string) *ProjectsServiceAccountsKeysDeleteCall {
 	c := &ProjectsServiceAccountsKeysDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -10834,14 +10898,14 @@ type ProjectsServiceAccountsKeysDisableCall struct {
 }
 
 // Disable: Disable a ServiceAccountKey. A disabled service account key
-// can be enabled through EnableServiceAccountKey.
+// can be re-enabled with EnableServiceAccountKey.
 //
-// - name: The resource name of the service account key in the following
-//   format:
-//   `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}/keys/{key}`. Using
-//   `-` as a wildcard for the `PROJECT_ID` will infer the project from
-//   the account. The `ACCOUNT` value can be the `email` address or the
-//   `unique_id` of the service account.
+//   - name: The resource name of the service account key in the following
+//     format:
+//     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}/keys/{key}`. Using
+//     `-` as a wildcard for the `PROJECT_ID` will infer the project from
+//     the account. The `ACCOUNT` value can be the `email` address or the
+//     `unique_id` of the service account.
 func (r *ProjectsServiceAccountsKeysService) Disable(name string, disableserviceaccountkeyrequest *DisableServiceAccountKeyRequest) *ProjectsServiceAccountsKeysDisableCall {
 	c := &ProjectsServiceAccountsKeysDisableCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -10940,7 +11004,7 @@ func (c *ProjectsServiceAccountsKeysDisableCall) Do(opts ...googleapi.CallOption
 	}
 	return ret, nil
 	// {
-	//   "description": "Disable a ServiceAccountKey. A disabled service account key can be enabled through EnableServiceAccountKey.",
+	//   "description": "Disable a ServiceAccountKey. A disabled service account key can be re-enabled with EnableServiceAccountKey.",
 	//   "flatPath": "v1/projects/{projectsId}/serviceAccounts/{serviceAccountsId}/keys/{keysId}:disable",
 	//   "httpMethod": "POST",
 	//   "id": "iam.projects.serviceAccounts.keys.disable",
@@ -10983,12 +11047,12 @@ type ProjectsServiceAccountsKeysEnableCall struct {
 
 // Enable: Enable a ServiceAccountKey.
 //
-// - name: The resource name of the service account key in the following
-//   format:
-//   `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}/keys/{key}`. Using
-//   `-` as a wildcard for the `PROJECT_ID` will infer the project from
-//   the account. The `ACCOUNT` value can be the `email` address or the
-//   `unique_id` of the service account.
+//   - name: The resource name of the service account key in the following
+//     format:
+//     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}/keys/{key}`. Using
+//     `-` as a wildcard for the `PROJECT_ID` will infer the project from
+//     the account. The `ACCOUNT` value can be the `email` address or the
+//     `unique_id` of the service account.
 func (r *ProjectsServiceAccountsKeysService) Enable(name string, enableserviceaccountkeyrequest *EnableServiceAccountKeyRequest) *ProjectsServiceAccountsKeysEnableCall {
 	c := &ProjectsServiceAccountsKeysEnableCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -11130,12 +11194,12 @@ type ProjectsServiceAccountsKeysGetCall struct {
 
 // Get: Gets a ServiceAccountKey.
 //
-// - name: The resource name of the service account key in the following
-//   format:
-//   `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}/keys/{key}`. Using
-//   `-` as a wildcard for the `PROJECT_ID` will infer the project from
-//   the account. The `ACCOUNT` value can be the `email` address or the
-//   `unique_id` of the service account.
+//   - name: The resource name of the service account key in the following
+//     format:
+//     `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}/keys/{key}`. Using
+//     `-` as a wildcard for the `PROJECT_ID` will infer the project from
+//     the account. The `ACCOUNT` value can be the `email` address or the
+//     `unique_id` of the service account.
 func (r *ProjectsServiceAccountsKeysService) Get(name string) *ProjectsServiceAccountsKeysGetCall {
 	c := &ProjectsServiceAccountsKeysGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -11147,9 +11211,10 @@ func (r *ProjectsServiceAccountsKeysService) Get(name string) *ProjectsServiceAc
 // that the public key is not returned.
 //
 // Possible values:
-//   "TYPE_NONE" - Do not return the public key.
-//   "TYPE_X509_PEM_FILE" - X509 PEM format.
-//   "TYPE_RAW_PUBLIC_KEY" - Raw public key.
+//
+//	"TYPE_NONE" - Do not return the public key.
+//	"TYPE_X509_PEM_FILE" - X509 PEM format.
+//	"TYPE_RAW_PUBLIC_KEY" - Raw public key.
 func (c *ProjectsServiceAccountsKeysGetCall) PublicKeyType(publicKeyType string) *ProjectsServiceAccountsKeysGetCall {
 	c.urlParams_.Set("publicKeyType", publicKeyType)
 	return c
@@ -11309,11 +11374,11 @@ type ProjectsServiceAccountsKeysListCall struct {
 
 // List: Lists every ServiceAccountKey for a service account.
 //
-// - name: The resource name of the service account in the following
-//   format: `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using
-//   `-` as a wildcard for the `PROJECT_ID`, will infer the project from
-//   the account. The `ACCOUNT` value can be the `email` address or the
-//   `unique_id` of the service account.
+//   - name: The resource name of the service account in the following
+//     format: `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using
+//     `-` as a wildcard for the `PROJECT_ID`, will infer the project from
+//     the account. The `ACCOUNT` value can be the `email` address or the
+//     `unique_id` of the service account.
 func (r *ProjectsServiceAccountsKeysService) List(name string) *ProjectsServiceAccountsKeysListCall {
 	c := &ProjectsServiceAccountsKeysListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -11326,11 +11391,17 @@ func (r *ProjectsServiceAccountsKeysService) List(name string) *ProjectsServiceA
 // returned.
 //
 // Possible values:
-//   "KEY_TYPE_UNSPECIFIED" - Unspecified key type. The presence of this
+//
+//	"KEY_TYPE_UNSPECIFIED" - Unspecified key type. The presence of this
+//
 // in the message will immediately result in an error.
-//   "USER_MANAGED" - User-managed keys (managed and rotated by the
+//
+//	"USER_MANAGED" - User-managed keys (managed and rotated by the
+//
 // user).
-//   "SYSTEM_MANAGED" - System-managed keys (managed and rotated by
+//
+//	"SYSTEM_MANAGED" - System-managed keys (managed and rotated by
+//
 // Google).
 func (c *ProjectsServiceAccountsKeysListCall) KeyTypes(keyTypes ...string) *ProjectsServiceAccountsKeysListCall {
 	c.urlParams_.SetMulti("keyTypes", append([]string{}, keyTypes...))
@@ -11490,14 +11561,16 @@ type ProjectsServiceAccountsKeysUploadCall struct {
 	header_                        http.Header
 }
 
-// Upload: Creates a ServiceAccountKey, using a public key that you
-// provide.
+// Upload: Uploads the public key portion of a key pair that you manage,
+// and associates the public key with a ServiceAccount. After you upload
+// the public key, you can use the private key from the key pair as a
+// service account key.
 //
-// - name: The resource name of the service account in the following
-//   format: `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using
-//   `-` as a wildcard for the `PROJECT_ID` will infer the project from
-//   the account. The `ACCOUNT` value can be the `email` address or the
-//   `unique_id` of the service account.
+//   - name: The resource name of the service account in the following
+//     format: `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. Using
+//     `-` as a wildcard for the `PROJECT_ID` will infer the project from
+//     the account. The `ACCOUNT` value can be the `email` address or the
+//     `unique_id` of the service account.
 func (r *ProjectsServiceAccountsKeysService) Upload(name string, uploadserviceaccountkeyrequest *UploadServiceAccountKeyRequest) *ProjectsServiceAccountsKeysUploadCall {
 	c := &ProjectsServiceAccountsKeysUploadCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -11596,7 +11669,7 @@ func (c *ProjectsServiceAccountsKeysUploadCall) Do(opts ...googleapi.CallOption)
 	}
 	return ret, nil
 	// {
-	//   "description": "Creates a ServiceAccountKey, using a public key that you provide.",
+	//   "description": "Uploads the public key portion of a key pair that you manage, and associates the public key with a ServiceAccount. After you upload the public key, you can use the private key from the key pair as a service account key.",
 	//   "flatPath": "v1/projects/{projectsId}/serviceAccounts/{serviceAccountsId}/keys:upload",
 	//   "httpMethod": "POST",
 	//   "id": "iam.projects.serviceAccounts.keys.upload",
@@ -11639,36 +11712,36 @@ type RolesGetCall struct {
 
 // Get: Gets the definition of a Role.
 //
-// - name: The `name` parameter's value depends on the target resource
-//   for the request, namely `roles`
-//   (https://cloud.google.com/iam/reference/rest/v1/roles), `projects`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles), or
-//   `organizations`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
-//   Each resource type's `name` value format is described below: *
-//   `roles.get()`
-//   (https://cloud.google.com/iam/reference/rest/v1/roles/get):
-//   `roles/{ROLE_NAME}`. This method returns results from all
-//   predefined roles
-//   (https://cloud.google.com/iam/docs/understanding-roles#predefined_roles)
-//   in Cloud IAM. Example request URL:
-//   `https://iam.googleapis.com/v1/roles/{ROLE_NAME}` *
-//   `projects.roles.get()`
-//   (https://cloud.google.com/iam/reference/rest/v1/projects.roles/get):
-//   `projects/{PROJECT_ID}/roles/{CUSTOM_ROLE_ID}`. This method returns
-//   only custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles) that
-//   have been created at the project level. Example request URL:
-//   `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles/{CUSTOM_R
-//   OLE_ID}` * `organizations.roles.get()`
-//   (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/get):
-//   `organizations/{ORGANIZATION_ID}/roles/{CUSTOM_ROLE_ID}`. This
-//   method returns only custom roles
-//   (https://cloud.google.com/iam/docs/understanding-custom-roles) that
-//   have been created at the organization level. Example request URL:
-//   `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
-//   /{CUSTOM_ROLE_ID}` Note: Wildcard (*) values are invalid; you must
-//   specify a complete project ID or organization ID.
+//   - name: The `name` parameter's value depends on the target resource
+//     for the request, namely `roles`
+//     (https://cloud.google.com/iam/reference/rest/v1/roles), `projects`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles), or
+//     `organizations`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles).
+//     Each resource type's `name` value format is described below: *
+//     `roles.get()`
+//     (https://cloud.google.com/iam/reference/rest/v1/roles/get):
+//     `roles/{ROLE_NAME}`. This method returns results from all
+//     predefined roles
+//     (https://cloud.google.com/iam/docs/understanding-roles#predefined_roles)
+//     in Cloud IAM. Example request URL:
+//     `https://iam.googleapis.com/v1/roles/{ROLE_NAME}` *
+//     `projects.roles.get()`
+//     (https://cloud.google.com/iam/reference/rest/v1/projects.roles/get):
+//     `projects/{PROJECT_ID}/roles/{CUSTOM_ROLE_ID}`. This method returns
+//     only custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles) that
+//     have been created at the project level. Example request URL:
+//     `https://iam.googleapis.com/v1/projects/{PROJECT_ID}/roles/{CUSTOM_R
+//     OLE_ID}` * `organizations.roles.get()`
+//     (https://cloud.google.com/iam/reference/rest/v1/organizations.roles/get):
+//     `organizations/{ORGANIZATION_ID}/roles/{CUSTOM_ROLE_ID}`. This
+//     method returns only custom roles
+//     (https://cloud.google.com/iam/docs/understanding-custom-roles) that
+//     have been created at the organization level. Example request URL:
+//     `https://iam.googleapis.com/v1/organizations/{ORGANIZATION_ID}/roles
+//     /{CUSTOM_ROLE_ID}` Note: Wildcard (*) values are invalid; you must
+//     specify a complete project ID or organization ID.
 func (r *RolesService) Get(name string) *RolesGetCall {
 	c := &RolesGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -11880,9 +11953,12 @@ func (c *RolesListCall) ShowDeleted(showDeleted bool) *RolesListCall {
 // return the `includedPermissions` field.
 //
 // Possible values:
-//   "BASIC" - Omits the `included_permissions` field. This is the
+//
+//	"BASIC" - Omits the `included_permissions` field. This is the
+//
 // default value.
-//   "FULL" - Returns all fields.
+//
+//	"FULL" - Returns all fields.
 func (c *RolesListCall) View(view string) *RolesListCall {
 	c.urlParams_.Set("view", view)
 	return c
