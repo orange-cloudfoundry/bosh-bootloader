@@ -6,7 +6,7 @@ require (
 	github.com/Azure/azure-sdk-for-go v12.5.0-beta+incompatible
 	github.com/Azure/go-autorest v9.10.0+incompatible
 	github.com/araddon/gou v0.0.0-20180509225133-7db4be5742ae
-	github.com/aws/aws-sdk-go v1.43.45
+	github.com/aws/aws-sdk-go v1.44.109
 	github.com/cloudfoundry/bbl-state-resource v0.0.0-20180409211107-a02832129633
 	github.com/cloudfoundry/multierror v0.0.0-20170123201326-dafed03eebc6
 	github.com/coreos/go-semver v0.3.0
