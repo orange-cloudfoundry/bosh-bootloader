@@ -36,7 +36,7 @@ github.com/Azure/go-autorest/autorest/validation
 # github.com/araddon/gou v0.0.0-20180509225133-7db4be5742ae
 ## explicit
 github.com/araddon/gou
-# github.com/aws/aws-sdk-go v1.43.45
+# github.com/aws/aws-sdk-go v1.44.122
 ## explicit; go 1.11
 github.com/aws/aws-sdk-go/aws
 github.com/aws/aws-sdk-go/aws/arn
