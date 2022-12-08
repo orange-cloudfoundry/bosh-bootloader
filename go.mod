@@ -6,7 +6,7 @@ require (
 	github.com/Azure/azure-sdk-for-go v12.5.0-beta+incompatible
 	github.com/Azure/go-autorest v9.10.0+incompatible
 	github.com/araddon/gou v0.0.0-20180509225133-7db4be5742ae
-	github.com/aws/aws-sdk-go v1.43.45
+	github.com/aws/aws-sdk-go v1.44.155
 	github.com/cloudfoundry/bbl-state-resource v0.0.0-20180409211107-a02832129633
 	github.com/cloudfoundry/multierror v0.0.0-20170123201326-dafed03eebc6
 	github.com/coreos/go-semver v0.3.0
@@ -65,10 +65,10 @@ require (
 	github.com/ulikunitz/xz v0.5.4 // indirect
 	github.com/vmware/govmomi v0.18.0 // indirect
 	go.opencensus.io v0.23.0 // indirect
-	golang.org/x/net v0.0.0-20220325170049-de3da57026de // indirect
-	golang.org/x/sys v0.0.0-20220328115105-d36c6a25d886 // indirect
-	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
-	golang.org/x/text v0.3.7 // indirect
+	golang.org/x/net v0.1.0 // indirect
+	golang.org/x/sys v0.1.0 // indirect
+	golang.org/x/term v0.1.0 // indirect
+	golang.org/x/text v0.4.0 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20220324131243-acbaeb5b85eb // indirect
