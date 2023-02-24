@@ -22,7 +22,7 @@ require (
 	github.com/onsi/gomega v1.19.0
 	github.com/pivotal-cf-experimental/gomegamatchers v0.0.0-20180326192815-e36bfcc98c3a
 	github.com/pmezard/go-difflib v1.0.0
-	github.com/spf13/afero v1.8.2
+	github.com/spf13/afero v1.9.4
 	golang.org/x/crypto v0.0.0-20211108221036-ceb1ce70b4fa
 	golang.org/x/oauth2 v0.0.0-20220309155454-6242fa91716a
 	google.golang.org/api v0.74.0
