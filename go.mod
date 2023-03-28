@@ -1,6 +1,6 @@
 module github.com/cloudfoundry/bosh-bootloader
 
-go 1.19
+go 1.20
 
 require (
 	github.com/Azure/azure-sdk-for-go v12.5.0-beta+incompatible
