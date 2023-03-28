@@ -43,7 +43,7 @@ jobs:
 
       - name: packr2
         run: |
-          curl -fsSL https://github.com/gobuffalo/packr/releases/download/v2.8.3/packr_2.8.3_linux_amd64.tar.gz | \
+          curl -fsSL https://github.com/gobuffalo/packr/releases/download/v2.8.1/packr_2.8.1_linux_amd64.tar.gz | \
             tar -xz -C /usr/local/bin/ packr2
           which packr2
 
