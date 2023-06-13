@@ -64,10 +64,6 @@ resource "cloudstack_network" "bosh_subnet" {
   display_text     = "bosh-subnet"
   network_offering = var.network_vpc_offering
   zone             = var.cloudstack_zone
-  acl_id = var.secure ? element(
-    concat(cloudstack_network_acl.bosh_subnet_sec_group.*.id, [""]),
-    0,
-  ) : cloudstack_network_acl.allow_all.id
 }
 
 resource "cloudstack_network" "compilation_subnet" {
@@ -77,10 +73,6 @@ resource "cloudstack_network" "compilation_subnet" {
   display_text     = "compilation-subnet"
   network_offering = var.network_vpc_offering
   zone             = var.cloudstack_zone
-  acl_id = var.secure ? element(
-    concat(cloudstack_network_acl.bosh_subnet_sec_group.*.id, [""]),
-    0,
-  ) : cloudstack_network_acl.allow_all.id
 }
 
 resource "cloudstack_network" "control_plane" {
@@ -90,10 +82,6 @@ resource "cloudstack_network" "control_plane" {
   display_text     = "control-plane"
   network_offering = var.network_vpc_offering
   zone             = var.cloudstack_zone
-  acl_id = var.secure ? element(
-    concat(cloudstack_network_acl.control_plane_sec_group.*.id, [""]),
-    0,
-  ) : cloudstack_network_acl.allow_all.id
 }
 
 resource "cloudstack_network" "data_plane" {
@@ -103,10 +91,6 @@ resource "cloudstack_network" "data_plane" {
   display_text     = "data-plane"
   network_offering = var.network_vpc_offering
   zone             = var.cloudstack_zone
-  acl_id = var.secure ? element(
-    concat(cloudstack_network_acl.data_plane_sec_group.*.id, [""]),
-    0,
-  ) : cloudstack_network_acl.allow_all.id
 }
 
 resource "cloudstack_network" "data_plane_public" {
@@ -117,10 +101,6 @@ resource "cloudstack_network" "data_plane_public" {
   display_text     = "data-plane-public"
   network_offering = var.network_vpc_offering
   zone             = var.cloudstack_zone
-  acl_id = var.secure ? element(
-    concat(cloudstack_network_acl.data_plane_sec_group.*.id, [""]),
-    0,
-  ) : cloudstack_network_acl.allow_all.id
 }
 
 resource "cloudstack_ipaddress" "jumpbox_eip" {

@@ -65,7 +65,6 @@ var _ = Describe("InputGenerator", func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			Expect(inputs).To(Equal(map[string]interface{}{
-				"secure":              true,
 				"iso_segment":         true,
 				"env_id":              "some-env-id",
 				"cloudstack_endpoint": "http://my-cloudstack.com/client/api",
