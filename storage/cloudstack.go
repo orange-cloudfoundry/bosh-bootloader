@@ -12,6 +12,5 @@ type CloudStack struct {
 	ExternalIP         string `json:"-"`
 	NetworkVpcOffering string `json:"-"`
 	ComputeOffering    string `json:"-"`
-	Secure             bool   `json:"-"`
 	IsoSegment         bool   `json:"-"`
 }

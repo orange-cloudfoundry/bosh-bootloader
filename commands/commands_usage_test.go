@@ -64,7 +64,6 @@ var _ = Describe("Commands Usage", func() {
   --cloudstack-secret-access-key     CloudStack Secret Access Key     env: $BBL_CLOUDSTACK_SECRET_ACCESS_KEY
   --cloudstack-api-key               CloudStack Api Key               env: $BBL_CLOUDSTACK_API_KEY
   --cloudstack-zone                  CloudStack Zone                  env: $BBL_CLOUDSTACK_ZONE
-  --cloudstack-secure                CloudStack Activate sec group    env: $BBL_CLOUDSTACK_SECURE
   --cloudstack-iso-segment           CloudStack Activate iso segemnt  env: $BBL_CLOUDSTACK_ISO_SEGMENT
 
   Load Balancer options:

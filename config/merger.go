@@ -71,7 +71,6 @@ func (m Merger) updateCloudStackState(globalFlags GlobalFlags, state storage.Sta
 	copyFlagToState(globalFlags.CloudStackZone, &state.CloudStack.Zone)
 	copyFlagToState(globalFlags.CloudStackNetworkVpcOffering, &state.CloudStack.NetworkVpcOffering)
 	copyFlagToState(globalFlags.CloudStackComputeOffering, &state.CloudStack.ComputeOffering)
-	state.CloudStack.Secure = globalFlags.CloudStackSecure
 	state.CloudStack.IsoSegment = globalFlags.CloudStackIsoSegment
 
 	return state, nil

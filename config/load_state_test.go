@@ -1178,7 +1178,6 @@ var _ = Describe("LoadState", func() {
 							Expect(state.CloudStack.SecretAccessKey).To(Equal("some-secret-key"))
 							Expect(state.CloudStack.Zone).To(Equal("some-zone"))
 							Expect(state.CloudStack.Endpoint).To(Equal("http://my-cloudstack.com/client/api"))
-							Expect(state.CloudStack.Secure).To(BeTrue())
 							Expect(state.CloudStack.IsoSegment).To(BeTrue())
 						})
 
@@ -1218,7 +1217,6 @@ var _ = Describe("LoadState", func() {
 							Expect(state.CloudStack.SecretAccessKey).To(Equal("some-secret-key"))
 							Expect(state.CloudStack.Zone).To(Equal("some-zone"))
 							Expect(state.CloudStack.Endpoint).To(Equal("http://my-cloudstack.com/client/api"))
-							Expect(state.CloudStack.Secure).To(BeTrue())
 							Expect(state.CloudStack.IsoSegment).To(BeTrue())
 						})
 
@@ -1447,7 +1445,6 @@ var _ = Describe("LoadState", func() {
 						ApiKey:          "value",
 						SecretAccessKey: "value",
 						IsoSegment:      true,
-						Secure:          true,
 						Subnet:          "value",
 					},
 				},

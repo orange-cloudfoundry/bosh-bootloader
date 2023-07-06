@@ -58,28 +58,3 @@ output "cloudstack_endpoint" {
 output "dns" {
   value = var.dns
 }
-
-output "internal_subnet_cidr_mapping" {
-  value = {
-    (cloudstack_network.data_plane.name)    = cloudstack_network.data_plane.cidr,
-    (cloudstack_network.control_plane.name) = cloudstack_network.control_plane.cidr,
-    (cloudstack_network.bosh_subnet.name)   = cloudstack_network.bosh_subnet.cidr,
-    (element(concat(cloudstack_network.data_plane_public.*.name, [
-      ""]), 0)) = element(concat(cloudstack_network.data_plane_public.*.cidr, [
-    ""]), 0),
-    (cloudstack_network.compilation_subnet.name) = cloudstack_network.compilation_subnet.cidr,
-  }
-}
-
-output "internal_subnet_gw_mapping" {
-  value = {
-    (cloudstack_network.data_plane.name)    = cloudstack_network.data_plane.gateway,
-    (cloudstack_network.control_plane.name) = cloudstack_network.control_plane.gateway,
-    (cloudstack_network.bosh_subnet.name)   = cloudstack_network.bosh_subnet.gateway,
-    (element(concat(cloudstack_network.data_plane_public.*.name, [""]), 0)) = element(
-      concat(cloudstack_network.data_plane_public.*.gateway, [""]),
-      0,
-    ),
-    (cloudstack_network.compilation_subnet.name) = cloudstack_network.compilation_subnet.gateway,
-  }
-}

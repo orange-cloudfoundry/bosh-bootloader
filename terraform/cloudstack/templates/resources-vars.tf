@@ -37,10 +37,6 @@ variable "dns" {
   ]
 }
 
-variable "secure" {
-  default = false
-}
-
 variable "iso_segment" {
   default = false
 }

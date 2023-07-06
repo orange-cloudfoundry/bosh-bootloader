@@ -56,6 +56,5 @@ type GlobalFlags struct {
 	CloudStackZone               string `long:"cloudstack-zone"                   env:"BBL_CLOUDSTACK_ZONE"`
 	CloudStackNetworkVpcOffering string `long:"cloudstack-network-vpc-offering"   env:"BBL_CLOUDSTACK_NETWORK_VPC_OFFERING"`
 	CloudStackComputeOffering    string `long:"cloudstack-compute-offering"       env:"BBL_CLOUDSTACK_COMPUTE_OFFERING"`
-	CloudStackSecure             bool   `long:"cloudstack-secure"                 env:"BBL_CLOUDSTACK_SECURE"`
 	CloudStackIsoSegment         bool   `long:"cloudstack-iso-segment"            env:"BBL_CLOUDSTACK_ISO_SEGMENT"`
 }
