@@ -13,7 +13,7 @@ require (
 	github.com/cloudfoundry/multierror v0.0.0-20170123201326-dafed03eebc6
 	github.com/coreos/go-semver v0.3.0
 	github.com/genevieve/leftovers v0.55.1-0.20190805182303-e86fd74c0714
-	github.com/gobuffalo/packd v1.0.1
+	github.com/gobuffalo/packd v1.0.2
 	github.com/gobuffalo/packr/v2 v2.8.3
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/kr/pty v1.1.8
