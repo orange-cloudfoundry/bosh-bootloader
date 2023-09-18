@@ -181,7 +181,7 @@ github.com/genevieve/leftovers/vsphere
 # github.com/gobuffalo/logger v1.0.6
 ## explicit; go 1.13
 github.com/gobuffalo/logger
-# github.com/gobuffalo/packd v1.0.1
+# github.com/gobuffalo/packd v1.0.2
 ## explicit; go 1.13
 github.com/gobuffalo/packd
 github.com/gobuffalo/packd/internal/takeon/github.com/markbates/errx
