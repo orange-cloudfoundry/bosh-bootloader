@@ -8,6 +8,7 @@ import (
 	gcp "google.golang.org/api/compute/v1"
 )
 
+//go:generate faux --interface networksClient --output fakes/networks_client.go
 type networksClient interface {
 	ListNetworks() ([]*gcp.Network, error)
 	DeleteNetwork(network string) error
@@ -26,6 +27,7 @@ func NewNetworks(client networksClient, logger logger) Networks {
 }
 
 func (n Networks) List(filter string) ([]common.Deletable, error) {
+	n.logger.Debugln("Listing Networks...")
 	networks, err := n.client.ListNetworks()
 	if err != nil {
 		return nil, fmt.Errorf("List Networks: %s", err)

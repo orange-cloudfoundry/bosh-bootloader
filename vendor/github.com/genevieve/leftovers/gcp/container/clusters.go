@@ -14,8 +14,9 @@ type Clusters struct {
 	logger logger
 }
 
+//go:generate faux --interface clustersClient --output fakes/clusters_client.go
 type clustersClient interface {
-	ListClusters(zone string) (*gcpcontainer.ListClustersResponse, error)
+	ListClusters() (*gcpcontainer.ListClustersResponse, error)
 	DeleteCluster(zone, cluster string) error
 }
 
@@ -28,14 +29,12 @@ func NewClusters(client clustersClient, zones map[string]string, logger logger) 
 }
 
 func (c Clusters) List(filter string) ([]common.Deletable, error) {
-	clusters := []*gcpcontainer.Cluster{}
-	for _, zone := range c.zones {
-		resp, err := c.client.ListClusters(zone)
-		if err != nil {
-			return nil, fmt.Errorf("List Clusters for Zone %s: %s", zone, err)
-		}
-		clusters = append(clusters, resp.Clusters...)
+	c.logger.Debugf("Listing Clusters for all Zones...\n")
+	resp, err := c.client.ListClusters()
+	if err != nil {
+		return nil, fmt.Errorf("List Clusters for all Zones: %w", err)
 	}
+	clusters := resp.Clusters
 
 	deletables := []common.Deletable{}
 	for _, cluster := range clusters {

@@ -1,6 +1,8 @@
 package container
 
+//go:generate faux --interface logger --output fakes/logger.go
 type logger interface {
 	Printf(message string, a ...interface{})
-	PromptWithDetails(resourceType, resourceName string) bool
+	Debugf(message string, a ...interface{})
+	PromptWithDetails(resourceType, resourceName string) (proceed bool)
 }

@@ -8,6 +8,7 @@ import (
 	gcpcompute "google.golang.org/api/compute/v1"
 )
 
+//go:generate faux --interface instanceGroupManagersClient --output fakes/instance_group_managers_client.go
 type instanceGroupManagersClient interface {
 	ListInstanceGroupManagers(zone string) ([]*gcpcompute.InstanceGroupManager, error)
 	DeleteInstanceGroupManager(zone, instanceGroupManager string) error
@@ -30,6 +31,7 @@ func NewInstanceGroupManagers(client instanceGroupManagersClient, logger logger,
 func (i InstanceGroupManagers) List(filter string) ([]common.Deletable, error) {
 	managers := []*gcpcompute.InstanceGroupManager{}
 	for _, zone := range i.zones {
+		i.logger.Debugf("Listing Instance Group Managers for Zone %s...\n", zone)
 		l, err := i.client.ListInstanceGroupManagers(zone)
 		if err != nil {
 			return nil, fmt.Errorf("List Instance Group Managers for zone %s: %s", zone, err)

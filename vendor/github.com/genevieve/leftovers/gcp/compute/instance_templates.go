@@ -8,6 +8,7 @@ import (
 	gcpcompute "google.golang.org/api/compute/v1"
 )
 
+//go:generate faux --interface instanceTemplatesClient --output fakes/instance_templates_client.go
 type instanceTemplatesClient interface {
 	ListInstanceTemplates() ([]*gcpcompute.InstanceTemplate, error)
 	DeleteInstanceTemplate(template string) error
@@ -26,6 +27,7 @@ func NewInstanceTemplates(client instanceTemplatesClient, logger logger) Instanc
 }
 
 func (i InstanceTemplates) List(filter string) ([]common.Deletable, error) {
+	i.logger.Debugln("Listing Instance Templates...")
 	templates, err := i.client.ListInstanceTemplates()
 	if err != nil {
 		return nil, fmt.Errorf("List Instance Templates: %s", err)

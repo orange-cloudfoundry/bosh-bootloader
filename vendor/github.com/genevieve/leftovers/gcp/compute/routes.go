@@ -8,7 +8,9 @@ import (
 	gcpcompute "google.golang.org/api/compute/v1"
 )
 
+//go:generate faux --interface routesClient --output fakes/routes_client.go
 type routesClient interface {
+	GetNetworkName(url string) (name string)
 	ListRoutes() ([]*gcpcompute.Route, error)
 	DeleteRoute(route string) error
 }
@@ -26,6 +28,7 @@ func NewRoutes(client routesClient, logger logger) Routes {
 }
 
 func (r Routes) List(filter string) ([]common.Deletable, error) {
+	r.logger.Debugln("Listing Routes...")
 	routes, err := r.client.ListRoutes()
 	if err != nil {
 		return nil, fmt.Errorf("List Routes: %s", err)
@@ -33,9 +36,9 @@ func (r Routes) List(filter string) ([]common.Deletable, error) {
 
 	var resources []common.Deletable
 	for _, route := range routes {
-		resource := NewRoute(r.client, route.Name)
+		resource := NewRoute(r.client, route.Name, route.Network)
 
-		if !strings.Contains(route.Name, filter) || strings.Contains(route.Name, "default") {
+		if !strings.Contains(resource.Name(), filter) || strings.Contains(route.Name, "default") {
 			continue
 		}
 

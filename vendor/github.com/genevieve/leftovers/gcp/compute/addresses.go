@@ -8,6 +8,7 @@ import (
 	gcpcompute "google.golang.org/api/compute/v1"
 )
 
+//go:generate faux --interface addressesClient --output fakes/addresses_client.go
 type addressesClient interface {
 	ListAddresses(region string) ([]*gcpcompute.Address, error)
 	DeleteAddress(region, address string) error
@@ -30,6 +31,7 @@ func NewAddresses(client addressesClient, logger logger, regions map[string]stri
 func (a Addresses) List(filter string) ([]common.Deletable, error) {
 	addresses := []*gcpcompute.Address{}
 	for _, region := range a.regions {
+		a.logger.Debugf("Listing Addresses for Region %s...\n", region)
 		l, err := a.client.ListAddresses(region)
 		if err != nil {
 			return nil, fmt.Errorf("List Addresses for Region %s: %s", region, err)

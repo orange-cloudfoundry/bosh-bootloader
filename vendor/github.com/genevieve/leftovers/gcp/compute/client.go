@@ -2,6 +2,7 @@ package compute
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	gcpcompute "google.golang.org/api/compute/v1"
@@ -182,6 +183,10 @@ func (c client) ListDisks(zone string) ([]*gcpcompute.Disk, error) {
 	}
 
 	return list, nil
+}
+
+func (c client) SetDiskAutoDelete(zone, instance, disk string) error {
+	return c.wait(c.instances.SetDiskAutoDelete(c.project, zone, instance, true, disk))
 }
 
 func (c client) DeleteDisk(zone, disk string) error {
@@ -538,6 +543,20 @@ func (c client) ListRouters(region string) ([]*gcpcompute.Router, error) {
 
 func (c client) DeleteRouter(region, router string) error {
 	return c.wait(c.routers.Delete(c.project, region, router))
+}
+
+// GetNetworkName accepts any valid URL according to GCP and returns the name.
+// Valid URLs:
+// - https://www.googleapis.com/compute/v1/projects/myproject/global/networks/my-network
+// - projects/myproject/global/networks/my-network
+// - global/networks/default
+func (c client) GetNetworkName(url string) string {
+	a := strings.Split(url, "/networks/")
+	if len(a) > 1 {
+		name := a[1]
+		return name
+	}
+	return ""
 }
 
 func (c client) ListNetworks() ([]*gcpcompute.Network, error) {

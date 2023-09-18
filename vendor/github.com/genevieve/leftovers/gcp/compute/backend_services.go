@@ -8,6 +8,7 @@ import (
 	gcpcompute "google.golang.org/api/compute/v1"
 )
 
+//go:generate faux --interface backendServicesClient --output fakes/backend_services_client.go
 type backendServicesClient interface {
 	ListBackendServices() ([]*gcpcompute.BackendService, error)
 	DeleteBackendService(backendService string) error
@@ -26,6 +27,7 @@ func NewBackendServices(client backendServicesClient, logger logger) BackendServ
 }
 
 func (b BackendServices) List(filter string) ([]common.Deletable, error) {
+	b.logger.Debugln("Listing Backend Services...")
 	backendServices, err := b.client.ListBackendServices()
 	if err != nil {
 		return nil, fmt.Errorf("List Backend Services: %s", err)
