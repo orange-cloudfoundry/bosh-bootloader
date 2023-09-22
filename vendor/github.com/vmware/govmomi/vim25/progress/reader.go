@@ -26,16 +26,19 @@ import (
 )
 
 type readerReport struct {
-	t time.Time
+	pos  int64   // Keep first to ensure 64-bit alignment
+	size int64   // Keep first to ensure 64-bit alignment
+	bps  *uint64 // Keep first to ensure 64-bit alignment
 
-	pos  int64
-	size int64
-	bps  *uint64
+	t time.Time
 
 	err error
 }
 
 func (r readerReport) Percentage() float32 {
+	if r.size <= 0 {
+		return 0
+	}
 	return 100.0 * float32(r.pos) / float32(r.size)
 }
 
@@ -158,7 +161,7 @@ func bpsLoop(ch <-chan Report, dst *uint64) {
 
 		// Setup timer for front of list to become stale.
 		if e := l.Front(); e != nil {
-			dt := time.Second - time.Now().Sub(e.Value.(readerReport).t)
+			dt := time.Second - time.Since(e.Value.(readerReport).t)
 			tch = time.After(dt)
 		}
 

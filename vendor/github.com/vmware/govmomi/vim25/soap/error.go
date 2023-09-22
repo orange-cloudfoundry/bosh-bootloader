@@ -17,6 +17,7 @@ limitations under the License.
 package soap
 
 import (
+	"encoding/json"
 	"fmt"
 	"reflect"
 
@@ -39,10 +40,23 @@ func (s soapFaultError) Error() string {
 	msg := s.fault.String
 
 	if msg == "" {
-		msg = reflect.TypeOf(s.fault.Detail.Fault).Name()
+		if s.fault.Detail.Fault == nil {
+			msg = "unknown fault"
+		} else {
+			msg = reflect.TypeOf(s.fault.Detail.Fault).Name()
+		}
 	}
 
 	return fmt.Sprintf("%s: %s", s.fault.Code, msg)
+}
+
+func (s soapFaultError) MarshalJSON() ([]byte, error) {
+	out := struct {
+		Fault *Fault
+	}{
+		Fault: s.fault,
+	}
+	return json.Marshal(out)
 }
 
 type vimFaultError struct {

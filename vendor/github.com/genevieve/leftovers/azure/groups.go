@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Azure/azure-sdk-for-go/arm/resources/resources"
-	"github.com/Azure/go-autorest/autorest"
 	"github.com/genevieve/leftovers/common"
 )
 
+//go:generate faux --interface groupsClient --output fakes/groups_client.go
 type groupsClient interface {
-	List(query string, top *int32) (resources.GroupListResult, error)
-	Delete(name string, channel <-chan struct{}) (<-chan autorest.Response, <-chan error)
+	ListGroups() (groups []string, err error)
+	DeleteGroup(name string) error
 }
 
 type Groups struct {
@@ -27,14 +26,15 @@ func NewGroups(client groupsClient, logger logger) Groups {
 }
 
 func (g Groups) List(filter string) ([]common.Deletable, error) {
-	groups, err := g.client.List("", nil)
+	g.logger.Debugln("Listing Resource Groups...")
+	groups, err := g.client.ListGroups()
 	if err != nil {
-		return nil, fmt.Errorf("Listing Resource Groups: %s", err)
+		return []common.Deletable{}, fmt.Errorf("Listing Resource Groups: %s", err)
 	}
 
 	var resources []common.Deletable
-	for _, group := range *groups.Value {
-		r := NewGroup(g.client, group.Name)
+	for _, group := range groups {
+		r := NewGroup(g.client, group)
 
 		if !strings.Contains(r.Name(), filter) {
 			continue

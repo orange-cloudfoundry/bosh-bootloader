@@ -8,6 +8,7 @@ import (
 	gcpcompute "google.golang.org/api/compute/v1"
 )
 
+//go:generate faux --interface imagesClient --output fakes/images_client.go
 type imagesClient interface {
 	ListImages() ([]*gcpcompute.Image, error)
 	DeleteImage(image string) error
@@ -26,6 +27,8 @@ func NewImages(client imagesClient, logger logger) Images {
 }
 
 func (i Images) List(filter string) ([]common.Deletable, error) {
+	i.logger.Debugln("Listing Images...")
+
 	images, err := i.client.ListImages()
 	if err != nil {
 		return nil, fmt.Errorf("List Images: %s", err)

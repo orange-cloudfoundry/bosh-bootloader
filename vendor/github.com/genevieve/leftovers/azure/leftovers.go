@@ -4,10 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/Azure/azure-sdk-for-go/arm/resources/resources"
-	"github.com/Azure/go-autorest/autorest"
-	"github.com/Azure/go-autorest/autorest/adal"
-	azurelib "github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
+	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/network/armnetwork"
+	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/resources/armresources"
 	"github.com/fatih/color"
 	"github.com/genevieve/leftovers/common"
 	multierror "github.com/hashicorp/go-multierror"
@@ -58,6 +57,7 @@ func (l Leftovers) Delete(filter string) error {
 		result     *multierror.Error
 	)
 
+	// TODO: If they say no to the Resource Group, prompt for individual resources.
 	deletables, err := l.resource.List(filter)
 	if err != nil {
 		l.logger.Println(color.YellowString(err.Error()))
@@ -108,21 +108,25 @@ func NewLeftovers(logger logger, clientId, clientSecret, subscriptionId, tenantI
 		return Leftovers{}, errors.New("Missing tenant id.")
 	}
 
-	oauthConfig, err := adal.NewOAuthConfig(azurelib.PublicCloud.ActiveDirectoryEndpoint, tenantId)
-	if err != nil {
-		return Leftovers{}, fmt.Errorf("Creating oauth config: %s\n", err)
-	}
-
-	servicePrincipalToken, err := adal.NewServicePrincipalToken(*oauthConfig, clientId, clientSecret, azurelib.PublicCloud.ResourceManagerEndpoint)
+	credential, err := azidentity.NewClientSecretCredential(tenantId, clientId, clientSecret, nil)
 	if err != nil {
 		return Leftovers{}, fmt.Errorf("Creating service principal token: %s\n", err)
 	}
 
-	gc := resources.NewGroupsClient(subscriptionId)
-	gc.ManagementClient.Authorizer = autorest.NewBearerAuthorizer(servicePrincipalToken)
+	rg, err := armresources.NewResourceGroupsClient(subscriptionId, credential, nil)
+	if err != nil {
+		return Leftovers{}, fmt.Errorf("Creating resource groups client: %s\n", err)
+	}
+
+	sg, err := armnetwork.NewApplicationSecurityGroupsClient(subscriptionId, credential, nil)
+	if err != nil {
+		return Leftovers{}, fmt.Errorf("Creating application security groups client: %s\n", err)
+	}
+
+	client := NewClient(*rg, *sg)
 
 	return Leftovers{
 		logger:   logger,
-		resource: NewGroups(gc, logger),
+		resource: NewGroups(client, logger),
 	}, nil
 }

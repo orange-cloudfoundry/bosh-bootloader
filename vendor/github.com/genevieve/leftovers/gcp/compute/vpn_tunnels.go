@@ -8,6 +8,7 @@ import (
 	gcpcompute "google.golang.org/api/compute/v1"
 )
 
+//go:generate faux --interface vpnTunnelsClient --output fakes/vpn_tunnels_client.go
 type vpnTunnelsClient interface {
 	ListVpnTunnels(region string) ([]*gcpcompute.VpnTunnel, error)
 	DeleteVpnTunnel(region, vpnTunnel string) error
@@ -31,6 +32,7 @@ func (v VpnTunnels) List(filter string) ([]common.Deletable, error) {
 	tunnels := []*gcpcompute.VpnTunnel{}
 
 	for _, region := range v.regions {
+		v.logger.Debugf("Listing Vpn Tunnels for Region %s...\n", region)
 		l, err := v.client.ListVpnTunnels(region)
 		if err != nil {
 			return nil, fmt.Errorf("List Vpn Tunnels: %s", err)

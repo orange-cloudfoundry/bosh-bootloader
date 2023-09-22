@@ -8,6 +8,7 @@ import (
 	gcpcompute "google.golang.org/api/compute/v1"
 )
 
+//go:generate faux --interface targetHttpProxiesClient --output fakes/target_http_proxies_client.go
 type targetHttpProxiesClient interface {
 	ListTargetHttpProxies() (*gcpcompute.TargetHttpProxyList, error)
 	DeleteTargetHttpProxy(targetHttpProxy string) error
@@ -26,6 +27,7 @@ func NewTargetHttpProxies(client targetHttpProxiesClient, logger logger) TargetH
 }
 
 func (t TargetHttpProxies) List(filter string) ([]common.Deletable, error) {
+	t.logger.Debugln("Listing Target Http Proxies...")
 	targetHttpProxies, err := t.client.ListTargetHttpProxies()
 	if err != nil {
 		return nil, fmt.Errorf("List Target Http Proxies: %s", err)

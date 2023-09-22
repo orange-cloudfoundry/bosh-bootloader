@@ -8,6 +8,7 @@ import (
 	gcpstorage "google.golang.org/api/storage/v1"
 )
 
+//go:generate faux --interface bucketsClient --output fakes/buckets_client.go
 type bucketsClient interface {
 	ListBuckets() (*gcpstorage.Buckets, error)
 	DeleteBucket(bucket string) error
@@ -29,6 +30,7 @@ func NewBuckets(client bucketsClient, logger logger) Buckets {
 }
 
 func (i Buckets) List(filter string) ([]common.Deletable, error) {
+	i.logger.Debugln("Listing Storage Buckets...")
 	buckets, err := i.client.ListBuckets()
 	if err != nil {
 		return nil, fmt.Errorf("List Storage Buckets: %s", err)

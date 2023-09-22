@@ -8,9 +8,12 @@ import (
 	"github.com/genevieve/leftovers/common"
 )
 
+//go:generate faux --interface loadBalancersClient --output fakes/load_balancers_client.go
 type loadBalancersClient interface {
 	DescribeLoadBalancers(*awselbv2.DescribeLoadBalancersInput) (*awselbv2.DescribeLoadBalancersOutput, error)
 	DeleteLoadBalancer(*awselbv2.DeleteLoadBalancerInput) (*awselbv2.DeleteLoadBalancerOutput, error)
+
+	DescribeTags(*awselbv2.DescribeTagsInput) (*awselbv2.DescribeTagsOutput, error)
 }
 
 type LoadBalancers struct {

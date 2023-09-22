@@ -8,6 +8,7 @@ import (
 	gcpcompute "google.golang.org/api/compute/v1"
 )
 
+//go:generate faux --interface sslCertificatesClient --output fakes/ssl_certificates_client.go
 type sslCertificatesClient interface {
 	ListSslCertificates() ([]*gcpcompute.SslCertificate, error)
 	DeleteSslCertificate(certificate string) error
@@ -26,6 +27,7 @@ func NewSslCertificates(client sslCertificatesClient, logger logger) SslCertific
 }
 
 func (s SslCertificates) List(filter string) ([]common.Deletable, error) {
+	s.logger.Debugln("Listing SSL Certificates...")
 	sslCertificates, err := s.client.ListSslCertificates()
 	if err != nil {
 		return nil, fmt.Errorf("List Ssl Certificates: %s", err)

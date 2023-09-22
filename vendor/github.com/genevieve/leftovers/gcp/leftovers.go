@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/genevieve/leftovers/gcp/artifacts"
 	"io/ioutil"
+	"strconv"
 
 	homedir "github.com/mitchellh/go-homedir"
 
@@ -19,6 +21,7 @@ import (
 	"github.com/genevieve/leftovers/gcp/sql"
 	"github.com/genevieve/leftovers/gcp/storage"
 	"golang.org/x/oauth2/google"
+	gcpartifact "google.golang.org/api/artifactregistry/v1"
 	gcpcrm "google.golang.org/api/cloudresourcemanager/v1"
 	gcpcompute "google.golang.org/api/compute/v1"
 	gcpcontainer "google.golang.org/api/container/v1"
@@ -103,6 +106,12 @@ func NewLeftovers(logger logger, keyPath string) (Leftovers, error) {
 		return Leftovers{}, err
 	}
 
+	project, err := crmService.Projects.Get(p.ProjectId).Do()
+	if err != nil {
+		return Leftovers{}, err
+	}
+	projectNumber := strconv.FormatInt(project.ProjectNumber, 10)
+
 	iamService, err := gcpiam.New(httpClient)
 	if err != nil {
 		return Leftovers{}, err
@@ -114,6 +123,12 @@ func NewLeftovers(logger logger, keyPath string) (Leftovers, error) {
 		return Leftovers{}, err
 	}
 	containerClient := container.NewClient(p.ProjectId, containerService, logger)
+
+	artifactService, err := gcpartifact.New(httpClient)
+	if err != nil {
+		return Leftovers{}, err
+	}
+	artifactClient := artifacts.NewClient(p.ProjectId, artifactService, logger)
 
 	regions, err := client.ListRegions()
 	if err != nil {
@@ -155,11 +170,12 @@ func NewLeftovers(logger logger, keyPath string) (Leftovers, error) {
 			compute.NewNetworks(client, logger),
 			compute.NewAddresses(client, logger, regions),
 			compute.NewSslCertificates(client, logger),
-			iam.NewServiceAccounts(iamClient, logger),
-			dns.NewManagedZones(dnsClient, dns.NewRecordSets(dnsClient), logger),
+			iam.NewServiceAccounts(iamClient, p.ProjectId, projectNumber, logger),
+			dns.NewManagedZones(dnsClient, dns.NewRecordSets(dnsClient, logger), logger),
 			sql.NewInstances(sqlClient, logger),
 			storage.NewBuckets(storageClient, logger),
 			container.NewClusters(containerClient, zones, logger),
+			artifacts.NewRepositories(artifactClient, logger, regions),
 		},
 	}, nil
 }

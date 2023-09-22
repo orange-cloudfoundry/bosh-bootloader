@@ -8,6 +8,7 @@ import (
 	gcpcompute "google.golang.org/api/compute/v1"
 )
 
+//go:generate faux --interface globalForwardingRulesClient --output fakes/global_forwarding_rules_client.go
 type globalForwardingRulesClient interface {
 	ListGlobalForwardingRules() ([]*gcpcompute.ForwardingRule, error)
 	DeleteGlobalForwardingRule(rule string) error
@@ -26,6 +27,7 @@ func NewGlobalForwardingRules(client globalForwardingRulesClient, logger logger)
 }
 
 func (g GlobalForwardingRules) List(filter string) ([]common.Deletable, error) {
+	g.logger.Debugln("Listing Global Forwarding Rules...")
 	rules, err := g.client.ListGlobalForwardingRules()
 	if err != nil {
 		return nil, fmt.Errorf("List Global Forwarding Rules: %s", err)

@@ -8,6 +8,7 @@ import (
 	gcpcompute "google.golang.org/api/compute/v1"
 )
 
+//go:generate faux --interface disksClient --output fakes/disks_client.go
 type disksClient interface {
 	ListDisks(zone string) ([]*gcpcompute.Disk, error)
 	DeleteDisk(zone, disk string) error
@@ -30,6 +31,7 @@ func NewDisks(client disksClient, logger logger, zones map[string]string) Disks 
 func (d Disks) List(filter string) ([]common.Deletable, error) {
 	disks := []*gcpcompute.Disk{}
 	for _, zone := range d.zones {
+		d.logger.Debugf("Listing Disks for Zone %s...\n", zone)
 		l, err := d.client.ListDisks(zone)
 		if err != nil {
 			return nil, fmt.Errorf("List Disks for zone %s: %s", zone, err)
