@@ -123,7 +123,7 @@ github.com/AzureAD/microsoft-authentication-library-for-go/apps/public
 # github.com/araddon/gou v0.0.0-20180509225133-7db4be5742ae
 ## explicit
 github.com/araddon/gou
-# github.com/aws/aws-sdk-go v1.45.24
+# github.com/aws/aws-sdk-go v1.45.25
 ## explicit; go 1.11
 github.com/aws/aws-sdk-go/aws
 github.com/aws/aws-sdk-go/aws/arn
