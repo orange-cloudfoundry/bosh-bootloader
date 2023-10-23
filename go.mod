@@ -26,7 +26,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/spf13/afero v1.10.0
 	golang.org/x/crypto v0.14.0
-	golang.org/x/oauth2 v0.12.0
+	golang.org/x/oauth2 v0.13.0
 	google.golang.org/api v0.143.0
 	gopkg.in/yaml.v2 v2.4.0
 )
