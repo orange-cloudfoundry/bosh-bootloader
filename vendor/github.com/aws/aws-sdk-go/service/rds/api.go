@@ -362,6 +362,9 @@ func (c *RDS) AddTagsToResourceRequest(input *AddTagsToResourceInput) (req *requ
 //   - ErrCodeBlueGreenDeploymentNotFoundFault "BlueGreenDeploymentNotFoundFault"
 //     BlueGreenDeploymentIdentifier doesn't refer to an existing blue/green deployment.
 //
+//   - ErrCodeIntegrationNotFoundFault "IntegrationNotFoundFault"
+//     The specified integration could not be found.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddTagsToResource
 func (c *RDS) AddTagsToResource(input *AddTagsToResourceInput) (*AddTagsToResourceOutput, error) {
 	req, out := c.AddTagsToResourceRequest(input)
@@ -3067,6 +3070,107 @@ func (c *RDS) CreateGlobalClusterWithContext(ctx aws.Context, input *CreateGloba
 	return out, req.Send()
 }
 
+const opCreateIntegration = "CreateIntegration"
+
+// CreateIntegrationRequest generates a "aws/request.Request" representing the
+// client's request for the CreateIntegration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateIntegration for more information on using the CreateIntegration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the CreateIntegrationRequest method.
+//	req, resp := client.CreateIntegrationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateIntegration
+func (c *RDS) CreateIntegrationRequest(input *CreateIntegrationInput) (req *request.Request, output *CreateIntegrationOutput) {
+	op := &request.Operation{
+		Name:       opCreateIntegration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateIntegrationInput{}
+	}
+
+	output = &CreateIntegrationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateIntegration API operation for Amazon Relational Database Service.
+//
+// Creates a zero-ETL integration with Amazon Redshift. For more information,
+// see Working with Amazon Aurora zero-ETL integrations with Amazon Redshift
+// (https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/zero-etl.html)
+// in the Amazon Aurora User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation CreateIntegration for usage and error information.
+//
+// Returned Error Codes:
+//
+//   - ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
+//     DBClusterIdentifier doesn't refer to an existing DB cluster.
+//
+//   - ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
+//     DBInstanceIdentifier doesn't refer to an existing DB instance.
+//
+//   - ErrCodeIntegrationAlreadyExistsFault "IntegrationAlreadyExistsFault"
+//     The integration you are trying to create already exists.
+//
+//   - ErrCodeIntegrationQuotaExceededFault "IntegrationQuotaExceededFault"
+//     You can't crate any more zero-ETL integrations because the quota has been
+//     reached.
+//
+//   - ErrCodeKMSKeyNotAccessibleFault "KMSKeyNotAccessibleFault"
+//     An error occurred accessing an Amazon Web Services KMS key.
+//
+//   - ErrCodeIntegrationConflictOperationFault "IntegrationConflictOperationFault"
+//     A conflicting conditional operation is currently in progress against this
+//     resource. Typically occurs when there are multiple requests being made to
+//     the same resource at the same time, and these requests conflict with each
+//     other.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateIntegration
+func (c *RDS) CreateIntegration(input *CreateIntegrationInput) (*CreateIntegrationOutput, error) {
+	req, out := c.CreateIntegrationRequest(input)
+	return out, req.Send()
+}
+
+// CreateIntegrationWithContext is the same as CreateIntegration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateIntegration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) CreateIntegrationWithContext(ctx aws.Context, input *CreateIntegrationInput, opts ...request.Option) (*CreateIntegrationOutput, error) {
+	req, out := c.CreateIntegrationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateOptionGroup = "CreateOptionGroup"
 
 // CreateOptionGroupRequest generates a "aws/request.Request" representing the
@@ -4701,6 +4805,96 @@ func (c *RDS) DeleteGlobalCluster(input *DeleteGlobalClusterInput) (*DeleteGloba
 // for more information on using Contexts.
 func (c *RDS) DeleteGlobalClusterWithContext(ctx aws.Context, input *DeleteGlobalClusterInput, opts ...request.Option) (*DeleteGlobalClusterOutput, error) {
 	req, out := c.DeleteGlobalClusterRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteIntegration = "DeleteIntegration"
+
+// DeleteIntegrationRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteIntegration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteIntegration for more information on using the DeleteIntegration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DeleteIntegrationRequest method.
+//	req, resp := client.DeleteIntegrationRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteIntegration
+func (c *RDS) DeleteIntegrationRequest(input *DeleteIntegrationInput) (req *request.Request, output *DeleteIntegrationOutput) {
+	op := &request.Operation{
+		Name:       opDeleteIntegration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteIntegrationInput{}
+	}
+
+	output = &DeleteIntegrationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteIntegration API operation for Amazon Relational Database Service.
+//
+// Deletes a zero-ETL integration with Amazon Redshift. For more information,
+// see Deleting Amazon Aurora zero-ETL integrations with Amazon Redshift (https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/zero-etl.deleting.html)
+// in the Amazon Aurora User Guide
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation DeleteIntegration for usage and error information.
+//
+// Returned Error Codes:
+//
+//   - ErrCodeIntegrationNotFoundFault "IntegrationNotFoundFault"
+//     The specified integration could not be found.
+//
+//   - ErrCodeIntegrationConflictOperationFault "IntegrationConflictOperationFault"
+//     A conflicting conditional operation is currently in progress against this
+//     resource. Typically occurs when there are multiple requests being made to
+//     the same resource at the same time, and these requests conflict with each
+//     other.
+//
+//   - ErrCodeInvalidIntegrationStateFault "InvalidIntegrationStateFault"
+//     The integration is in an invalid state and can't perform the requested operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteIntegration
+func (c *RDS) DeleteIntegration(input *DeleteIntegrationInput) (*DeleteIntegrationOutput, error) {
+	req, out := c.DeleteIntegrationRequest(input)
+	return out, req.Send()
+}
+
+// DeleteIntegrationWithContext is the same as DeleteIntegration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteIntegration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) DeleteIntegrationWithContext(ctx aws.Context, input *DeleteIntegrationInput, opts ...request.Option) (*DeleteIntegrationOutput, error) {
+	req, out := c.DeleteIntegrationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -9072,6 +9266,144 @@ func (c *RDS) DescribeGlobalClustersPagesWithContext(ctx aws.Context, input *Des
 	return p.Err()
 }
 
+const opDescribeIntegrations = "DescribeIntegrations"
+
+// DescribeIntegrationsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeIntegrations operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeIntegrations for more information on using the DescribeIntegrations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DescribeIntegrationsRequest method.
+//	req, resp := client.DescribeIntegrationsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeIntegrations
+func (c *RDS) DescribeIntegrationsRequest(input *DescribeIntegrationsInput) (req *request.Request, output *DescribeIntegrationsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeIntegrations,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &DescribeIntegrationsInput{}
+	}
+
+	output = &DescribeIntegrationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeIntegrations API operation for Amazon Relational Database Service.
+//
+// Describe one or more zero-ETL integration with Amazon Redshift. For more
+// information, see Viewing and monitoring Amazon Aurora zero-ETL integrations
+// with Amazon Redshift (https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/zero-etl.describingmonitoring.html)
+// in the Amazon Aurora User Guide
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation DescribeIntegrations for usage and error information.
+//
+// Returned Error Codes:
+//   - ErrCodeIntegrationNotFoundFault "IntegrationNotFoundFault"
+//     The specified integration could not be found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeIntegrations
+func (c *RDS) DescribeIntegrations(input *DescribeIntegrationsInput) (*DescribeIntegrationsOutput, error) {
+	req, out := c.DescribeIntegrationsRequest(input)
+	return out, req.Send()
+}
+
+// DescribeIntegrationsWithContext is the same as DescribeIntegrations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeIntegrations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) DescribeIntegrationsWithContext(ctx aws.Context, input *DescribeIntegrationsInput, opts ...request.Option) (*DescribeIntegrationsOutput, error) {
+	req, out := c.DescribeIntegrationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// DescribeIntegrationsPages iterates over the pages of a DescribeIntegrations operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeIntegrations method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a DescribeIntegrations operation.
+//	pageNum := 0
+//	err := client.DescribeIntegrationsPages(params,
+//	    func(page *rds.DescribeIntegrationsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *RDS) DescribeIntegrationsPages(input *DescribeIntegrationsInput, fn func(*DescribeIntegrationsOutput, bool) bool) error {
+	return c.DescribeIntegrationsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeIntegrationsPagesWithContext same as DescribeIntegrationsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) DescribeIntegrationsPagesWithContext(ctx aws.Context, input *DescribeIntegrationsInput, fn func(*DescribeIntegrationsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeIntegrationsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeIntegrationsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeIntegrationsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opDescribeOptionGroupOptions = "DescribeOptionGroupOptions"
 
 // DescribeOptionGroupOptionsRequest generates a "aws/request.Request" representing the
@@ -10560,6 +10892,9 @@ func (c *RDS) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *
 //
 //   - ErrCodeBlueGreenDeploymentNotFoundFault "BlueGreenDeploymentNotFoundFault"
 //     BlueGreenDeploymentIdentifier doesn't refer to an existing blue/green deployment.
+//
+//   - ErrCodeIntegrationNotFoundFault "IntegrationNotFoundFault"
+//     The specified integration could not be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ListTagsForResource
 func (c *RDS) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
@@ -13496,6 +13831,9 @@ func (c *RDS) RemoveTagsFromResourceRequest(input *RemoveTagsFromResourceInput) 
 //
 //   - ErrCodeBlueGreenDeploymentNotFoundFault "BlueGreenDeploymentNotFoundFault"
 //     BlueGreenDeploymentIdentifier doesn't refer to an existing blue/green deployment.
+//
+//   - ErrCodeIntegrationNotFoundFault "IntegrationNotFoundFault"
+//     The specified integration could not be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveTagsFromResource
 func (c *RDS) RemoveTagsFromResource(input *RemoveTagsFromResourceInput) (*RemoveTagsFromResourceOutput, error) {
@@ -17770,6 +18108,9 @@ type ClusterPendingModifiedValues struct {
 	// these log types are in the process of being activated or deactivated.
 	PendingCloudwatchLogsExports *PendingCloudwatchLogsExports `type:"structure"`
 
+	// Reserved for future use.
+	RdsCustomClusterConfiguration *RdsCustomClusterConfiguration `type:"structure"`
+
 	// The storage type for the DB cluster.
 	StorageType *string `type:"string"`
 }
@@ -17837,6 +18178,12 @@ func (s *ClusterPendingModifiedValues) SetMasterUserPassword(v string) *ClusterP
 // SetPendingCloudwatchLogsExports sets the PendingCloudwatchLogsExports field's value.
 func (s *ClusterPendingModifiedValues) SetPendingCloudwatchLogsExports(v *PendingCloudwatchLogsExports) *ClusterPendingModifiedValues {
 	s.PendingCloudwatchLogsExports = v
+	return s
+}
+
+// SetRdsCustomClusterConfiguration sets the RdsCustomClusterConfiguration field's value.
+func (s *ClusterPendingModifiedValues) SetRdsCustomClusterConfiguration(v *RdsCustomClusterConfiguration) *ClusterPendingModifiedValues {
+	s.RdsCustomClusterConfiguration = v
 	return s
 }
 
@@ -19024,6 +19371,9 @@ type CreateBlueGreenDeploymentInput struct {
 	// from the one associated with the source DB cluster.
 	TargetDBClusterParameterGroupName *string `min:"1" type:"string"`
 
+	// Specify the DB instance class for the databases in the green environment.
+	TargetDBInstanceClass *string `min:"5" type:"string"`
+
 	// The DB parameter group associated with the DB instance in the green environment.
 	//
 	// To test parameter changes, specify a DB parameter group that is different
@@ -19034,6 +19384,12 @@ type CreateBlueGreenDeploymentInput struct {
 	//
 	// Specify the engine version to upgrade to in the green environment.
 	TargetEngineVersion *string `min:"1" type:"string"`
+
+	// Whether to upgrade the storage file system configuration on the green database.
+	// This option migrates the green DB instance from the older 32-bit file system
+	// to the preferred configuration. For more information, see Upgrading the storage
+	// file system for a DB instance (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIOPS.StorageTypes.html#USER_PIOPS.UpgradeFileSystem).
+	UpgradeTargetStorageConfig *bool `type:"boolean"`
 }
 
 // String returns the string representation.
@@ -19072,6 +19428,9 @@ func (s *CreateBlueGreenDeploymentInput) Validate() error {
 	if s.TargetDBClusterParameterGroupName != nil && len(*s.TargetDBClusterParameterGroupName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("TargetDBClusterParameterGroupName", 1))
 	}
+	if s.TargetDBInstanceClass != nil && len(*s.TargetDBInstanceClass) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("TargetDBInstanceClass", 5))
+	}
 	if s.TargetDBParameterGroupName != nil && len(*s.TargetDBParameterGroupName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("TargetDBParameterGroupName", 1))
 	}
@@ -19109,6 +19468,12 @@ func (s *CreateBlueGreenDeploymentInput) SetTargetDBClusterParameterGroupName(v 
 	return s
 }
 
+// SetTargetDBInstanceClass sets the TargetDBInstanceClass field's value.
+func (s *CreateBlueGreenDeploymentInput) SetTargetDBInstanceClass(v string) *CreateBlueGreenDeploymentInput {
+	s.TargetDBInstanceClass = &v
+	return s
+}
+
 // SetTargetDBParameterGroupName sets the TargetDBParameterGroupName field's value.
 func (s *CreateBlueGreenDeploymentInput) SetTargetDBParameterGroupName(v string) *CreateBlueGreenDeploymentInput {
 	s.TargetDBParameterGroupName = &v
@@ -19118,6 +19483,12 @@ func (s *CreateBlueGreenDeploymentInput) SetTargetDBParameterGroupName(v string)
 // SetTargetEngineVersion sets the TargetEngineVersion field's value.
 func (s *CreateBlueGreenDeploymentInput) SetTargetEngineVersion(v string) *CreateBlueGreenDeploymentInput {
 	s.TargetEngineVersion = &v
+	return s
+}
+
+// SetUpgradeTargetStorageConfig sets the UpgradeTargetStorageConfig field's value.
+func (s *CreateBlueGreenDeploymentInput) SetUpgradeTargetStorageConfig(v bool) *CreateBlueGreenDeploymentInput {
+	s.UpgradeTargetStorageConfig = &v
 	return s
 }
 
@@ -19497,6 +19868,10 @@ type CreateCustomDBEngineVersionOutput struct {
 	// engine version.
 	SupportsGlobalDatabases *bool `type:"boolean"`
 
+	// Indicates whether the DB engine version supports Aurora zero-ETL integrations
+	// with Amazon Redshift.
+	SupportsIntegrations *bool `type:"boolean"`
+
 	// Indicates whether the DB engine version supports forwarding write operations
 	// from reader DB instances to the writer DB instance in the DB cluster. By
 	// default, write operations aren't allowed on reader DB instances.
@@ -19695,6 +20070,12 @@ func (s *CreateCustomDBEngineVersionOutput) SetSupportsCertificateRotationWithou
 // SetSupportsGlobalDatabases sets the SupportsGlobalDatabases field's value.
 func (s *CreateCustomDBEngineVersionOutput) SetSupportsGlobalDatabases(v bool) *CreateCustomDBEngineVersionOutput {
 	s.SupportsGlobalDatabases = &v
+	return s
+}
+
+// SetSupportsIntegrations sets the SupportsIntegrations field's value.
+func (s *CreateCustomDBEngineVersionOutput) SetSupportsIntegrations(v bool) *CreateCustomDBEngineVersionOutput {
+	s.SupportsIntegrations = &v
 	return s
 }
 
@@ -20600,6 +20981,9 @@ type CreateDBClusterInput struct {
 	//    to it, the DB cluster is public.
 	PubliclyAccessible *bool `type:"boolean"`
 
+	// Reserved for future use.
+	RdsCustomClusterConfiguration *RdsCustomClusterConfiguration `type:"structure"`
+
 	// The Amazon Resource Name (ARN) of the source DB instance or DB cluster if
 	// this DB cluster is created as a read replica.
 	//
@@ -20965,6 +21349,12 @@ func (s *CreateDBClusterInput) SetPreferredMaintenanceWindow(v string) *CreateDB
 // SetPubliclyAccessible sets the PubliclyAccessible field's value.
 func (s *CreateDBClusterInput) SetPubliclyAccessible(v bool) *CreateDBClusterInput {
 	s.PubliclyAccessible = &v
+	return s
+}
+
+// SetRdsCustomClusterConfiguration sets the RdsCustomClusterConfiguration field's value.
+func (s *CreateDBClusterInput) SetRdsCustomClusterConfiguration(v *RdsCustomClusterConfiguration) *CreateDBClusterInput {
+	s.RdsCustomClusterConfiguration = v
 	return s
 }
 
@@ -23345,6 +23735,11 @@ type CreateDBInstanceReadReplicaInput struct {
 	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
+	// Whether to upgrade the storage file system configuration on the read replica.
+	// This option migrates the read replica from the old storage file system layout
+	// to the preferred layout.
+	UpgradeStorageConfig *bool `type:"boolean"`
+
 	// Specifies whether the DB instance class of the DB instance uses its default
 	// processor features.
 	//
@@ -23645,6 +24040,12 @@ func (s *CreateDBInstanceReadReplicaInput) SetStorageType(v string) *CreateDBIns
 // SetTags sets the Tags field's value.
 func (s *CreateDBInstanceReadReplicaInput) SetTags(v []*Tag) *CreateDBInstanceReadReplicaInput {
 	s.Tags = v
+	return s
+}
+
+// SetUpgradeStorageConfig sets the UpgradeStorageConfig field's value.
+func (s *CreateDBInstanceReadReplicaInput) SetUpgradeStorageConfig(v bool) *CreateDBInstanceReadReplicaInput {
+	s.UpgradeStorageConfig = &v
 	return s
 }
 
@@ -24913,6 +25314,247 @@ func (s *CreateGlobalClusterOutput) SetGlobalCluster(v *GlobalCluster) *CreateGl
 	return s
 }
 
+type CreateIntegrationInput struct {
+	_ struct{} `type:"structure"`
+
+	// An optional set of non-secret key–value pairs that contains additional
+	// contextual information about the data. For more information, see Encryption
+	// context (https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context)
+	// in the Amazon Web Services Key Management Service Developer Guide.
+	//
+	// You can only include this parameter if you specify the KMSKeyId parameter.
+	AdditionalEncryptionContext map[string]*string `type:"map"`
+
+	// The name of the integration.
+	//
+	// IntegrationName is a required field
+	IntegrationName *string `min:"1" type:"string" required:"true"`
+
+	// The Amazon Web Services Key Management System (Amazon Web Services KMS) key
+	// identifier for the key to use to encrypt the integration. If you don't specify
+	// an encryption key, Aurora uses a default Amazon Web Services owned key.
+	KMSKeyId *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) of the Aurora DB cluster to use as the source
+	// for replication.
+	//
+	// SourceArn is a required field
+	SourceArn *string `min:"1" type:"string" required:"true"`
+
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
+	Tags []*Tag `locationNameList:"Tag" type:"list"`
+
+	// The ARN of the Redshift data warehouse to use as the target for replication.
+	//
+	// TargetArn is a required field
+	TargetArn *string `min:"20" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateIntegrationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateIntegrationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateIntegrationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateIntegrationInput"}
+	if s.IntegrationName == nil {
+		invalidParams.Add(request.NewErrParamRequired("IntegrationName"))
+	}
+	if s.IntegrationName != nil && len(*s.IntegrationName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IntegrationName", 1))
+	}
+	if s.SourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceArn"))
+	}
+	if s.SourceArn != nil && len(*s.SourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SourceArn", 1))
+	}
+	if s.TargetArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("TargetArn"))
+	}
+	if s.TargetArn != nil && len(*s.TargetArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("TargetArn", 20))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAdditionalEncryptionContext sets the AdditionalEncryptionContext field's value.
+func (s *CreateIntegrationInput) SetAdditionalEncryptionContext(v map[string]*string) *CreateIntegrationInput {
+	s.AdditionalEncryptionContext = v
+	return s
+}
+
+// SetIntegrationName sets the IntegrationName field's value.
+func (s *CreateIntegrationInput) SetIntegrationName(v string) *CreateIntegrationInput {
+	s.IntegrationName = &v
+	return s
+}
+
+// SetKMSKeyId sets the KMSKeyId field's value.
+func (s *CreateIntegrationInput) SetKMSKeyId(v string) *CreateIntegrationInput {
+	s.KMSKeyId = &v
+	return s
+}
+
+// SetSourceArn sets the SourceArn field's value.
+func (s *CreateIntegrationInput) SetSourceArn(v string) *CreateIntegrationInput {
+	s.SourceArn = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateIntegrationInput) SetTags(v []*Tag) *CreateIntegrationInput {
+	s.Tags = v
+	return s
+}
+
+// SetTargetArn sets the TargetArn field's value.
+func (s *CreateIntegrationInput) SetTargetArn(v string) *CreateIntegrationInput {
+	s.TargetArn = &v
+	return s
+}
+
+// An Aurora zero-ETL integration with Amazon Redshift. For more information,
+// see Working with Amazon Aurora zero-ETL integrations with Amazon Redshift
+// (https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/zero-etl.html)
+// in the Amazon Aurora User Guide.
+type CreateIntegrationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The encryption context for the integration. For more information, see Encryption
+	// context (https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context)
+	// in the Amazon Web Services Key Management Service Developer Guide.
+	AdditionalEncryptionContext map[string]*string `type:"map"`
+
+	// The time when the integration was created, in Universal Coordinated Time
+	// (UTC).
+	CreateTime *time.Time `type:"timestamp"`
+
+	// Any errors associated with the integration.
+	Errors []*IntegrationError `locationNameList:"IntegrationError" type:"list"`
+
+	// The ARN of the integration.
+	IntegrationArn *string `min:"1" type:"string"`
+
+	// The name of the integration.
+	IntegrationName *string `min:"1" type:"string"`
+
+	// The Amazon Web Services Key Management System (Amazon Web Services KMS) key
+	// identifier for the key used to to encrypt the integration.
+	KMSKeyId *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) of the Aurora DB cluster used as the source
+	// for replication.
+	SourceArn *string `min:"1" type:"string"`
+
+	// The current status of the integration.
+	Status *string `type:"string" enum:"IntegrationStatus"`
+
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
+	Tags []*Tag `locationNameList:"Tag" type:"list"`
+
+	// The ARN of the Redshift data warehouse used as the target for replication.
+	TargetArn *string `min:"20" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateIntegrationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateIntegrationOutput) GoString() string {
+	return s.String()
+}
+
+// SetAdditionalEncryptionContext sets the AdditionalEncryptionContext field's value.
+func (s *CreateIntegrationOutput) SetAdditionalEncryptionContext(v map[string]*string) *CreateIntegrationOutput {
+	s.AdditionalEncryptionContext = v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *CreateIntegrationOutput) SetCreateTime(v time.Time) *CreateIntegrationOutput {
+	s.CreateTime = &v
+	return s
+}
+
+// SetErrors sets the Errors field's value.
+func (s *CreateIntegrationOutput) SetErrors(v []*IntegrationError) *CreateIntegrationOutput {
+	s.Errors = v
+	return s
+}
+
+// SetIntegrationArn sets the IntegrationArn field's value.
+func (s *CreateIntegrationOutput) SetIntegrationArn(v string) *CreateIntegrationOutput {
+	s.IntegrationArn = &v
+	return s
+}
+
+// SetIntegrationName sets the IntegrationName field's value.
+func (s *CreateIntegrationOutput) SetIntegrationName(v string) *CreateIntegrationOutput {
+	s.IntegrationName = &v
+	return s
+}
+
+// SetKMSKeyId sets the KMSKeyId field's value.
+func (s *CreateIntegrationOutput) SetKMSKeyId(v string) *CreateIntegrationOutput {
+	s.KMSKeyId = &v
+	return s
+}
+
+// SetSourceArn sets the SourceArn field's value.
+func (s *CreateIntegrationOutput) SetSourceArn(v string) *CreateIntegrationOutput {
+	s.SourceArn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateIntegrationOutput) SetStatus(v string) *CreateIntegrationOutput {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateIntegrationOutput) SetTags(v []*Tag) *CreateIntegrationOutput {
+	s.Tags = v
+	return s
+}
+
+// SetTargetArn sets the TargetArn field's value.
+func (s *CreateIntegrationOutput) SetTargetArn(v string) *CreateIntegrationOutput {
+	s.TargetArn = &v
+	return s
+}
+
 type CreateOptionGroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -25459,6 +26101,9 @@ type DBCluster struct {
 	// This setting is only for non-Aurora Multi-AZ DB clusters.
 	PubliclyAccessible *bool `type:"boolean"`
 
+	// Reserved for future use.
+	RdsCustomClusterConfiguration *RdsCustomClusterConfiguration `type:"structure"`
+
 	// Contains one or more identifiers of the read replicas associated with this
 	// DB cluster.
 	ReadReplicaIdentifiers []*string `locationNameList:"ReadReplicaIdentifier" type:"list"`
@@ -25908,6 +26553,12 @@ func (s *DBCluster) SetPreferredMaintenanceWindow(v string) *DBCluster {
 // SetPubliclyAccessible sets the PubliclyAccessible field's value.
 func (s *DBCluster) SetPubliclyAccessible(v bool) *DBCluster {
 	s.PubliclyAccessible = &v
+	return s
+}
+
+// SetRdsCustomClusterConfiguration sets the RdsCustomClusterConfiguration field's value.
+func (s *DBCluster) SetRdsCustomClusterConfiguration(v *RdsCustomClusterConfiguration) *DBCluster {
+	s.RdsCustomClusterConfiguration = v
 	return s
 }
 
@@ -27133,6 +27784,10 @@ type DBEngineVersion struct {
 	// engine version.
 	SupportsGlobalDatabases *bool `type:"boolean"`
 
+	// Indicates whether the DB engine version supports Aurora zero-ETL integrations
+	// with Amazon Redshift.
+	SupportsIntegrations *bool `type:"boolean"`
+
 	// Indicates whether the DB engine version supports forwarding write operations
 	// from reader DB instances to the writer DB instance in the DB cluster. By
 	// default, write operations aren't allowed on reader DB instances.
@@ -27331,6 +27986,12 @@ func (s *DBEngineVersion) SetSupportsCertificateRotationWithoutRestart(v bool) *
 // SetSupportsGlobalDatabases sets the SupportsGlobalDatabases field's value.
 func (s *DBEngineVersion) SetSupportsGlobalDatabases(v bool) *DBEngineVersion {
 	s.SupportsGlobalDatabases = &v
+	return s
+}
+
+// SetSupportsIntegrations sets the SupportsIntegrations field's value.
+func (s *DBEngineVersion) SetSupportsIntegrations(v bool) *DBEngineVersion {
+	s.SupportsIntegrations = &v
 	return s
 }
 
@@ -27595,6 +28256,13 @@ type DBInstance struct {
 
 	// The Provisioned IOPS (I/O operations per second) value for the DB instance.
 	Iops *int64 `type:"integer"`
+
+	// Indicates whether an upgrade is recommended for the storage file system configuration
+	// on the DB instance. To migrate to the preferred configuration, you can either
+	// create a blue/green deployment, or create a read replica from the DB instance.
+	// For more information, see Upgrading the storage file system for a DB instance
+	// (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PIOPS.StorageTypes.html#USER_PIOPS.UpgradeFileSystem).
+	IsStorageConfigUpgradeAvailable *bool `type:"boolean"`
 
 	// If StorageEncrypted is enabled, the Amazon Web Services KMS key identifier
 	// for the encrypted DB instance.
@@ -28078,6 +28746,12 @@ func (s *DBInstance) SetInstanceCreateTime(v time.Time) *DBInstance {
 // SetIops sets the Iops field's value.
 func (s *DBInstance) SetIops(v int64) *DBInstance {
 	s.Iops = &v
+	return s
+}
+
+// SetIsStorageConfigUpgradeAvailable sets the IsStorageConfigUpgradeAvailable field's value.
+func (s *DBInstance) SetIsStorageConfigUpgradeAvailable(v bool) *DBInstance {
+	s.IsStorageConfigUpgradeAvailable = &v
 	return s
 }
 
@@ -30483,6 +31157,10 @@ type DeleteCustomDBEngineVersionOutput struct {
 	// engine version.
 	SupportsGlobalDatabases *bool `type:"boolean"`
 
+	// Indicates whether the DB engine version supports Aurora zero-ETL integrations
+	// with Amazon Redshift.
+	SupportsIntegrations *bool `type:"boolean"`
+
 	// Indicates whether the DB engine version supports forwarding write operations
 	// from reader DB instances to the writer DB instance in the DB cluster. By
 	// default, write operations aren't allowed on reader DB instances.
@@ -30681,6 +31359,12 @@ func (s *DeleteCustomDBEngineVersionOutput) SetSupportsCertificateRotationWithou
 // SetSupportsGlobalDatabases sets the SupportsGlobalDatabases field's value.
 func (s *DeleteCustomDBEngineVersionOutput) SetSupportsGlobalDatabases(v bool) *DeleteCustomDBEngineVersionOutput {
 	s.SupportsGlobalDatabases = &v
+	return s
+}
+
+// SetSupportsIntegrations sets the SupportsIntegrations field's value.
+func (s *DeleteCustomDBEngineVersionOutput) SetSupportsIntegrations(v bool) *DeleteCustomDBEngineVersionOutput {
+	s.SupportsIntegrations = &v
 	return s
 }
 
@@ -32136,6 +32820,177 @@ func (s DeleteGlobalClusterOutput) GoString() string {
 // SetGlobalCluster sets the GlobalCluster field's value.
 func (s *DeleteGlobalClusterOutput) SetGlobalCluster(v *GlobalCluster) *DeleteGlobalClusterOutput {
 	s.GlobalCluster = v
+	return s
+}
+
+type DeleteIntegrationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the integration.
+	//
+	// IntegrationIdentifier is a required field
+	IntegrationIdentifier *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteIntegrationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteIntegrationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteIntegrationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteIntegrationInput"}
+	if s.IntegrationIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("IntegrationIdentifier"))
+	}
+	if s.IntegrationIdentifier != nil && len(*s.IntegrationIdentifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IntegrationIdentifier", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIntegrationIdentifier sets the IntegrationIdentifier field's value.
+func (s *DeleteIntegrationInput) SetIntegrationIdentifier(v string) *DeleteIntegrationInput {
+	s.IntegrationIdentifier = &v
+	return s
+}
+
+// An Aurora zero-ETL integration with Amazon Redshift. For more information,
+// see Working with Amazon Aurora zero-ETL integrations with Amazon Redshift
+// (https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/zero-etl.html)
+// in the Amazon Aurora User Guide.
+type DeleteIntegrationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The encryption context for the integration. For more information, see Encryption
+	// context (https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context)
+	// in the Amazon Web Services Key Management Service Developer Guide.
+	AdditionalEncryptionContext map[string]*string `type:"map"`
+
+	// The time when the integration was created, in Universal Coordinated Time
+	// (UTC).
+	CreateTime *time.Time `type:"timestamp"`
+
+	// Any errors associated with the integration.
+	Errors []*IntegrationError `locationNameList:"IntegrationError" type:"list"`
+
+	// The ARN of the integration.
+	IntegrationArn *string `min:"1" type:"string"`
+
+	// The name of the integration.
+	IntegrationName *string `min:"1" type:"string"`
+
+	// The Amazon Web Services Key Management System (Amazon Web Services KMS) key
+	// identifier for the key used to to encrypt the integration.
+	KMSKeyId *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) of the Aurora DB cluster used as the source
+	// for replication.
+	SourceArn *string `min:"1" type:"string"`
+
+	// The current status of the integration.
+	Status *string `type:"string" enum:"IntegrationStatus"`
+
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
+	Tags []*Tag `locationNameList:"Tag" type:"list"`
+
+	// The ARN of the Redshift data warehouse used as the target for replication.
+	TargetArn *string `min:"20" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteIntegrationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DeleteIntegrationOutput) GoString() string {
+	return s.String()
+}
+
+// SetAdditionalEncryptionContext sets the AdditionalEncryptionContext field's value.
+func (s *DeleteIntegrationOutput) SetAdditionalEncryptionContext(v map[string]*string) *DeleteIntegrationOutput {
+	s.AdditionalEncryptionContext = v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *DeleteIntegrationOutput) SetCreateTime(v time.Time) *DeleteIntegrationOutput {
+	s.CreateTime = &v
+	return s
+}
+
+// SetErrors sets the Errors field's value.
+func (s *DeleteIntegrationOutput) SetErrors(v []*IntegrationError) *DeleteIntegrationOutput {
+	s.Errors = v
+	return s
+}
+
+// SetIntegrationArn sets the IntegrationArn field's value.
+func (s *DeleteIntegrationOutput) SetIntegrationArn(v string) *DeleteIntegrationOutput {
+	s.IntegrationArn = &v
+	return s
+}
+
+// SetIntegrationName sets the IntegrationName field's value.
+func (s *DeleteIntegrationOutput) SetIntegrationName(v string) *DeleteIntegrationOutput {
+	s.IntegrationName = &v
+	return s
+}
+
+// SetKMSKeyId sets the KMSKeyId field's value.
+func (s *DeleteIntegrationOutput) SetKMSKeyId(v string) *DeleteIntegrationOutput {
+	s.KMSKeyId = &v
+	return s
+}
+
+// SetSourceArn sets the SourceArn field's value.
+func (s *DeleteIntegrationOutput) SetSourceArn(v string) *DeleteIntegrationOutput {
+	s.SourceArn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DeleteIntegrationOutput) SetStatus(v string) *DeleteIntegrationOutput {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *DeleteIntegrationOutput) SetTags(v []*Tag) *DeleteIntegrationOutput {
+	s.Tags = v
+	return s
+}
+
+// SetTargetArn sets the TargetArn field's value.
+func (s *DeleteIntegrationOutput) SetTargetArn(v string) *DeleteIntegrationOutput {
+	s.TargetArn = &v
 	return s
 }
 
@@ -37230,6 +38085,138 @@ func (s *DescribeGlobalClustersOutput) SetMarker(v string) *DescribeGlobalCluste
 	return s
 }
 
+type DescribeIntegrationsInput struct {
+	_ struct{} `type:"structure"`
+
+	// A filter that specifies one or more resources to return.
+	Filters []*Filter `locationNameList:"Filter" type:"list"`
+
+	// The unique identifier of the integration.
+	IntegrationIdentifier *string `min:"1" type:"string"`
+
+	// An optional pagination token provided by a previous DescribeIntegrations
+	// request. If this parameter is specified, the response includes only records
+	// beyond the marker, up to the value specified by MaxRecords.
+	Marker *string `min:"1" type:"string"`
+
+	// The maximum number of records to include in the response. If more records
+	// exist than the specified MaxRecords value, a pagination token called a marker
+	// is included in the response so that you can retrieve the remaining results.
+	//
+	// Default: 100
+	//
+	// Constraints: Minimum 20, maximum 100.
+	MaxRecords *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeIntegrationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeIntegrationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeIntegrationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeIntegrationsInput"}
+	if s.IntegrationIdentifier != nil && len(*s.IntegrationIdentifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IntegrationIdentifier", 1))
+	}
+	if s.Marker != nil && len(*s.Marker) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Marker", 1))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *DescribeIntegrationsInput) SetFilters(v []*Filter) *DescribeIntegrationsInput {
+	s.Filters = v
+	return s
+}
+
+// SetIntegrationIdentifier sets the IntegrationIdentifier field's value.
+func (s *DescribeIntegrationsInput) SetIntegrationIdentifier(v string) *DescribeIntegrationsInput {
+	s.IntegrationIdentifier = &v
+	return s
+}
+
+// SetMarker sets the Marker field's value.
+func (s *DescribeIntegrationsInput) SetMarker(v string) *DescribeIntegrationsInput {
+	s.Marker = &v
+	return s
+}
+
+// SetMaxRecords sets the MaxRecords field's value.
+func (s *DescribeIntegrationsInput) SetMaxRecords(v int64) *DescribeIntegrationsInput {
+	s.MaxRecords = &v
+	return s
+}
+
+type DescribeIntegrationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of integrations.
+	Integrations []*Integration `locationNameList:"Integration" type:"list"`
+
+	// A pagination token that can be used in a later DescribeIntegrations request.
+	Marker *string `min:"1" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeIntegrationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeIntegrationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetIntegrations sets the Integrations field's value.
+func (s *DescribeIntegrationsOutput) SetIntegrations(v []*Integration) *DescribeIntegrationsOutput {
+	s.Integrations = v
+	return s
+}
+
+// SetMarker sets the Marker field's value.
+func (s *DescribeIntegrationsOutput) SetMarker(v string) *DescribeIntegrationsOutput {
+	s.Marker = &v
+	return s
+}
+
 type DescribeOptionGroupOptionsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -40115,6 +41102,171 @@ func (s *IPRange) SetStatus(v string) *IPRange {
 	return s
 }
 
+// An Aurora zero-ETL integration with Amazon Redshift. For more information,
+// see Working with Amazon Aurora zero-ETL integrations with Amazon Redshift
+// (https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/zero-etl.html)
+// in the Amazon Aurora User Guide.
+type Integration struct {
+	_ struct{} `type:"structure"`
+
+	// The encryption context for the integration. For more information, see Encryption
+	// context (https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#encrypt_context)
+	// in the Amazon Web Services Key Management Service Developer Guide.
+	AdditionalEncryptionContext map[string]*string `type:"map"`
+
+	// The time when the integration was created, in Universal Coordinated Time
+	// (UTC).
+	CreateTime *time.Time `type:"timestamp"`
+
+	// Any errors associated with the integration.
+	Errors []*IntegrationError `locationNameList:"IntegrationError" type:"list"`
+
+	// The ARN of the integration.
+	IntegrationArn *string `min:"1" type:"string"`
+
+	// The name of the integration.
+	IntegrationName *string `min:"1" type:"string"`
+
+	// The Amazon Web Services Key Management System (Amazon Web Services KMS) key
+	// identifier for the key used to to encrypt the integration.
+	KMSKeyId *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) of the Aurora DB cluster used as the source
+	// for replication.
+	SourceArn *string `min:"1" type:"string"`
+
+	// The current status of the integration.
+	Status *string `type:"string" enum:"IntegrationStatus"`
+
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
+	Tags []*Tag `locationNameList:"Tag" type:"list"`
+
+	// The ARN of the Redshift data warehouse used as the target for replication.
+	TargetArn *string `min:"20" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Integration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s Integration) GoString() string {
+	return s.String()
+}
+
+// SetAdditionalEncryptionContext sets the AdditionalEncryptionContext field's value.
+func (s *Integration) SetAdditionalEncryptionContext(v map[string]*string) *Integration {
+	s.AdditionalEncryptionContext = v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *Integration) SetCreateTime(v time.Time) *Integration {
+	s.CreateTime = &v
+	return s
+}
+
+// SetErrors sets the Errors field's value.
+func (s *Integration) SetErrors(v []*IntegrationError) *Integration {
+	s.Errors = v
+	return s
+}
+
+// SetIntegrationArn sets the IntegrationArn field's value.
+func (s *Integration) SetIntegrationArn(v string) *Integration {
+	s.IntegrationArn = &v
+	return s
+}
+
+// SetIntegrationName sets the IntegrationName field's value.
+func (s *Integration) SetIntegrationName(v string) *Integration {
+	s.IntegrationName = &v
+	return s
+}
+
+// SetKMSKeyId sets the KMSKeyId field's value.
+func (s *Integration) SetKMSKeyId(v string) *Integration {
+	s.KMSKeyId = &v
+	return s
+}
+
+// SetSourceArn sets the SourceArn field's value.
+func (s *Integration) SetSourceArn(v string) *Integration {
+	s.SourceArn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *Integration) SetStatus(v string) *Integration {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *Integration) SetTags(v []*Tag) *Integration {
+	s.Tags = v
+	return s
+}
+
+// SetTargetArn sets the TargetArn field's value.
+func (s *Integration) SetTargetArn(v string) *Integration {
+	s.TargetArn = &v
+	return s
+}
+
+// An error associated with a zero-ETL integration with Amazon Redshift.
+type IntegrationError struct {
+	_ struct{} `type:"structure"`
+
+	// The error code associated with the integration.
+	//
+	// ErrorCode is a required field
+	ErrorCode *string `type:"string" required:"true"`
+
+	// A message explaining the error.
+	ErrorMessage *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IntegrationError) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s IntegrationError) GoString() string {
+	return s.String()
+}
+
+// SetErrorCode sets the ErrorCode field's value.
+func (s *IntegrationError) SetErrorCode(v string) *IntegrationError {
+	s.ErrorCode = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *IntegrationError) SetErrorMessage(v string) *IntegrationError {
+	s.ErrorMessage = &v
+	return s
+}
+
 type ListTagsForResourceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -40928,6 +42080,10 @@ type ModifyCustomDBEngineVersionOutput struct {
 	// engine version.
 	SupportsGlobalDatabases *bool `type:"boolean"`
 
+	// Indicates whether the DB engine version supports Aurora zero-ETL integrations
+	// with Amazon Redshift.
+	SupportsIntegrations *bool `type:"boolean"`
+
 	// Indicates whether the DB engine version supports forwarding write operations
 	// from reader DB instances to the writer DB instance in the DB cluster. By
 	// default, write operations aren't allowed on reader DB instances.
@@ -41126,6 +42282,12 @@ func (s *ModifyCustomDBEngineVersionOutput) SetSupportsCertificateRotationWithou
 // SetSupportsGlobalDatabases sets the SupportsGlobalDatabases field's value.
 func (s *ModifyCustomDBEngineVersionOutput) SetSupportsGlobalDatabases(v bool) *ModifyCustomDBEngineVersionOutput {
 	s.SupportsGlobalDatabases = &v
+	return s
+}
+
+// SetSupportsIntegrations sets the SupportsIntegrations field's value.
+func (s *ModifyCustomDBEngineVersionOutput) SetSupportsIntegrations(v bool) *ModifyCustomDBEngineVersionOutput {
+	s.SupportsIntegrations = &v
 	return s
 }
 
@@ -47181,6 +48343,47 @@ func (s *Range) SetTo(v int64) *Range {
 	return s
 }
 
+// Reserved for future use.
+type RdsCustomClusterConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Reserved for future use.
+	InterconnectSubnetId *string `type:"string"`
+
+	// Reserved for future use.
+	TransitGatewayMulticastDomainId *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RdsCustomClusterConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RdsCustomClusterConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetInterconnectSubnetId sets the InterconnectSubnetId field's value.
+func (s *RdsCustomClusterConfiguration) SetInterconnectSubnetId(v string) *RdsCustomClusterConfiguration {
+	s.InterconnectSubnetId = &v
+	return s
+}
+
+// SetTransitGatewayMulticastDomainId sets the TransitGatewayMulticastDomainId field's value.
+func (s *RdsCustomClusterConfiguration) SetTransitGatewayMulticastDomainId(v string) *RdsCustomClusterConfiguration {
+	s.TransitGatewayMulticastDomainId = &v
+	return s
+}
+
 type RebootDBClusterInput struct {
 	_ struct{} `type:"structure"`
 
@@ -49415,6 +50618,9 @@ type RestoreDBClusterFromSnapshotInput struct {
 	// Valid for: Aurora DB clusters and Multi-AZ DB clusters
 	PubliclyAccessible *bool `type:"boolean"`
 
+	// Reserved for future use.
+	RdsCustomClusterConfiguration *RdsCustomClusterConfiguration `type:"structure"`
+
 	// For DB clusters in serverless DB engine mode, the scaling properties of the
 	// DB cluster.
 	//
@@ -49632,6 +50838,12 @@ func (s *RestoreDBClusterFromSnapshotInput) SetPort(v int64) *RestoreDBClusterFr
 // SetPubliclyAccessible sets the PubliclyAccessible field's value.
 func (s *RestoreDBClusterFromSnapshotInput) SetPubliclyAccessible(v bool) *RestoreDBClusterFromSnapshotInput {
 	s.PubliclyAccessible = &v
+	return s
+}
+
+// SetRdsCustomClusterConfiguration sets the RdsCustomClusterConfiguration field's value.
+func (s *RestoreDBClusterFromSnapshotInput) SetRdsCustomClusterConfiguration(v *RdsCustomClusterConfiguration) *RestoreDBClusterFromSnapshotInput {
+	s.RdsCustomClusterConfiguration = v
 	return s
 }
 
@@ -49978,6 +51190,9 @@ type RestoreDBClusterToPointInTimeInput struct {
 	// Valid for: Multi-AZ DB clusters only
 	PubliclyAccessible *bool `type:"boolean"`
 
+	// Reserved for future use.
+	RdsCustomClusterConfiguration *RdsCustomClusterConfiguration `type:"structure"`
+
 	// The date and time to restore the DB cluster to.
 	//
 	// Valid Values: Value must be a time in Universal Coordinated Time (UTC) format
@@ -50204,6 +51419,12 @@ func (s *RestoreDBClusterToPointInTimeInput) SetPort(v int64) *RestoreDBClusterT
 // SetPubliclyAccessible sets the PubliclyAccessible field's value.
 func (s *RestoreDBClusterToPointInTimeInput) SetPubliclyAccessible(v bool) *RestoreDBClusterToPointInTimeInput {
 	s.PubliclyAccessible = &v
+	return s
+}
+
+// SetRdsCustomClusterConfiguration sets the RdsCustomClusterConfiguration field's value.
+func (s *RestoreDBClusterToPointInTimeInput) SetRdsCustomClusterConfiguration(v *RdsCustomClusterConfiguration) *RestoreDBClusterToPointInTimeInput {
+	s.RdsCustomClusterConfiguration = v
 	return s
 }
 
@@ -55044,6 +56265,10 @@ type UpgradeTarget struct {
 	// version.
 	SupportsGlobalDatabases *bool `type:"boolean"`
 
+	// Indicates whether the DB engine version supports Aurora zero-ETL integrations
+	// with Amazon Redshift.
+	SupportsIntegrations *bool `type:"boolean"`
+
 	// Indicates whether the target engine version supports forwarding write operations
 	// from reader DB instances to the writer DB instance in the DB cluster. By
 	// default, write operations aren't allowed on reader DB instances.
@@ -55119,6 +56344,12 @@ func (s *UpgradeTarget) SetSupportsBabelfish(v bool) *UpgradeTarget {
 // SetSupportsGlobalDatabases sets the SupportsGlobalDatabases field's value.
 func (s *UpgradeTarget) SetSupportsGlobalDatabases(v bool) *UpgradeTarget {
 	s.SupportsGlobalDatabases = &v
+	return s
+}
+
+// SetSupportsIntegrations sets the SupportsIntegrations field's value.
+func (s *UpgradeTarget) SetSupportsIntegrations(v bool) *UpgradeTarget {
+	s.SupportsIntegrations = &v
 	return s
 }
 
@@ -55841,6 +57072,42 @@ func IAMAuthMode_Values() []string {
 		IAMAuthModeDisabled,
 		IAMAuthModeRequired,
 		IAMAuthModeEnabled,
+	}
+}
+
+const (
+	// IntegrationStatusCreating is a IntegrationStatus enum value
+	IntegrationStatusCreating = "creating"
+
+	// IntegrationStatusActive is a IntegrationStatus enum value
+	IntegrationStatusActive = "active"
+
+	// IntegrationStatusModifying is a IntegrationStatus enum value
+	IntegrationStatusModifying = "modifying"
+
+	// IntegrationStatusFailed is a IntegrationStatus enum value
+	IntegrationStatusFailed = "failed"
+
+	// IntegrationStatusDeleting is a IntegrationStatus enum value
+	IntegrationStatusDeleting = "deleting"
+
+	// IntegrationStatusSyncing is a IntegrationStatus enum value
+	IntegrationStatusSyncing = "syncing"
+
+	// IntegrationStatusNeedsAttention is a IntegrationStatus enum value
+	IntegrationStatusNeedsAttention = "needs_attention"
+)
+
+// IntegrationStatus_Values returns all elements of the IntegrationStatus enum
+func IntegrationStatus_Values() []string {
+	return []string{
+		IntegrationStatusCreating,
+		IntegrationStatusActive,
+		IntegrationStatusModifying,
+		IntegrationStatusFailed,
+		IntegrationStatusDeleting,
+		IntegrationStatusSyncing,
+		IntegrationStatusNeedsAttention,
 	}
 }
 
