@@ -25,8 +25,8 @@ require (
 	github.com/pivotal-cf-experimental/gomegamatchers v0.0.0-20180326192815-e36bfcc98c3a
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/spf13/afero v1.10.0
-	golang.org/x/crypto v0.14.0
-	golang.org/x/oauth2 v0.12.0
+	golang.org/x/crypto v0.18.0
+	golang.org/x/oauth2 v0.16.0
 	google.golang.org/api v0.143.0
 	gopkg.in/yaml.v2 v2.4.0
 )
@@ -87,11 +87,11 @@ require (
 	github.com/vmware/govmomi v0.30.4 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	go.opencensus.io v0.24.0 // indirect
-	golang.org/x/net v0.17.0 // indirect
+	golang.org/x/net v0.20.0 // indirect
 	golang.org/x/sync v0.3.0 // indirect
-	golang.org/x/sys v0.13.0 // indirect
-	golang.org/x/term v0.13.0 // indirect
-	golang.org/x/text v0.13.0 // indirect
+	golang.org/x/sys v0.16.0 // indirect
+	golang.org/x/term v0.16.0 // indirect
+	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20230913181813-007df8e322eb // indirect
