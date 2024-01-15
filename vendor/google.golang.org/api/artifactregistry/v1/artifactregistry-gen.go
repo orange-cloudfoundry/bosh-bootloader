@@ -1,4 +1,4 @@
-// Copyright 2023 Google LLC.
+// Copyright 2024 Google LLC.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -95,7 +95,9 @@ const apiId = "artifactregistry:v1"
 const apiName = "artifactregistry"
 const apiVersion = "v1"
 const basePath = "https://artifactregistry.googleapis.com/"
+const basePathTemplate = "https://artifactregistry.UNIVERSE_DOMAIN/"
 const mtlsBasePath = "https://artifactregistry.mtls.googleapis.com/"
+const defaultUniverseDomain = "googleapis.com"
 
 // OAuth2 scopes used by this API.
 const (
@@ -117,7 +119,9 @@ func NewService(ctx context.Context, opts ...option.ClientOption) (*Service, err
 	// NOTE: prepend, so we don't override user-specified scopes.
 	opts = append([]option.ClientOption{scopesOption}, opts...)
 	opts = append(opts, internaloption.WithDefaultEndpoint(basePath))
+	opts = append(opts, internaloption.WithDefaultEndpointTemplate(basePathTemplate))
 	opts = append(opts, internaloption.WithDefaultMTLSEndpoint(mtlsBasePath))
+	opts = append(opts, internaloption.WithDefaultUniverseDomain(defaultUniverseDomain))
 	client, endpoint, err := htransport.NewClient(ctx, opts...)
 	if err != nil {
 		return nil, err
@@ -541,11 +545,34 @@ type Binding struct {
 	// For example, `admins@example.com`. * `domain:{domain}`: The G Suite
 	// domain (primary) that represents all the users of that domain. For
 	// example, `google.com` or `example.com`. *
-	// `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus
-	// unique identifier) representing a user that has been recently
-	// deleted. For example, `alice@example.com?uid=123456789012345678901`.
-	// If the user is recovered, this value reverts to `user:{emailid}` and
-	// the recovered user retains the role in the binding. *
+	// `principal://iam.googleapis.com/locations/global/workforcePools/{pool_
+	// id}/subject/{subject_attribute_value}`: A single identity in a
+	// workforce identity pool. *
+	// `principalSet://iam.googleapis.com/locations/global/workforcePools/{po
+	// ol_id}/group/{group_id}`: All workforce identities in a group. *
+	// `principalSet://iam.googleapis.com/locations/global/workforcePools/{po
+	// ol_id}/attribute.{attribute_name}/{attribute_value}`: All workforce
+	// identities with a specific attribute value. *
+	// `principalSet://iam.googleapis.com/locations/global/workforcePools/{po
+	// ol_id}/*`: All identities in a workforce identity pool. *
+	// `principal://iam.googleapis.com/projects/{project_number}/locations/gl
+	// obal/workloadIdentityPools/{pool_id}/subject/{subject_attribute_value}
+	// `: A single identity in a workload identity pool. *
+	// `principalSet://iam.googleapis.com/projects/{project_number}/locations
+	// /global/workloadIdentityPools/{pool_id}/group/{group_id}`: A workload
+	// identity pool group. *
+	// `principalSet://iam.googleapis.com/projects/{project_number}/locations
+	// /global/workloadIdentityPools/{pool_id}/attribute.{attribute_name}/{at
+	// tribute_value}`: All identities in a workload identity pool with a
+	// certain attribute. *
+	// `principalSet://iam.googleapis.com/projects/{project_number}/locations
+	// /global/workloadIdentityPools/{pool_id}/*`: All identities in a
+	// workload identity pool. * `deleted:user:{emailid}?uid={uniqueid}`: An
+	// email address (plus unique identifier) representing a user that has
+	// been recently deleted. For example,
+	// `alice@example.com?uid=123456789012345678901`. If the user is
+	// recovered, this value reverts to `user:{emailid}` and the recovered
+	// user retains the role in the binding. *
 	// `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address
 	// (plus unique identifier) representing a service account that has been
 	// recently deleted. For example,
@@ -557,7 +584,12 @@ type Binding struct {
 	// that has been recently deleted. For example,
 	// `admins@example.com?uid=123456789012345678901`. If the group is
 	// recovered, this value reverts to `group:{emailid}` and the recovered
-	// group retains the role in the binding.
+	// group retains the role in the binding. *
+	// `deleted:principal://iam.googleapis.com/locations/global/workforcePool
+	// s/{pool_id}/subject/{subject_attribute_value}`: Deleted single
+	// identity in a workforce identity pool. For example,
+	// `deleted:principal://iam.googleapis.com/locations/global/workforcePool
+	// s/my-pool-id/subject/my-subject-attribute-value`.
 	Members []string `json:"members,omitempty"`
 
 	// Role: Role that is assigned to the list of `members`, or principals.
@@ -657,9 +689,6 @@ type CleanupPolicyCondition struct {
 	//   "UNTAGGED" - Applies to untagged versions only.
 	//   "ANY" - Applies to all versions.
 	TagState string `json:"tagState,omitempty"`
-
-	// VersionAge: DEPRECATED: Use older_than.
-	VersionAge string `json:"versionAge,omitempty"`
 
 	// VersionNamePrefixes: Match versions by version name prefix. Applied
 	// on any prefix match.
@@ -1072,6 +1101,7 @@ type GoogleDevtoolsArtifactregistryV1RemoteRepositoryConfigAptRepositoryPublicRe
 	//   "REPOSITORY_BASE_UNSPECIFIED" - Unspecified repository base.
 	//   "DEBIAN" - Debian.
 	//   "UBUNTU" - Ubuntu LTS/Pro.
+	//   "DEBIAN_SNAPSHOT" - Archived Debian.
 	RepositoryBase string `json:"repositoryBase,omitempty"`
 
 	// RepositoryPath: A custom field to define a path to a specific
@@ -2625,6 +2655,10 @@ type RemoteRepositoryConfig struct {
 	// PythonRepository: Specific settings for a Python remote repository.
 	PythonRepository *PythonRepository `json:"pythonRepository,omitempty"`
 
+	// UpstreamCredentials: Optional. The credentials used to access the
+	// remote repository.
+	UpstreamCredentials *UpstreamCredentials `json:"upstreamCredentials,omitempty"`
+
 	// YumRepository: Specific settings for a Yum remote repository.
 	YumRepository *YumRepository `json:"yumRepository,omitempty"`
 
@@ -2722,7 +2756,7 @@ type Repository struct {
 	Mode string `json:"mode,omitempty"`
 
 	// Name: The name of the repository, for example:
-	// "projects/p1/locations/us-central1/repositories/repo1".
+	// `projects/p1/locations/us-central1/repositories/repo1`.
 	Name string `json:"name,omitempty"`
 
 	// RemoteRepositoryConfig: Configuration specific for a Remote
@@ -3282,6 +3316,37 @@ func (s *UploadYumArtifactResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// UpstreamCredentials: The credentials to access the remote repository.
+type UpstreamCredentials struct {
+	// UsernamePasswordCredentials: Use username and password to access the
+	// remote repository.
+	UsernamePasswordCredentials *UsernamePasswordCredentials `json:"usernamePasswordCredentials,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g.
+	// "UsernamePasswordCredentials") to unconditionally include in API
+	// requests. By default, fields with empty or default values are omitted
+	// from API requests. However, any non-pointer, non-interface field
+	// appearing in ForceSendFields will be sent to the server regardless of
+	// whether the field is empty or not. This may be used to include empty
+	// fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g.
+	// "UsernamePasswordCredentials") to include in API requests with the
+	// JSON null value. By default, fields with empty values are omitted
+	// from API requests. However, any field with an empty value appearing
+	// in NullFields will be sent to the server as null. It is an error if a
+	// field in this list has a non-empty value. This may be used to include
+	// null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *UpstreamCredentials) MarshalJSON() ([]byte, error) {
+	type NoMethod UpstreamCredentials
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // UpstreamPolicy: Artifact policy configuration for the repository
 // contents.
 type UpstreamPolicy struct {
@@ -3293,7 +3358,7 @@ type UpstreamPolicy struct {
 	Priority int64 `json:"priority,omitempty"`
 
 	// Repository: A reference to the repository resource, for example:
-	// "projects/p1/locations/us-central1/repositories/repo1".
+	// `projects/p1/locations/us-central1/repositories/repo1`.
 	Repository string `json:"repository,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Id") to
@@ -3315,6 +3380,41 @@ type UpstreamPolicy struct {
 
 func (s *UpstreamPolicy) MarshalJSON() ([]byte, error) {
 	type NoMethod UpstreamPolicy
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// UsernamePasswordCredentials: Username and password credentials.
+type UsernamePasswordCredentials struct {
+	// PasswordSecretVersion: The Secret Manager key version that holds the
+	// password to access the remote repository. Must be in the format of
+	// `projects/{project}/secrets/{secret}/versions/{version}`.
+	PasswordSecretVersion string `json:"passwordSecretVersion,omitempty"`
+
+	// Username: The username to access the remote repository.
+	Username string `json:"username,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g.
+	// "PasswordSecretVersion") to unconditionally include in API requests.
+	// By default, fields with empty or default values are omitted from API
+	// requests. However, any non-pointer, non-interface field appearing in
+	// ForceSendFields will be sent to the server regardless of whether the
+	// field is empty or not. This may be used to include empty fields in
+	// Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "PasswordSecretVersion") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *UsernamePasswordCredentials) MarshalJSON() ([]byte, error) {
+	type NoMethod UsernamePasswordCredentials
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -4669,8 +4769,8 @@ func (r *ProjectsLocationsRepositoriesService) Create(parent string, repository 
 	return c
 }
 
-// RepositoryId sets the optional parameter "repositoryId": The
-// repository id to use for this repository.
+// RepositoryId sets the optional parameter "repositoryId": Required.
+// The repository id to use for this repository.
 func (c *ProjectsLocationsRepositoriesCreateCall) RepositoryId(repositoryId string) *ProjectsLocationsRepositoriesCreateCall {
 	c.urlParams_.Set("repositoryId", repositoryId)
 	return c
@@ -4783,7 +4883,7 @@ func (c *ProjectsLocationsRepositoriesCreateCall) Do(opts ...googleapi.CallOptio
 	//       "type": "string"
 	//     },
 	//     "repositoryId": {
-	//       "description": "The repository id to use for this repository.",
+	//       "description": "Required. The repository id to use for this repository.",
 	//       "location": "query",
 	//       "type": "string"
 	//     }
@@ -5466,7 +5566,7 @@ type ProjectsLocationsRepositoriesPatchCall struct {
 // Patch: Updates a repository.
 //
 //   - name: The name of the repository, for example:
-//     "projects/p1/locations/us-central1/repositories/repo1".
+//     `projects/p1/locations/us-central1/repositories/repo1`.
 func (r *ProjectsLocationsRepositoriesService) Patch(name string, repository *Repository) *ProjectsLocationsRepositoriesPatchCall {
 	c := &ProjectsLocationsRepositoriesPatchCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.name = name
@@ -5582,7 +5682,7 @@ func (c *ProjectsLocationsRepositoriesPatchCall) Do(opts ...googleapi.CallOption
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "The name of the repository, for example: \"projects/p1/locations/us-central1/repositories/repo1\".",
+	//       "description": "The name of the repository, for example: `projects/p1/locations/us-central1/repositories/repo1`.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]+/locations/[^/]+/repositories/[^/]+$",
 	//       "required": true,
