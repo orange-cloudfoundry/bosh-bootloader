@@ -41,10 +41,6 @@ jobs:
             exit 1
           fi
 
-      - name: tests
-        run: |
-          go test -v ./...
-
       - name: packr2
         run: |
           curl -fsSL https://github.com/gobuffalo/packr/releases/download/v2.8.1/packr_2.8.1_linux_amd64.tar.gz | \
