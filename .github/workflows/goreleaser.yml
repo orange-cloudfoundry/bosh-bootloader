@@ -41,12 +41,6 @@ jobs:
             exit 1
           fi
 
-      - name: packr2
-        run: |
-          curl -fsSL https://github.com/gobuffalo/packr/releases/download/v2.8.1/packr_2.8.1_linux_amd64.tar.gz | \
-            tar -xz -C /usr/local/bin/ packr2
-          which packr2
-
       - name: run goreleaser
         uses: goreleaser/goreleaser-action@v5
         if: success() && startsWith(github.ref, 'refs/tags/')
