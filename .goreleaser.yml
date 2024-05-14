@@ -20,7 +20,6 @@ builds:
             - GOOS={{.Os}}
             - GOARCH={{.Arch}}
         - cmd: bash -c "source ./scripts/create_mod && create_mod"
-        - cmd: ./scripts/generate
     goos:
       - darwin
       - linux
