@@ -2,32 +2,32 @@
 
 ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 
-source $ROOT_DIR/scripts/create_mod
+source "$ROOT_DIR/scripts/create_mod"
 
-function cleanup_terraform() {
-  rm -rf ${ROOT_DIR}/terraform/binary_dist/terraform
+cleanup_terraform() {
+	rm -rf "${ROOT_DIR}/terraform/binary_dist/terraform"
 }
 
 function main() {
-  trap "cleanup_terraform" INT TERM EXIT
+	trap "cleanup_terraform" INT TERM EXIT
 
-  if [[ ! -f "${ROOT_DIR}/terraform/binary_dist/terraform" ]]; then
-    echo "missing required terraform binary in binary_dist"
-    exit 127
-  fi
+	if [ ! -f "${ROOT_DIR}/terraform/binary_dist/terraform" ]
+	then
+		>&2 echo "error: missing required terraform binary in binary_dist"
+		exit 127
+	fi
 
-  local parallelFlag
-  if [[ "${BBL_IAAS}" == "aws" ]]; then
-    parallelFlag=""
-  else
-    parallelFlag="-p"
-  fi
+	local parallelFlag
+	if [ "${BBL_IAAS}" = "aws" ]
+	then parallelFlag=""
+	else parallelFlag="-p"
+	fi
 
-  pushd "${ROOT_DIR}/acceptance-tests" > /dev/null
-    create_mod
-    go run github.com/onsi/ginkgo/v2/ginkgo -r -timeout=2h -v ${parallelFlag} --race --fail-fast --randomize-all --randomize-suites --skip-package=no-iaas
-    cleanup_mod
-  popd > /dev/null
+	pushd "${ROOT_DIR}/acceptance-tests" > /dev/null
+	create_mod
+	go run github.com/onsi/ginkgo/v2/ginkgo -r -timeout=2h -v ${parallelFlag} --race --fail-fast --randomize-all --randomize-suites --skip-package=no-iaas
+	cleanup_mod
+	popd > /dev/null
 }
 
 main "${@:-""}"
