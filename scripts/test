@@ -3,21 +3,21 @@
 ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 
 function unset_env_vars() {
-  echo "Unsetting BBL environment variables"
-  unset BBL_IAAS
-  unset BBL_AWS_ACCESS_KEY_ID
-  unset BBL_AWS_REGION
-  unset BBL_AWS_SECRET_ACCESS_KEY
-  unset BBL_AWS_BOSH_AZ
-  unset BBL_GCP_SERVICE_ACCOUNT_KEY
-  unset BBL_GCP_REGION
-  unset BBL_GCP_ZONE
-  unset BBL_AZURE_CLIENT_ID
-  unset BBL_AZURE_CLIENT_SECRET
-  unset BBL_AZURE_REGION
-  unset BBL_AZURE_SUBSCRIPTION_ID
-  unset BBL_AZURE_TENANT_ID
-  unset BBL_DEBUG
+	echo "Unsetting BBL environment variables"
+	unset BBL_IAAS
+	unset BBL_AWS_ACCESS_KEY_ID
+	unset BBL_AWS_REGION
+	unset BBL_AWS_SECRET_ACCESS_KEY
+	unset BBL_AWS_BOSH_AZ
+	unset BBL_GCP_SERVICE_ACCOUNT_KEY
+	unset BBL_GCP_REGION
+	unset BBL_GCP_ZONE
+	unset BBL_AZURE_CLIENT_ID
+	unset BBL_AZURE_CLIENT_SECRET
+	unset BBL_AZURE_REGION
+	unset BBL_AZURE_SUBSCRIPTION_ID
+	unset BBL_AZURE_TENANT_ID
+	unset BBL_DEBUG
 }
 
 function main() {
@@ -25,7 +25,7 @@ function main() {
 
   pushd "${ROOT_DIR}" > /dev/null
     echo "Unit tests"
-    go run github.com/onsi/ginkgo/v2/ginkgo -p -r --race --randomize-all --randomize-suites --skip-package=acceptance-test ${@}
+    go run github.com/onsi/ginkgo/v2/ginkgo -p -r --race --randomize-all --randomize-suites --skip-package=acceptance-test "${@}"
 
     echo "Test compilation of acceptance-tests"
     go run github.com/onsi/ginkgo/v2/ginkgo -r --dry-run acceptance-tests

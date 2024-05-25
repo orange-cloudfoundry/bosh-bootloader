@@ -1,19 +1,28 @@
-#!/bin/bash -e
+#!/bin/bash
 
+set -e
+set -u
 set -o pipefail
 
-ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+ROOT_DIR="$(dirname "$(dirname "$(realpath -e "${0}")")")"
 
-if [ -z "${TF_VERSION}" ] || [ -z "${GOOS}" ] || [ -z "${GOARCH}" ]; then
-  echo "error: missing required en variables: TF_VERSION, OS, ARCH"
-  exit 1
+: "${GOARCH:?}"
+: "${GOOS:?}"
+: "${TF_VERSION:?}"
+
+PREFIX="${ROOT_DIR}/terraform/binary_dist"
+TARGET="${PREFIX}/terraform"
+ARCH="terraform_${TF_VERSION}_${GOOS}_${GOARCH}.zip"
+URL="https://releases.hashicorp.com/terraform/${TF_VERSION}/${ARCH}"
+
+if [ -f "${TARGET}" ] && [ -x "${TARGET}" ] && [ "${TF_VERSION}" = "$(CHECKPOINT_DISABLE=true "$TARGET" version -json | jq -r .terraform_version)" ]
+then
+	echo "info: terraform ${TF_VERSION} already present, skipping download"
+	exit 0
 fi
-
-path="${TF_VERSION}/terraform_${TF_VERSION}_${GOOS}_${GOARCH}.zip"
-url="https://releases.hashicorp.com/terraform/${path}"
-echo "downloading terraform from ${url}"
-
-rm -f ${ROOT_DIR}/terraform/binary_dist/terraform
-curl -fsSL "${url}" | \
-  gunzip -d -c | \
-  install /dev/stdin ${ROOT_DIR}/terraform/binary_dist/terraform
+echo "info: downloading terraform from: ${URL}"
+rm -fr "${TARGET}"
+mkdir -p "${PREFIX}"
+trap 'rm -vf "${ARCH}"' EXIT
+wget -nv -O "$ARCH" "$URL"
+unzip -j "$ARCH" terraform -d "${PREFIX}"
