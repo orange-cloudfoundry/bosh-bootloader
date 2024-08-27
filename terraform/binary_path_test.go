@@ -39,9 +39,10 @@ var _ = Describe("BinaryPath", func() {
 		fileSystem.ExistsCall.Returns.Bool = false
 
 		binary = &terraform.Binary{
-			Path:      "testassets/success",
-			EmbedData: content,
-			FS:        fileSystem,
+			Path:            "testassets/success",
+			EmbedData:       content,
+			FS:              fileSystem,
+			TerraformBinary: "",
 		}
 	})
 
@@ -57,6 +58,33 @@ var _ = Describe("BinaryPath", func() {
 		// this covers a critical corner case where the user installs
 		// an old version AFTER we updated the tf binary that we distribute.
 		Expect(fileSystem.ChtimesCall.Receives.ModTime).To(Equal(modTime))
+	})
+
+	Context("when a custom terraform binary path is set", func() {
+		BeforeEach(func() {
+			binary.TerraformBinary = "/some/custom/path/bbl-terraform"
+		})
+
+		Context("and the file exists", func() {
+			BeforeEach(func() {
+				fileSystem.ExistsCall.Returns.Bool = true
+			})
+
+			It("doesn't rewrite the file", func() {
+				res, err := binary.BinaryPath()
+				Expect(err).NotTo(HaveOccurred())
+				Expect(res).To(Equal("/some/custom/path/bbl-terraform"))
+				Expect(fileSystem.WriteFileCall.CallCount).To(Equal(0))
+			})
+		})
+
+		Context("but the file does not exist", func() {
+			It("uses the embedded binary ", func() {
+				res, err := binary.BinaryPath()
+				Expect(err).NotTo(HaveOccurred())
+				Expect(res).To(Equal("/some/tmp/path/bbl-terraform"))
+			})
+		})
 	})
 
 	Context("when there is no my-terraform-binary in box", func() {

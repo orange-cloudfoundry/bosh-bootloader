@@ -27,24 +27,34 @@ type tfBinaryPathFs interface {
 }
 
 type Binary struct {
-	FS        tfBinaryPathFs
-	EmbedData embed.FS
-	Path      string
+	FS              tfBinaryPathFs
+	EmbedData       embed.FS
+	Path            string
+	TerraformBinary string
 }
 
 //go:embed binary_dist
 var content embed.FS
 
-func NewBinary() *Binary {
+func NewBinary(terraformBinary string) *Binary {
 	fs := afero.Afero{Fs: afero.NewOsFs()}
 	return &Binary{
-		FS:        fs,
-		Path:      "binary_dist",
-		EmbedData: content,
+		FS:              fs,
+		Path:            "binary_dist",
+		EmbedData:       content,
+		TerraformBinary: terraformBinary,
 	}
 }
 
 func (binary *Binary) BinaryPath() (string, error) {
+	// if user sets a terraform binary use it
+	if binary.TerraformBinary != "" {
+		exists, err := binary.FS.Exists(binary.TerraformBinary)
+		if err == nil && exists {
+			return binary.TerraformBinary, nil
+		}
+	}
+
 	destinationPath := fmt.Sprintf("%s/%s", binary.FS.GetTempDir(os.TempDir()), bblTfBinaryName)
 	exists, err := binary.FS.Exists(destinationPath)
 	if err != nil {
