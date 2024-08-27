@@ -3,9 +3,10 @@ package application
 import "github.com/cloudfoundry/bosh-bootloader/storage"
 
 type GlobalConfiguration struct {
-	StateDir string
-	Debug    bool
-	Name     string
+	StateDir             string
+	Debug                bool
+	Name                 string
+	DisableTfAutoApprove bool
 }
 
 type StringSlice []string

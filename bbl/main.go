@@ -94,14 +94,14 @@ func main() {
 	// Terraform
 	terraformOutputBuffer := bytes.NewBuffer([]byte{})
 	dotTerraformDir := filepath.Join(appConfig.Global.StateDir, "terraform", ".terraform")
-	bufferingCLI := terraform.NewCLI(terraformOutputBuffer, terraformOutputBuffer, dotTerraformDir)
+	bufferingCLI := terraform.NewCLI(terraformOutputBuffer, terraformOutputBuffer, dotTerraformDir, globals.DisableTfAutoApprove)
 	var (
 		terraformCLI terraform.CLI
 		out          io.Writer
 	)
 	if appConfig.Global.Debug {
 		errBuffer := io.MultiWriter(os.Stderr, terraformOutputBuffer)
-		terraformCLI = terraform.NewCLI(errBuffer, terraformOutputBuffer, dotTerraformDir)
+		terraformCLI = terraform.NewCLI(errBuffer, terraformOutputBuffer, dotTerraformDir, globals.DisableTfAutoApprove)
 		out = os.Stdout
 	} else {
 		terraformCLI = bufferingCLI

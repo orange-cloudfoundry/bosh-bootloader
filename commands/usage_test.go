@@ -39,11 +39,12 @@ Usage:
   bbl [GLOBAL OPTIONS] COMMAND [OPTIONS]
 
 Global Options:
-  --help       [-h]        Prints usage. Use "bbl [command] --help" for more information about a command
-  --state-dir  [-s]        Directory containing the bbl state                                            env:"BBL_STATE_DIRECTORY"
-  --debug      [-d]        Prints debugging output                                                       env:"BBL_DEBUG"
-  --version    [-v]        Prints version
-  --no-confirm [-n]        No confirm
+  --help                    [-h] Prints usage. Use "bbl [command] --help" for more information about a command
+  --state-dir               [-s] Directory containing the bbl state                                             env:"BBL_STATE_DIRECTORY"
+  --debug                   [-d] Prints debugging output                                                        env:"BBL_DEBUG"
+  --version                 [-v] Prints version
+  --no-confirm              [-n] No confirm
+  --disable-tf-auto-approve      Do not use the '-auto-approve' option with terraform (debug mode required)     env:"BBL_DISABLE_TF_AUTO_APPROVE"
 
 Basic Commands: A good place to start
   up                      Deploys BOSH director on an IAAS, creates CF/Concourse load balancers. Updates existing director.
@@ -84,11 +85,12 @@ Troubleshooting Commands:
   bbl [GLOBAL OPTIONS] my-command [OPTIONS]
 
 Global Options:
-  --help       [-h]        Prints usage. Use "bbl [command] --help" for more information about a command
-  --state-dir  [-s]        Directory containing the bbl state                                            env:"BBL_STATE_DIRECTORY"
-  --debug      [-d]        Prints debugging output                                                       env:"BBL_DEBUG"
-  --version    [-v]        Prints version
-  --no-confirm [-n]        No confirm
+  --help                    [-h] Prints usage. Use "bbl [command] --help" for more information about a command
+  --state-dir               [-s] Directory containing the bbl state                                             env:"BBL_STATE_DIRECTORY"
+  --debug                   [-d] Prints debugging output                                                        env:"BBL_DEBUG"
+  --version                 [-v] Prints version
+  --no-confirm              [-n] No confirm
+  --disable-tf-auto-approve      Do not use the '-auto-approve' option with terraform (debug mode required)     env:"BBL_DISABLE_TF_AUTO_APPROVE"
 
 [my-command command options]
   some message
